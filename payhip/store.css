@@ -25,9 +25,9 @@
    Sections are not boxed. They sit on the page and are
    separated by space; the type and the artwork do the
    dividing. Product artwork is rounded; the page is not.
-   Headlines are large, uppercase and tightly tracked in Neue
-   Haas Grotesk Display. Motion is scroll-driven and costs no
-   JavaScript.
+   Headlines are large, sentence case and tightly tracked in
+   Neue Haas Grotesk Display. Motion is scroll-driven and costs
+   no JavaScript.
    ============================================================ */
 
 :root {
