@@ -1,0 +1,1203 @@
+/* ============================================================
+   SKETCHSETS — Payhip store styles
+   Paste into: Store settings → STORE PAGES CUSTOM CSS
+   ============================================================
+
+   TWO HARD RULES FOR THIS FILE
+   ---------------------------------------------------------
+   1. NEVER use the child combinator. Payhip HTML-escapes it,
+      so ">" arrives in the page as "&gt;" and the whole rule
+      is discarded by the browser. The previous file had 106
+      of them and every single one was dead. Use a descendant
+      selector, or a more specific class, instead.
+
+   2. Every custom property must be defined in the :root block
+      below. The previous file used 9 that were never defined
+      (--prod-card-bg, --fc-panel, --ss-sale-glow-rgb and so
+      on), which silently killed the rules that referenced
+      them: the product page info card, the featured
+      collection treatment and the badge glow never rendered.
+
+   DESIGN DIRECTION
+   ---------------------------------------------------------
+   Calm. The old file leaned on pulsing glows, conic-gradient
+   neon rims, shine sweeps and breathing orbs. Most of them
+   were broken anyway, and the ones that worked are the exact
+   thing that makes a shop read as software. The artwork is
+   the product; this stylesheet gets out of its way and spends
+   its effort on spacing, type and one accent colour.
+   ============================================================ */
+
+:root {
+  /* ---- brand ---- */
+  --ss-accent: #00bcff;
+  --ss-accent-ink: #0a1520; /* text on top of accent fills */
+  --ss-gold: #f2c53d; /* Premium pill only */
+  --ss-gold-ink: #12161b;
+
+  /* ---- surfaces ---- */
+  --ss-bg: #080d13;
+  --ss-panel: #0f151d;
+  --ss-panel-2: #131b25;
+  --ss-line: rgba(255, 255, 255, 0.09);
+  --ss-line-strong: rgba(255, 255, 255, 0.16);
+
+  /* ---- text ---- */
+  --ss-text: #ffffff;
+  --ss-dim: #b3c0cf;
+  --ss-muted: #8494a5;
+
+  /* ---- shape ---- */
+  --ss-radius-card: 18px;
+  --ss-radius-media: 14px;
+  --ss-radius-pill: 9999px;
+  --ss-radius-input: 12px;
+
+  /* ---- one shadow scale, used everywhere ---- */
+  --ss-shadow-1: 0 8px 24px rgba(0, 0, 0, 0.28);
+  --ss-shadow-2: 0 16px 44px rgba(0, 0, 0, 0.38);
+
+  /* ---- rhythm ----
+     The single biggest lever on how considered the shop looks.
+     Payhip's builder sets its own section padding; set that to
+     its minimum and tune this instead. */
+  --ss-section-y: clamp(56px, 8vw, 112px);
+  --ss-grid-gap: clamp(18px, 2.4vw, 30px);
+
+  --ss-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============================================================
+   1. RHYTHM
+   More air between sections was the main ask. This adds a
+   floor, so a section is never cramped even if the builder
+   padding is set low.
+   ============================================================ */
+
+.js-section-wrapper .section-contents {
+  padding-top: var(--ss-section-y);
+  padding-bottom: var(--ss-section-y);
+}
+
+/* The header is a section wrapper too; it must not gain 100px. */
+#header .section-contents,
+#header.js-section-wrapper .section-contents {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Let wide sections actually use the screen. */
+.js-section-wrapper .section-contents {
+  max-width: 1440px;
+  margin-inline: auto;
+}
+
+/* ============================================================
+   2. TYPE
+   ============================================================ */
+
+body {
+  color: var(--ss-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+
+/* The theme sets h1 to 4.5rem, which is enormous on a laptop
+   and overflows on a phone. One fluid ramp instead. */
+h1 {
+  font-size: clamp(2rem, 1.2rem + 3.2vw, 3.5rem) !important;
+}
+h2 {
+  font-size: clamp(1.5rem, 1rem + 2vw, 2.35rem) !important;
+}
+h3 {
+  font-size: clamp(1.125rem, 1rem + 0.6vw, 1.375rem) !important;
+}
+
+p {
+  color: var(--ss-dim);
+  line-height: 1.65;
+}
+
+/* Section headings sit left with room to breathe. */
+.js-section-wrapper .heading-text-main,
+.js-section-wrapper .heading-text {
+  margin-bottom: clamp(20px, 3vw, 36px) !important;
+}
+
+/* ============================================================
+   3. BUTTONS
+   Flat accent, no gradient, no bloom. A glowing gradient pill
+   is the most recognisable piece of software marketing there
+   is, and this is a shop counter.
+   ============================================================ */
+
+.btn.btn-primary,
+button.add-to-cart-button,
+button.btn.btn-primary.add-to-cart-button,
+.btn.payhip-buy-button,
+.js-section-wrapper .button-wrapper .btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  background: var(--ss-accent) !important;
+  background-image: none !important;
+  color: var(--ss-accent-ink) !important;
+  border: 0 !important;
+  border-radius: var(--ss-radius-pill) !important;
+  padding: 14px 26px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em !important;
+  box-shadow: none !important;
+  transition:
+    background-color 0.2s var(--ss-ease),
+    transform 0.15s var(--ss-ease);
+}
+
+.btn.btn-primary:hover,
+button.add-to-cart-button:hover,
+.btn.payhip-buy-button:hover,
+.js-section-wrapper .button-wrapper .btn:hover {
+  background: #33cbff !important;
+  transform: translateY(-1px);
+}
+
+.btn.btn-primary:active,
+button.add-to-cart-button:active,
+.btn.payhip-buy-button:active {
+  transform: none;
+}
+
+.btn.btn-primary[disabled],
+button.add-to-cart-button[disabled] {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* Nothing should paint an overlay on top of a button. */
+.btn.btn-primary::before,
+.btn.btn-primary::after {
+  content: none !important;
+}
+
+/* ============================================================
+   4. HEADER
+   ============================================================ */
+
+#header,
+.header-wrapper,
+.header-nav-wrapper,
+.header-nav-list {
+  overflow: visible !important;
+}
+
+.header-nav-wrapper nav.header-nav-list .header-nav-item a {
+  font-weight: 600;
+  transition: color 0.18s var(--ss-ease);
+}
+
+/* --- the two action pills: Premium and Sell on SketchSets --- */
+@media (min-width: 1026px) {
+  .header-nav-wrapper nav.header-nav-list {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 22px !important;
+    padding-right: 12px !important;
+  }
+
+  .header-nav-wrapper nav.header-nav-list .header-nav-item {
+    flex: 0 0 auto !important;
+  }
+
+  /* Push the pair to the right. */
+  .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(2) {
+    margin-left: auto !important;
+  }
+
+  /* Shared pill shape. Colour is set per-pill below. */
+  .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(-n + 2) a {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    min-height: 40px !important;
+    padding: 0 18px !important;
+    border-radius: var(--ss-radius-pill) !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+    box-shadow: none !important;
+    transition: filter 0.18s var(--ss-ease), transform 0.15s var(--ss-ease);
+  }
+
+  /* Premium — gold. Kept flat; it earns attention by colour alone. */
+  .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(2) a {
+    background: var(--ss-gold) !important;
+    color: var(--ss-gold-ink) !important;
+    -webkit-text-fill-color: var(--ss-gold-ink) !important;
+  }
+
+  /* Crown, drawn inline so there is no extra request.
+     The fill is URL-encoded because a literal "#" would end
+     the data URI. */
+  .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(2) a::before {
+    content: "";
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2312161b' d='M4 19h16v2H4v-2Zm16-3H4L2 7l5 3 5-6 5 6 5-3-2 9Z'/%3E%3C/svg%3E");
+  }
+
+  /* Sell on SketchSets — accent. */
+  .header-nav-wrapper nav.header-nav-list .header-nav-item:last-child a {
+    background: var(--ss-accent) !important;
+    color: var(--ss-accent-ink) !important;
+    -webkit-text-fill-color: var(--ss-accent-ink) !important;
+  }
+
+  /* One hover behaviour for both, and the colour never changes.
+     The old file had a dozen rules fighting to stop the label
+     going dark on :active; keeping the fill constant removes
+     the problem instead of patching it. */
+  .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(-n + 2) a:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+  }
+  .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(-n + 2) a:active {
+    transform: none;
+  }
+}
+
+/* Below the desktop breakpoint the pills become plain links,
+   so they never crowd the search and cart icons. */
+@media (max-width: 1025px) {
+  .header-nav-wrapper nav.header-nav-list {
+    gap: 16px !important;
+    padding-right: 56px !important;
+  }
+  .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(-n + 2) a {
+    background: none !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    min-height: auto !important;
+    color: inherit !important;
+    -webkit-text-fill-color: inherit !important;
+    font: inherit !important;
+    box-shadow: none !important;
+  }
+  .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(2) a::before {
+    content: none !important;
+  }
+}
+
+/* --- header icons: put them on one baseline --- */
+.header-actions-action-login .header-login-icon-link,
+.header-actions-action-cart .header-cart-icon-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 6px !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.header-actions-action-login svg,
+.header-actions-action-cart svg {
+  display: block !important;
+}
+
+/* ============================================================
+   5. DROPDOWN AND MEGA MENU
+   ============================================================ */
+
+.header-dropdown-wrapper {
+  margin-top: 10px;
+  padding: 12px !important;
+  border-radius: var(--ss-radius-card) !important;
+  background: rgba(12, 18, 25, 0.94) !important;
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  border: 1px solid var(--ss-line) !important;
+  box-shadow: var(--ss-shadow-2) !important;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .header-dropdown-wrapper {
+    background: rgba(12, 18, 25, 0.98) !important;
+  }
+}
+
+.header-dropdown-wrapper a {
+  display: block;
+  padding: 10px 14px;
+  margin: 1px 0;
+  border-radius: 10px !important;
+  color: var(--ss-dim);
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 0.16s var(--ss-ease),
+    color 0.16s var(--ss-ease);
+}
+
+.header-dropdown-wrapper a:hover,
+.header-dropdown-wrapper a:focus-visible {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ss-text);
+  outline: none;
+}
+
+/* Mega menu columns. The old version put a coloured dot before
+   every row; with the panel already legible it was decoration
+   for its own sake. */
+.header-dropdown-wrapper .dropdown-columns-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: clamp(24px, 4vw, 64px);
+  padding: 6px 4px;
+}
+
+.header-dropdown-wrapper .dropdown-columns-wrapper .dropdown-column {
+  flex: 1 1 0;
+  min-width: 180px;
+}
+
+/* Column headings: the level-1 item in each column. */
+.header-dropdown-wrapper .dropdown-columns-wrapper .dropdown-item-level1 a {
+  color: var(--ss-muted) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  padding-left: 14px;
+  padding-bottom: 4px;
+  pointer-events: none;
+}
+
+.header-dropdown-wrapper .dropdown-columns-wrapper .dropdown-item-level1 a:hover {
+  background: transparent;
+  color: var(--ss-muted) !important;
+}
+
+/* ============================================================
+   6. MOBILE DRAWER
+   The old file had five overlapping blocks for this, several
+   contradicting each other on width. One block, one width.
+   ============================================================ */
+
+@media (max-width: 1025px) {
+  .nav-mobile-block,
+  .js-nav-mobile-block {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: 100dvh !important;
+    width: clamp(300px, 78vw, 460px) !important;
+    max-width: none !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    background: var(--ss-panel) !important;
+    color: var(--ss-text) !important;
+    box-sizing: border-box !important;
+    padding-top: max(16px, env(safe-area-inset-top)) !important;
+    padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
+    z-index: 9999 !important;
+  }
+
+  /* Labels and icons stay white regardless of the theme's
+     colour scheme attribute. */
+  .nav-mobile-block .menu a,
+  .nav-mobile-block .submenu a,
+  .js-nav-mobile-block .menu a,
+  .js-nav-mobile-block .submenu a {
+    color: var(--ss-text) !important;
+    -webkit-text-fill-color: var(--ss-text) !important;
+    opacity: 1 !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+  }
+
+  .nav-mobile-block .dropdown-arrow,
+  .js-nav-mobile-block .dropdown-arrow,
+  .nav-mobile-block .nav-mobile-close-button,
+  .js-nav-mobile-block .nav-mobile-close-button {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    color: var(--ss-text) !important;
+  }
+
+  .nav-mobile-block .dropdown-arrow svg path,
+  .js-nav-mobile-block .dropdown-arrow svg path,
+  .nav-mobile-block .nav-mobile-close-button svg path,
+  .js-nav-mobile-block .nav-mobile-close-button svg path {
+    fill: var(--ss-text) !important;
+    stroke: var(--ss-text) !important;
+  }
+
+  .nav-mobile-block .submenu li,
+  .js-nav-mobile-block .submenu li {
+    border-color: var(--ss-line) !important;
+  }
+
+  /* Login reads as the drawer's one action. */
+  .nav-mobile-block a[href*="/users/login"],
+  .js-nav-mobile-block a[href*="/users/login"] {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    margin-top: 12px !important;
+    padding: 11px 20px !important;
+    border-radius: var(--ss-radius-pill) !important;
+    background: var(--ss-accent) !important;
+    color: var(--ss-accent-ink) !important;
+    -webkit-text-fill-color: var(--ss-accent-ink) !important;
+    font-weight: 700 !important;
+  }
+
+  .mobile-nav-backdrop,
+  .drawer__overlay,
+  .offcanvas-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    height: 100dvh !important;
+    background: rgba(4, 8, 12, 0.6) !important;
+  }
+}
+
+@supports not (height: 100dvh) {
+  @media (max-width: 1025px) {
+    .nav-mobile-block,
+    .js-nav-mobile-block,
+    .mobile-nav-backdrop {
+      height: 100vh !important;
+    }
+  }
+}
+
+/* ============================================================
+   7. PRODUCT CARDS
+   Artwork, title, price. No neon rim, no pulsing badge.
+   ============================================================ */
+
+.product-card-wrapper .card {
+  background: var(--ss-panel) !important;
+  border: 1px solid var(--ss-line) !important;
+  border-radius: var(--ss-radius-card) !important;
+  padding: 0 0 4px !important;
+  overflow: hidden !important;
+  box-shadow: var(--ss-shadow-1) !important;
+  transition:
+    transform 0.22s var(--ss-ease),
+    border-color 0.22s var(--ss-ease),
+    box-shadow 0.22s var(--ss-ease) !important;
+}
+
+.product-card-wrapper .card:hover {
+  transform: translateY(-3px);
+  border-color: var(--ss-line-strong) !important;
+  box-shadow: var(--ss-shadow-2) !important;
+}
+
+/* The theme draws frames and overlays with pseudo elements. */
+.product-card-wrapper .card::before,
+.product-card-wrapper .card::after {
+  content: none !important;
+}
+
+/* Media wrapper.
+   NOT `.card--media`: that class sits on the card element itself
+   (div.card.card--standard.card--media), so styling it as the
+   media box applied a 4:3 aspect ratio to the whole card and
+   squashed it. The real media box is div.card__inner.ratio.
+   The previous stylesheet had this same mistake. */
+.product-card-wrapper .card .ratio,
+.product-card-wrapper .card .card__media {
+  aspect-ratio: 4 / 3 !important;
+  border-radius: var(--ss-radius-media) !important;
+  overflow: hidden !important;
+  background: var(--ss-panel-2) !important;
+  margin-bottom: 4px !important;
+}
+
+/* Descendant, not child. A child combinator would be escaped
+   to &gt; and this rule would never apply. */
+.product-card-wrapper .card img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border: 0 !important;
+  border-radius: inherit !important;
+  /* Stops a hairline seam appearing at the rounded corners. */
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+}
+
+/* Inner wrappers must not paint over the card. */
+.product-card-wrapper .card .card__inner,
+.product-card-wrapper .card .card__content,
+.product-card-wrapper .card .card__information {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* --- price --- */
+.product-card-wrapper .price.price--on-sale .price__regular {
+  display: none !important;
+}
+
+.product-card-wrapper .price__sale,
+.product-card-wrapper .price__regular {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  flex-wrap: wrap;
+  margin-top: 8px !important;
+}
+
+/* Current price. Plain accent text reads as a price; a filled
+   pill reads as a button and invites a click that does nothing. */
+.product-card-wrapper .price__sale .price-item--sale.price-item--last,
+.product-card-wrapper .price:not(.price--on-sale) .price__regular .price-item--regular {
+  color: var(--ss-accent) !important;
+  font-weight: 700 !important;
+  font-size: 1.0625rem !important;
+  line-height: 1 !important;
+  background: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Was-price, when something is genuinely on sale. */
+.product-card-wrapper .price__sale .price-item--regular {
+  color: var(--ss-muted) !important;
+  font-weight: 500 !important;
+  font-size: 0.9375rem !important;
+  line-height: 1 !important;
+  background: none !important;
+  padding: 0 !important;
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+}
+
+/* --- sale badge --- */
+.product-card-wrapper .badge-product-on-sale,
+#page-section-product span.badge-general.badge-product-on-sale {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 6px 12px !important;
+  border-radius: var(--ss-radius-pill) !important;
+  background: #ff3b30 !important;
+  background-image: none !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
+  letter-spacing: 0.02em !important;
+  box-shadow: none !important;
+  filter: none !important;
+  animation: none !important;
+}
+
+/* The theme adds rivets and dots around badges. */
+.product-card-wrapper .card [class*="badge"]::before,
+.product-card-wrapper .card [class*="badge"]::after {
+  content: none !important;
+}
+
+/* ============================================================
+   8. PRODUCT PAGE
+   ============================================================ */
+
+/* The details column becomes one calm panel. The old rules for
+   this referenced --prod-card-bg and three siblings that were
+   never defined, so none of it rendered. */
+.product-details-wrapper .row .col-md-12 {
+  background: var(--ss-panel) !important;
+  border: 1px solid var(--ss-line) !important;
+  border-radius: var(--ss-radius-card) !important;
+  box-shadow: var(--ss-shadow-1) !important;
+  padding: 26px 24px 22px !important;
+}
+
+@media (max-width: 680px) {
+  .product-details-wrapper .row .col-md-12 {
+    padding: 18px 16px 16px !important;
+    border-radius: var(--ss-radius-media) !important;
+  }
+}
+
+/* ============================================================
+   9. COLLECTION TABS
+   ============================================================ */
+
+.collection-tabs-wrapper {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 4px 0 !important;
+  max-width: 1180px !important;
+  margin-inline: auto !important;
+}
+
+.collection-tabs-border {
+  display: none !important;
+}
+
+.collection-tabs-wrapper ul,
+.collection-tabs {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 10px 12px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.collection-tabs-wrapper li {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+/* The theme injects a "|" between tabs. */
+.collection-tabs-wrapper .breadcrumb-separator {
+  display: none !important;
+}
+
+.collection-tabs-wrapper a {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 38px !important;
+  padding: 0 18px !important;
+  border-radius: var(--ss-radius-pill) !important;
+  background: transparent !important;
+  border: 1px solid var(--ss-line) !important;
+  color: var(--ss-dim) !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  text-decoration: none !important;
+  transition:
+    background-color 0.18s var(--ss-ease),
+    border-color 0.18s var(--ss-ease),
+    color 0.18s var(--ss-ease);
+}
+
+.collection-tabs-wrapper a:hover {
+  border-color: var(--ss-line-strong) !important;
+  color: var(--ss-text) !important;
+}
+
+/* Active tab, covering every state Payhip might emit. */
+.collection-tabs-wrapper li.active a,
+.collection-tabs-wrapper li.current a,
+.collection-tabs-wrapper a.active,
+.collection-tabs-wrapper a.current,
+.collection-tabs-wrapper a[aria-current="page"],
+.collection-tabs-wrapper a[aria-selected="true"] {
+  background: var(--ss-accent) !important;
+  border-color: transparent !important;
+  color: var(--ss-accent-ink) !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 979px) {
+  .collection-tabs-wrapper ul,
+  .collection-tabs {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    justify-content: flex-start !important;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .collection-tabs-wrapper ul::-webkit-scrollbar {
+    display: none;
+  }
+  .collection-tabs-wrapper li {
+    scroll-snap-align: start;
+  }
+}
+
+/* ============================================================
+   11. BLOG GRID (home page feature)
+   ============================================================ */
+
+.js-section-wrapper[data-section-key="featured-blog-post-list"] .js-builder-blog-post-list-block[data-layout="grid"] {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--ss-grid-gap);
+  align-items: stretch;
+}
+
+@media (max-width: 980px) {
+  .js-section-wrapper[data-section-key="featured-blog-post-list"] .js-builder-blog-post-list-block[data-layout="grid"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .js-section-wrapper[data-section-key="featured-blog-post-list"] .js-builder-blog-post-list-block[data-layout="grid"] {
+    grid-template-columns: 1fr;
+  }
+}
+
+.js-section-wrapper[data-section-key="featured-blog-post-list"] .js-blog-post-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--ss-panel);
+  border: 1px solid var(--ss-line);
+  border-radius: var(--ss-radius-card);
+  padding: 14px 16px 18px;
+  overflow: hidden;
+  transition:
+    transform 0.22s var(--ss-ease),
+    border-color 0.22s var(--ss-ease);
+}
+
+.js-section-wrapper[data-section-key="featured-blog-post-list"] .js-blog-post-item:hover,
+.js-section-wrapper[data-section-key="featured-blog-post-list"] .js-blog-post-item:focus-within {
+  transform: translateY(-3px);
+  border-color: var(--ss-line-strong);
+}
+
+.js-section-wrapper[data-section-key="featured-blog-post-list"] .js-blog-post-item figure,
+.js-section-wrapper[data-section-key="featured-blog-post-list"] .js-blog-post-item .image {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--ss-radius-media);
+  overflow: hidden;
+  margin: 0 0 14px !important;
+  background: var(--ss-panel-2);
+}
+
+/* The shine sweep that used to live on ::after is gone. */
+.js-section-wrapper[data-section-key="featured-blog-post-list"] .js-blog-post-item figure::after,
+.js-section-wrapper[data-section-key="featured-blog-post-list"] .js-blog-post-item .image::after {
+  content: none !important;
+}
+
+.js-section-wrapper[data-section-key="featured-blog-post-list"] .js-blog-post-item img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  transition: transform 0.5s var(--ss-ease);
+}
+
+.js-section-wrapper[data-section-key="featured-blog-post-list"] .js-blog-post-item:hover img {
+  transform: scale(1.04);
+}
+
+.js-section-wrapper[data-section-key="featured-blog-post-list"] time,
+.js-section-wrapper[data-section-key="featured-blog-post-list"] [class*="date"] {
+  display: inline-block;
+  color: var(--ss-muted) !important;
+  font-size: 0.8125rem;
+  margin: 0 0 6px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: none !important;
+}
+
+.js-section-wrapper[data-section-key="featured-blog-post-list"] h3 {
+  color: var(--ss-text) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Payhip sometimes emits an empty excerpt paragraph. */
+.js-section-wrapper[data-section-key="featured-blog-post-list"] [class*="excerpt"]:empty {
+  display: none !important;
+}
+
+/* ============================================================
+   12. TESTIMONIAL SLIDER
+   ============================================================ */
+
+.js-section-wrapper[data-section-key="slider-list"] .slider-list .js-slider-list-item {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  background: var(--ss-panel);
+  border: 1px solid var(--ss-line);
+  border-radius: var(--ss-radius-card);
+  padding: 22px;
+  overflow: hidden;
+  width: 380px !important;
+  margin-right: 20px !important;
+  height: auto;
+  transition:
+    transform 0.22s var(--ss-ease),
+    border-color 0.22s var(--ss-ease);
+}
+
+/* The gradient rim and the giant quote watermark are gone. */
+.js-section-wrapper[data-section-key="slider-list"] .slider-list .js-slider-list-item::before,
+.js-section-wrapper[data-section-key="slider-list"] .slider-list .js-slider-list-item::after {
+  content: none !important;
+}
+
+.js-section-wrapper[data-section-key="slider-list"] .slider-list .js-slider-list-item:hover {
+  transform: translateY(-3px);
+  border-color: var(--ss-line-strong);
+}
+
+.js-section-wrapper[data-section-key="slider-list"] .slider-list .content-container {
+  width: 100%;
+}
+
+.js-section-wrapper[data-section-key="slider-list"] .slider-list .heading-text h3 {
+  margin: 0 0 8px !important;
+  font-weight: 700 !important;
+  color: var(--ss-text) !important;
+}
+
+/* Stars line. */
+.js-section-wrapper[data-section-key="slider-list"] .slider-list .richtext p:first-child {
+  margin: 0 0 12px !important;
+  color: var(--ss-accent) !important;
+  font-size: 15px !important;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+.js-section-wrapper[data-section-key="slider-list"] .slider-list .richtext p {
+  color: var(--ss-dim) !important;
+  line-height: 1.55;
+  margin: 0 0 8px !important;
+}
+
+.js-section-wrapper[data-section-key="slider-list"] .slider-list .richtext p:last-child {
+  margin-top: 12px !important;
+  color: var(--ss-text) !important;
+  font-weight: 700;
+}
+
+.js-section-wrapper[data-section-key="slider-list"] .slider-list .richtext p:empty {
+  display: none !important;
+}
+
+@media (max-width: 1024px) {
+  .js-section-wrapper[data-section-key="slider-list"] .slider-list .js-slider-list-item {
+    width: 60% !important;
+    margin-right: 16px !important;
+  }
+}
+@media (max-width: 680px) {
+  .js-section-wrapper[data-section-key="slider-list"] .slider-list .js-slider-list-item {
+    width: 86% !important;
+    margin-right: 14px !important;
+  }
+}
+
+.js-section-wrapper[data-section-key="slider-list"] .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--ss-radius-pill);
+  background: rgba(255, 255, 255, 0.24);
+  opacity: 1;
+  margin: 0 5px !important;
+  transition: all 0.2s var(--ss-ease);
+}
+
+.js-section-wrapper[data-section-key="slider-list"] .swiper-pagination-bullet-active {
+  width: 24px;
+  background: var(--ss-accent);
+}
+
+/* ============================================================
+   13. FAQ / ACCORDION
+   ============================================================ */
+
+.accordion-items-container {
+  display: flex !important;
+  flex-direction: column !important;
+  row-gap: 12px !important;
+  margin: 8px 0 0 !important;
+  padding: 0 !important;
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+/* Payhip injects hairline dividers between items. */
+.accordion-divider,
+.js-builder-accordion-divider {
+  display: none !important;
+}
+
+.accordion-item,
+.js-accordion-item {
+  margin: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: var(--ss-panel);
+  border: 1px solid var(--ss-line);
+  border-radius: var(--ss-radius-media);
+  transition: border-color 0.18s var(--ss-ease);
+}
+
+.accordion-item:hover {
+  border-color: var(--ss-line-strong);
+}
+
+.accordion-item-title-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  padding: 16px 52px 16px 20px !important;
+  margin: 0 !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  text-align: left !important;
+  cursor: pointer;
+}
+
+.accordion-item-title-wrapper h3 {
+  margin: 0 !important;
+  font: inherit !important;
+  overflow-wrap: anywhere !important;
+}
+
+.accordion-item-description,
+.accordion-item .js-builder-text {
+  padding: 0 20px 18px 20px !important;
+  font-size: 15px !important;
+  line-height: 1.65 !important;
+  color: var(--ss-dim) !important;
+  text-align: left !important;
+  overflow-wrap: anywhere !important;
+}
+
+.accordion-item-description p:last-child {
+  margin-bottom: 0 !important;
+}
+
+@media (max-width: 680px) {
+  .accordion-item-title-wrapper {
+    font-size: 16px !important;
+    padding: 14px 46px 14px 16px !important;
+  }
+  .accordion-item-description {
+    font-size: 14px !important;
+    padding: 0 16px 16px 16px !important;
+  }
+}
+
+/* ============================================================
+   14. FORMS
+   ============================================================ */
+
+.js-section-wrapper form {
+  max-width: 860px;
+  margin-inline: auto;
+}
+
+.js-section-wrapper form label {
+  display: block;
+  color: var(--ss-text) !important;
+  font-weight: 700 !important;
+  margin-bottom: 7px !important;
+}
+
+.js-section-wrapper form input[type="text"],
+.js-section-wrapper form input[type="email"],
+.js-section-wrapper form input[type="tel"],
+.js-section-wrapper form input[type="url"],
+.js-section-wrapper form input[type="number"],
+.js-section-wrapper form textarea {
+  width: 100%;
+  background: var(--ss-panel) !important;
+  color: var(--ss-text) !important;
+  border: 1px solid var(--ss-line) !important;
+  border-radius: var(--ss-radius-input) !important;
+  padding: 13px 16px !important;
+  outline: none !important;
+  transition: border-color 0.18s var(--ss-ease);
+}
+
+.js-section-wrapper form textarea {
+  min-height: 180px;
+  resize: vertical;
+}
+
+.js-section-wrapper form ::placeholder {
+  color: var(--ss-muted) !important;
+}
+
+.js-section-wrapper form input:focus,
+.js-section-wrapper form textarea:focus {
+  border-color: var(--ss-accent) !important;
+}
+
+.js-section-wrapper form .form-error {
+  color: #ff6b6b !important;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+/* ============================================================
+   15. LOGO LIST
+   ============================================================ */
+
+[data-section-key="logo-list"] .logo-list-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(clamp(110px, 16vw, 190px), 1fr));
+  gap: clamp(18px, 3vw, 40px);
+  place-items: center;
+}
+
+[data-section-key="logo-list"] .logo-list-wrapper img {
+  max-width: 100%;
+  height: clamp(26px, 4vw, 46px);
+  object-fit: contain;
+  opacity: 0.7;
+  filter: grayscale(1);
+  transition:
+    opacity 0.18s var(--ss-ease),
+    filter 0.18s var(--ss-ease);
+}
+
+[data-section-key="logo-list"] .logo-list-wrapper a:hover img {
+  opacity: 1;
+  filter: none;
+}
+
+/* ============================================================
+   16. VIDEO SECTION
+   ============================================================ */
+
+.js-builder-section-wrapper[data-section-key="video-and-text-rows"] .embed-code-wrapper {
+  position: relative !important;
+  border-radius: var(--ss-radius-card);
+  overflow: hidden;
+  background: var(--ss-panel-2);
+  border: 1px solid var(--ss-line);
+  box-shadow: var(--ss-shadow-1);
+}
+
+.js-builder-section-wrapper[data-section-key="video-and-text-rows"] .embed-code-wrapper::before {
+  content: none !important;
+}
+
+.js-builder-section-wrapper[data-section-key="video-and-text-rows"] iframe {
+  display: block;
+  width: 100% !important;
+  aspect-ratio: 16 / 9;
+  border: 0 !important;
+}
+
+/* ============================================================
+   17. IMAGE + TEXT COLUMNS
+   Bootstrap's flex-basis fights a grid, so the columns are
+   neutralised before the grid is applied.
+   ============================================================ */
+
+.js-section-wrapper[data-section-key="image-and-text-columns"] .row {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: var(--ss-grid-gap) !important;
+}
+
+@media (max-width: 900px) {
+  .js-section-wrapper[data-section-key="image-and-text-columns"] .row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.js-section-wrapper[data-section-key="image-and-text-columns"] .image-and-text-column-item {
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  flex: none !important;
+}
+
+.js-section-wrapper[data-section-key="image-and-text-columns"] .content-container {
+  position: relative;
+  background: var(--ss-panel);
+  border: 1px solid var(--ss-line);
+  border-radius: var(--ss-radius-card);
+  padding: 22px 20px;
+  overflow: hidden;
+  transition:
+    transform 0.22s var(--ss-ease),
+    border-color 0.22s var(--ss-ease);
+}
+
+.js-section-wrapper[data-section-key="image-and-text-columns"] .content-container::before {
+  content: none !important;
+}
+
+.js-section-wrapper[data-section-key="image-and-text-columns"] .content-container:hover {
+  transform: translateY(-3px);
+  border-color: var(--ss-line-strong);
+}
+
+.js-section-wrapper[data-section-key="image-and-text-columns"] .image-row-contents img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--ss-radius-media);
+  margin-bottom: 14px;
+}
+
+/* ============================================================
+   18. MOBILE GRID SPACING
+   The previous file targeted max-width 280px, which is
+   narrower than any phone in use, so none of it applied.
+   ============================================================ */
+
+@media (max-width: 640px) {
+  .product-grid,
+  .collection-products {
+    row-gap: 20px !important;
+    gap: 20px !important;
+  }
+}
+
+/* ============================================================
+   19. MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
