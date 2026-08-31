@@ -62,11 +62,16 @@ export default function HomePage() {
             <span className="sm:whitespace-nowrap">the internet</span>
           </h1>
           <p className="text-dim mx-auto mt-6 max-w-xl text-[17px] leading-relaxed">
-            Presets, assets, templates and creative tools curated for editors,
-            thumbnail designers and creators.{" "}
-            <span className="text-text font-semibold">
-              {products.length} packs from {formatPrice(lowest)}.
-            </span>
+            Presets, assets and creator tools curated for editors, thumbnail
+            designers and people making stuff online.
+          </p>
+          {/*
+            Inventory count is metadata, not part of the promise. Baking "10
+            packs" into the headline copy would date the moment one is added.
+          */}
+          <p className="text-muted mt-4 text-[14px]">
+            {products.length} packs · {free.length} free · from{" "}
+            {formatPrice(lowest)}
           </p>
 
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
@@ -87,6 +92,25 @@ export default function HomePage() {
       </section>
 
       <ArtworkMarquee products={products} />
+
+      {/* Quick confidence, early. The full explainer still lives further down. */}
+      <div className="border-line border-b">
+        <div className="shell text-muted flex flex-wrap items-center justify-center gap-x-3 gap-y-2 py-5 text-center text-[13.5px]">
+          {[
+            "Instant downloads",
+            "Commercial licence",
+            "One-time purchases",
+            "Curated by Frostify",
+          ].map((point, i) => (
+            <span key={point} className="flex items-center gap-3">
+              {i > 0 && (
+                <span aria-hidden="true" className="bg-line h-3 w-px" />
+              )}
+              {point}
+            </span>
+          ))}
+        </div>
+      </div>
 
       {/* Curated */}
       <section className="shell section-gap">
@@ -115,60 +139,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* Categories */}
-      <section className="shell section-gap">
-        <SectionHeader
-          eyebrow="Categories"
-          title="Shop by what you make"
-          note="Whether you are cutting video, building thumbnails, or kitting out a workflow."
-        />
-        <div className="grid gap-5 sm:grid-cols-3">
-          {categories.map((category, i) => (
-            <Reveal key={category.id} delay={i * 70}>
-              <CategoryCard category={category} />
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* Free, as the low-friction way in. */}
-      {free.length > 0 && (
-        <section className="shell section-gap">
-          <SectionHeader
-            eyebrow="No cost"
-            title="Free to download"
-            note="Real packs, not trials. Take them and see whether the quality holds up."
-            action={{ href: "/browse", label: "See all" }}
-          />
-          <div className="grid grid-cols-2 gap-x-5 gap-y-9 lg:grid-cols-4">
-            {free.map((product, i) => (
-              <Reveal key={product.id} delay={i * 70}>
-                <ProductCard product={product} />
-              </Reveal>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Entry price */}
-      {cheap.length > 0 && (
-        <section className="shell section-gap">
-          <SectionHeader
-            eyebrow="From the shop"
-            title="Under $10"
-            note="Single-purpose packs that earn their place without much thought."
-            action={{ href: "/browse", label: "See all" }}
-          />
-          <div className="grid grid-cols-2 gap-x-5 gap-y-9 lg:grid-cols-4">
-            {cheap.map((product, i) => (
-              <Reveal key={product.id} delay={i * 70}>
-                <ProductCard product={product} />
-              </Reveal>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* The bundle, presented as an offer: what it is, and what it costs. */}
       {vault && vaultContents.length > 0 && (
@@ -224,8 +194,13 @@ export default function HomePage() {
                       <s>${vaultTotal.toFixed(2)}</s> separately
                     </span>
                   </div>
+                  {/* Percentage lands faster than the dollar figure alone. */}
                   <p className="bg-accent/15 text-accent mt-4 inline-block rounded-full px-3.5 py-1.5 text-[14px] font-bold">
-                    Save ${(vaultTotal - vault.price).toFixed(2)}
+                    Save ${(vaultTotal - vault.price).toFixed(2)} ·{" "}
+                    {Math.round(
+                      ((vaultTotal - vault.price) / vaultTotal) * 100,
+                    )}
+                    %
                   </p>
 
                   <ul className="text-dim mt-7 space-y-3 text-[15px]">
@@ -257,6 +232,60 @@ export default function HomePage() {
               </div>
             </div>
           </Reveal>
+        </section>
+      )}
+
+      {/* Categories */}
+      <section className="shell section-gap">
+        <SectionHeader
+          eyebrow="Categories"
+          title="Shop by what you make"
+          note="Whether you are cutting video, building thumbnails, or kitting out a workflow."
+        />
+        <div className="grid gap-5 sm:grid-cols-3">
+          {categories.map((category, i) => (
+            <Reveal key={category.id} delay={i * 70}>
+              <CategoryCard category={category} />
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* Free, as the low-friction way in. */}
+      {free.length > 0 && (
+        <section className="shell section-gap">
+          <SectionHeader
+            eyebrow="No cost"
+            title="Free to download"
+            note="Real packs, not trials. Take them and see whether the quality holds up."
+            action={{ href: "/browse", label: "See all" }}
+          />
+          <div className="grid grid-cols-2 gap-x-5 gap-y-9 lg:grid-cols-4">
+            {free.map((product, i) => (
+              <Reveal key={product.id} delay={i * 70}>
+                <ProductCard product={product} />
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Entry price */}
+      {cheap.length > 0 && (
+        <section className="shell section-gap">
+          <SectionHeader
+            eyebrow="From the shop"
+            title="Under $10"
+            note="Single-purpose packs that earn their place without much thought."
+            action={{ href: "/browse", label: "See all" }}
+          />
+          <div className="grid grid-cols-2 gap-x-5 gap-y-9 lg:grid-cols-4">
+            {cheap.map((product, i) => (
+              <Reveal key={product.id} delay={i * 70}>
+                <ProductCard product={product} />
+              </Reveal>
+            ))}
+          </div>
         </section>
       )}
 

@@ -186,41 +186,58 @@ export function ProductBrowser({
   );
 
   return (
-    <div className="mt-12 flex gap-10 sm:mt-14 lg:gap-14">
-      {/* Desktop sidebar */}
-      <aside className="hidden w-[230px] shrink-0 lg:block">
-        <div className="sticky top-24">
-          <div className="mb-5 flex items-center justify-between">
-            <h2 className="font-display text-lg">Filters</h2>
-            {active.length > 0 && (
-              <button
-                type="button"
-                onClick={clearAll}
-                className="text-accent text-[13px] font-medium hover:underline"
+    <div className="mt-10 sm:mt-12">
+      {/*
+        At ten products, a permanent three-group sidebar was more machinery
+        than the catalogue warrants. The common cuts sit up front as tabs;
+        software and price live behind Filters. Nothing was removed.
+      */}
+      <nav
+        aria-label="Quick filters"
+        className="border-line flex flex-wrap items-center gap-x-7 gap-y-3 border-b pb-4"
+      >
+        {!lockedCategory && (
+          <>
+            <Tab
+              active={category === "all" && band === "all"}
+              onClick={() => {
+                setCategory("all");
+                setBand("all");
+              }}
+            >
+              All
+            </Tab>
+            {categories.map((c) => (
+              <Tab
+                key={c.id}
+                active={category === c.id}
+                onClick={() => setCategory(c.id)}
               >
-                Clear all
-              </button>
-            )}
-          </div>
-          {filters}
-        </div>
-      </aside>
+                {c.name}
+              </Tab>
+            ))}
+          </>
+        )}
+        <Tab active={band === "free"} onClick={() => setBand("free")}>
+          Free
+        </Tab>
+
+        <button
+          type="button"
+          onClick={() => setSheetOpen(true)}
+          className="border-line hover:border-line-bright ml-auto flex items-center gap-2 rounded-full border px-4 py-2 text-[14px] font-medium"
+        >
+          Filters
+          {active.length > 0 && (
+            <span className="bg-accent text-ink flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold">
+              {active.length}
+            </span>
+          )}
+        </button>
+      </nav>
 
       <div className="min-w-0 flex-1">
-        <div className="border-line flex flex-wrap items-center gap-3 border-b pb-4">
-          <button
-            type="button"
-            onClick={() => setSheetOpen(true)}
-            className="border-line hover:border-line-bright flex items-center gap-2 rounded-full border px-4 py-2 text-[14px] font-medium lg:hidden"
-          >
-            Filters
-            {active.length > 0 && (
-              <span className="bg-accent text-ink flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold">
-                {active.length}
-              </span>
-            )}
-          </button>
-
+        <div className="flex flex-wrap items-center gap-3 pt-4">
           <p className="text-[15px] font-semibold" aria-live="polite">
             {results.length} {results.length === 1 ? "pack" : "packs"}
           </p>
@@ -230,7 +247,7 @@ export function ProductBrowser({
               key={f.label}
               type="button"
               onClick={f.clear}
-              className="bg-elevated text-dim hover:text-text hidden items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] transition-colors lg:inline-flex"
+              className="bg-elevated text-dim hover:text-text inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] transition-colors"
             >
               {f.label}
               <span aria-hidden="true">×</span>
@@ -333,6 +350,36 @@ export function ProductBrowser({
         </div>
       )}
     </div>
+  );
+}
+
+/** Quick cut across the catalogue, sitting above the results. */
+function Tab({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`relative py-1 text-[15px] transition-colors ${
+        active ? "text-text font-semibold" : "text-dim hover:text-text"
+      }`}
+    >
+      {children}
+      <span
+        aria-hidden="true"
+        className={`bg-accent absolute -bottom-[17px] left-0 h-[2px] transition-all duration-300 ease-[var(--ease-glide)] ${
+          active ? "w-full" : "w-0"
+        }`}
+      />
+    </button>
   );
 }
 

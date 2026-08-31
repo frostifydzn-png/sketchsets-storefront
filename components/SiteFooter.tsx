@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { categories } from "@/lib/products";
-import { payhipPage, site } from "@/lib/site";
+import { PAYHIP_ACCOUNT, payhipPage, site } from "@/lib/site";
 
 const shopLinks = [
   { href: "/browse", label: "Browse" },
@@ -10,9 +10,9 @@ const shopLinks = [
 ];
 
 const supportLinks = [
-  { href: payhipPage("support"), label: "Support" },
   { href: payhipPage("faq"), label: "FAQ" },
-  { href: payhipPage("customer/login"), label: "Your downloads" },
+  { href: payhipPage("contact"), label: "Contact" },
+  { href: PAYHIP_ACCOUNT, label: "Your downloads" },
   { href: payhipPage("license"), label: "Licensing" },
   { href: payhipPage("terms-and-conditions"), label: "Terms" },
   { href: payhipPage("privacy-policy"), label: "Privacy" },

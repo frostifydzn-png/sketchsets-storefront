@@ -31,6 +31,8 @@ export interface Product {
   compatibility: string[];
   license: string;
   licenseSummary: string;
+  /** File types in the pack, for at-a-glance scanning. */
+  formats: string[];
   fileSize: string;
   tags: string[];
   /** Surfaces the product as a Frostify Pick. */
@@ -118,6 +120,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    formats: ["PSD", "PNG", "SVG", "PAT"],
     fileSize: "ZIP · 487MB",
     tags: ["bundle", "vault", "collection", "psd", "svg", "value"],
     featured: true,
@@ -160,6 +163,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    formats: ["SVG", "PNG", "PSD"],
     fileSize: "ZIP · 106MB",
     tags: ["doodles", "hand-drawn", "svg", "vector", "psd", "accents"],
     featured: true,
@@ -205,6 +209,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    formats: ["PNG", "PSD"],
     fileSize: "ZIP · 99MB",
     tags: ["glows", "light leaks", "flares", "overlays", "1080p", "psd"],
     featured: true,
@@ -240,6 +245,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    formats: ["PSD", "SVG", "PNG"],
     fileSize: "ZIP · 57MB",
     tags: ["brushes", "texture", "vector", "svg", "hand-drawn", "grunge"],
     featured: false,
@@ -278,6 +284,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    formats: ["PNG", "PSD"],
     fileSize: "ZIP · 172MB",
     tags: ["paper", "tears", "texture", "collage", "grunge", "psd"],
     featured: true,
@@ -315,6 +322,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    formats: ["PAT", "PSD"],
     fileSize: "ZIP · 40MB",
     tags: ["patterns", "pat", "texture", "backgrounds", "psd", "tiling"],
     featured: false,
@@ -350,6 +358,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    formats: ["PSD", "PNG"],
     fileSize: "ZIP · 25MB",
     tags: ["speedlines", "free", "4k", "effects", "psd", "png"],
     featured: false,
@@ -382,6 +391,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    formats: ["PSD"],
     fileSize: "ZIP · 16MB",
     tags: ["sparks", "particles", "free", "overlays", "fireworks", "psd"],
     featured: false,
@@ -410,10 +420,11 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    formats: ["PSD", "PNG", "SVG"],
     fileSize: "ZIP · 1MB",
     tags: ["doodles", "free", "sample", "hand-drawn"],
     featured: false,
-    isNew: false,
+    isNew: true,
     payhipId: "I09f8",
   },
   {
@@ -438,10 +449,11 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    formats: ["PAT", "PSD"],
     fileSize: "ZIP · 12MB",
     tags: ["patterns", "free", "sample", "pat"],
     featured: false,
-    isNew: false,
+    isNew: true,
     payhipId: "v912K",
   },
 ];

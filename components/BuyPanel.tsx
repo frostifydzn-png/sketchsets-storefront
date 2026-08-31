@@ -20,9 +20,17 @@ export function BuyPanel({ product }: { product: Product }) {
           </div>
           {product.bundleOf?.length ? (
             <p className="text-muted pb-1.5 text-right text-[14px]">
-              <s>${bundleTotal(product).toFixed(2)}</s>
+              <s>${bundleTotal(product).toFixed(2)}</s> separately
               <br />
-              separately
+              <span className="text-accent font-bold">
+                Save ${(bundleTotal(product) - product.price).toFixed(2)} ·{" "}
+                {Math.round(
+                  ((bundleTotal(product) - product.price) /
+                    bundleTotal(product)) *
+                    100,
+                )}
+                %
+              </span>
             </p>
           ) : null}
         </div>
@@ -41,9 +49,28 @@ export function BuyPanel({ product }: { product: Product }) {
           Secure checkout via {checkout.overlay ? "Lemon Squeezy" : "Payhip"}
         </p>
 
+        {/* Formats and software read in a glance, not as prose to parse. */}
+        <div className="border-line mt-6 border-t pt-6">
+          <p className="text-muted text-[13px]">Works with</p>
+          <ul className="mt-2 flex flex-wrap gap-1.5">
+            {product.compatibility.map((app) => (
+              <li
+                key={app}
+                className="bg-elevated text-dim rounded-lg px-2.5 py-1.5 text-[13px]"
+              >
+                {app}
+              </li>
+            ))}
+          </ul>
+
+          <p className="text-muted mt-5 text-[13px]">File types</p>
+          <p className="text-text mt-1.5 font-mono text-[13.5px] tracking-wide">
+            {product.formats.join(" · ")}
+          </p>
+        </div>
+
         <dl className="border-line mt-6 space-y-4 border-t pt-6 text-[14.5px]">
           <Row label="You get">{product.fileSize}</Row>
-          <Row label="Works with">{product.compatibility.join(", ")}</Row>
           <Row label="Licence">
             {product.licenseSummary}{" "}
             <a

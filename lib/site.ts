@@ -15,10 +15,16 @@ export const site = {
   twitter: "@sketchsets",
   links: {
     frostify: "https://frostify.design",
-    frostoria: "https://frostify.design/join-the-community.html",
-    discord: "https://discord.gg/sketchsets",
-    instagram: "https://instagram.com/sketchsets",
-    twitter: "https://x.com/sketchsets",
+    /*
+     * TODO: point at the real Frostoria page once it exists.
+     * frostify.design/join-the-community.html and /frostoria both 404 today;
+     * the root is the only Frostify URL that resolves.
+     */
+    frostoria: "https://frostify.design",
+    // Taken from the live Payhip storefront footer, not guessed.
+    discord: "https://discord.gg/KwjaKJMYBp",
+    instagram: "https://www.instagram.com/thesketchsets",
+    twitter: "https://x.com/SketchSets",
   },
 } as const;
 
@@ -35,6 +41,13 @@ export const CHECKOUT_BASE = "https://sketchsets.com";
 export const checkoutUrl = (payhipId: string) =>
   `${CHECKOUT_BASE}/b/${payhipId}`;
 export const payhipPage = (path: string) => `${CHECKOUT_BASE}/${path}`;
+
+/**
+ * Customer login and past downloads. Absolute rather than derived from
+ * CHECKOUT_BASE because Payhip serves this from payhip.com itself.
+ * `/customer/login` on the store domain is a 404.
+ */
+export const PAYHIP_ACCOUNT = "https://payhip.com/SketchSets/users/login";
 
 export type Checkout = {
   href: string;
