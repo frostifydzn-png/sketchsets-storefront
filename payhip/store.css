@@ -254,7 +254,7 @@ body {
     text-align: left !important;
     font-size: clamp(28px, 2.7vw, 44px) !important;
     font-weight: 700 !important;
-    text-transform: uppercase;
+    text-transform: none;
     letter-spacing: -0.02em;
     line-height: 0.94;
     margin: 0 0 20px !important;
@@ -313,7 +313,10 @@ h2,
 .js-section-wrapper[data-section-key="image-and-text-advanced"] .heading-text,
 .js-section-wrapper[data-section-key="featured-collection"] .heading-text {
   font-family: "neue-haas-grotesk-display", rubik, sans-serif !important;
-  text-transform: uppercase !important;
+  /* Sentence case. Caps was doing the shouting the 900 weight used to
+     do, and Neue Haas has real lowercase worth showing - the ascenders
+     and descenders are most of what makes the face look expensive. */
+  text-transform: none !important;
   /* 600, not 900. The heaviest cut turned every headline into a wall;
      Neue Haas at 600 is what the face is actually admired for, and it
      reads as expensive rather than loud. Tracking eases off with it,
@@ -661,10 +664,10 @@ button.add-to-cart-button[disabled] {
   border-radius: 0 !important;
   background: none !important;
   color: var(--ss-muted) !important;
-  font-size: 11px !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em;
+  text-transform: none;
   pointer-events: none;
 }
 
@@ -685,10 +688,10 @@ button.add-to-cart-button[disabled] {
   border: 1px solid rgba(255, 61, 158, 0.35);
   border-radius: var(--ss-radius-pill) !important;
   color: var(--ss-accent) !important;
-  font-size: 12px !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em;
+  text-transform: none;
   transition:
     background 0.2s var(--ss-ease),
     color 0.2s var(--ss-ease);
@@ -923,8 +926,8 @@ button.add-to-cart-button[disabled] {
   font-family: "neue-haas-grotesk-text", rubik, sans-serif !important;
   font-size: 15px !important;
   font-weight: 700 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.02em !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
   line-height: 1.3 !important;
   margin: 0 0 5px !important;
   display: -webkit-box;
@@ -952,30 +955,13 @@ button.add-to-cart-button[disabled] {
   background-image: none !important;
 }
 
-/* Price sits left, and an arrow slides in on the right to say the
-   whole tile is a link. */
+/* Price only. The arrow that used to slide in on the right is gone -
+   the whole card is already a link, the artwork lifts and the title
+   turns accent on hover, so a fourth signal was just clutter. */
 .product-card-wrapper .card .card-information {
   display: flex !important;
   align-items: baseline;
-  justify-content: space-between;
   gap: 10px;
-}
-
-.product-card-wrapper .card .card-information::after {
-  content: "→";
-  color: var(--ss-accent);
-  font-weight: 700;
-  font-size: 15px;
-  opacity: 0;
-  transform: translateX(-6px);
-  transition:
-    opacity 0.3s var(--ss-ease),
-    transform 0.3s var(--ss-ease);
-}
-
-.product-card-wrapper .card:hover .card-information::after {
-  opacity: 1;
-  transform: none;
 }
 
 /* A scrim deepens the art on hover. */
@@ -1232,9 +1218,33 @@ button.add-to-cart-button[disabled] {
   gap: clamp(28px, 4vw, 72px);
 }
 
+/* THE IMAGE COLUMN IS CAPPED AT 580px ON PURPOSE.
+   Payhip ships this img with sizes="(min-width: 1260px) 580px, ...",
+   so on a wide screen the browser fetches a 580px-wide file. Section 1
+   widens the page past Payhip's own 1260px cap, which made the column
+   738px - so a 580px image was being stretched 1.27x and looked soft.
+   The source is fine; asking the CDN for width=2500 returns 2500x1406.
+   The sizes attribute is markup, not CSS, so the honest fix is to hold
+   the column to the width the browser was told to expect. The image
+   renders 1:1 and sharp, and the text column takes the space it gives
+   up, which reads better than a 50/50 split anyway. */
+.js-section-wrapper[data-section-key="image-and-text-advanced"] .image-column {
+  flex: 0 1 580px !important;
+  max-width: 580px !important;
+}
+
+.js-section-wrapper[data-section-key="image-and-text-advanced"] .text-column {
+  flex: 1 1 auto !important;
+  max-width: none !important;
+}
+
+/* The theme rounds only the two left corners, to sit the artwork flush
+   against the page edge. It is an object in the middle of a row here,
+   so it gets all four. */
 .js-section-wrapper[data-section-key="image-and-text-advanced"] .image-column .media {
-  border-radius: var(--ss-radius-media);
-  overflow: hidden;
+  border-radius: var(--ss-radius-media) !important;
+  overflow: hidden !important;
+  border: 1px solid var(--ss-line);
 }
 
 /* Its own scale, well under the 96px it inherited, so the heading
@@ -1263,11 +1273,11 @@ button.add-to-cart-button[disabled] {
 .js-section-wrapper[data-section-key="image-and-text-advanced"] .richtext em {
   display: block;
   font-style: normal;
-  font-size: 0.8125rem !important;
-  font-weight: 600;
-  letter-spacing: 0.07em;
+  font-size: 0.875rem !important;
+  font-weight: 500;
+  letter-spacing: 0.01em;
   line-height: 1.9;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--ss-muted) !important;
 }
 
@@ -1289,6 +1299,8 @@ button.add-to-cart-button[disabled] {
   .js-section-wrapper[data-section-key="image-and-text-advanced"] .image-column,
   .js-section-wrapper[data-section-key="image-and-text-advanced"] .text-column {
     width: 100% !important;
+    max-width: none !important;
+    flex: 0 0 auto !important;
   }
 }
 
