@@ -14,12 +14,29 @@ import {
 export type MenuId = "browse" | CategoryId;
 
 const collections = [
-  { href: "/new", label: "New drops", count: () => newDrops().length },
-  { href: "/browse", label: "Under $10", count: () => under(10).length },
+  {
+    href: "/new",
+    label: "New drops",
+    blurb: "Just added",
+    count: () => newDrops().length,
+  },
+  {
+    href: "/browse",
+    label: "Under $10",
+    blurb: "Low-risk starters",
+    count: () => under(10).length,
+  },
   {
     href: "/products/sketchsets-vault",
     label: "Bundles",
+    blurb: "Everything, cheaper",
     count: () => products.filter((p) => p.bundleOf?.length).length,
+  },
+  {
+    href: "/browse",
+    label: "Everything",
+    blurb: "The full catalogue",
+    count: () => products.length,
   },
 ];
 
@@ -35,50 +52,42 @@ export function MegaPanel({
 
     return (
       <Panel>
-        <div className="grid gap-10 lg:grid-cols-[1fr_1fr_1.6fr]">
-          <Column title="Categories">
+        <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr_1.5fr]">
+          <Group title="Categories">
             {categories.map((c) => (
-              <MenuLink
+              <BigLink
                 key={c.id}
                 href={`/${c.id}`}
                 onNavigate={onNavigate}
-                meta={`${byCategory(c.id).length}`}
-                sub={c.blurb}
-                accent={c.accentVar}
+                blurb={c.blurb}
+                count={byCategory(c.id).length}
               >
                 {c.name}
-              </MenuLink>
+              </BigLink>
             ))}
-          </Column>
+          </Group>
 
-          <Column title="Collections">
+          <Group title="Collections">
             {collections.map((c) => (
-              <MenuLink
+              <BigLink
                 key={c.label}
                 href={c.href}
                 onNavigate={onNavigate}
-                meta={`${c.count()}`}
+                blurb={c.blurb}
+                count={c.count()}
               >
                 {c.label}
-              </MenuLink>
+              </BigLink>
             ))}
-            <MenuLink
-              href="/browse"
-              onNavigate={onNavigate}
-              meta={`${products.length}`}
-            >
-              Everything
-            </MenuLink>
-          </Column>
+          </Group>
 
-          <div>
-            <ColumnTitle>Frostify Picks</ColumnTitle>
-            <div className="grid grid-cols-3 gap-3">
+          <Group title="Frostify Picks">
+            <div className="grid grid-cols-3 gap-3 pt-1">
               {picks.map((p) => (
                 <MiniCard key={p.id} product={p} onNavigate={onNavigate} />
               ))}
             </div>
-          </div>
+          </Group>
         </div>
       </Panel>
     );
@@ -90,28 +99,27 @@ export function MegaPanel({
 
   return (
     <Panel>
-      <div className="grid gap-10 lg:grid-cols-[1fr_2.6fr]">
+      <div className="grid gap-12 lg:grid-cols-[1fr_2.4fr]">
         <div>
-          <ColumnTitle>{category.name}</ColumnTitle>
-          <p className="text-dim mt-1 max-w-[26ch] text-[14px] leading-relaxed">
+          <h3 className="font-display text-[1.75rem] leading-tight">
+            {category.name}
+          </h3>
+          <p className="text-dim mt-3 max-w-[28ch] text-[15px] leading-relaxed">
             {category.intro}
           </p>
           <Link
             href={`/${category.id}`}
             onClick={onNavigate}
-            className="text-accent mt-5 inline-block text-[14px] font-semibold hover:underline"
+            className="border-line hover:border-line-bright hover:bg-elevated mt-6 inline-block rounded-full border px-5 py-2.5 text-[14px] font-semibold transition-colors"
           >
-            View all {items.length} →
+            View all {items.length}
           </Link>
         </div>
 
-        <div>
-          <ColumnTitle>In this category</ColumnTitle>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {items.slice(0, 4).map((p) => (
-              <MiniCard key={p.id} product={p} onNavigate={onNavigate} />
-            ))}
-          </div>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {items.slice(0, 4).map((p) => (
+            <MiniCard key={p.id} product={p} onNavigate={onNavigate} />
+          ))}
         </div>
       </div>
     </Panel>
@@ -121,18 +129,12 @@ export function MegaPanel({
 function Panel({ children }: { children: React.ReactNode }) {
   return (
     <div className="bg-ink border-line animate-menu-drop border-t border-b shadow-[0_30px_60px_-30px_rgba(0,0,0,1)]">
-      <div className="shell py-9">{children}</div>
+      <div className="shell py-10">{children}</div>
     </div>
   );
 }
 
-function ColumnTitle({ children }: { children: React.ReactNode }) {
-  return (
-    <h3 className="text-muted mb-3 text-[13px] font-medium">{children}</h3>
-  );
-}
-
-function Column({
+function Group({
   title,
   children,
 }: {
@@ -141,53 +143,38 @@ function Column({
 }) {
   return (
     <div>
-      <ColumnTitle>{title}</ColumnTitle>
-      <div className="space-y-0.5">{children}</div>
+      <h3 className="text-muted mb-4 text-[13px]">{title}</h3>
+      <div className="space-y-1">{children}</div>
     </div>
   );
 }
 
-function MenuLink({
+/** Name at reading size with its blurb beneath. No dots, no aligned counters. */
+function BigLink({
   href,
   children,
-  sub,
-  meta,
-  accent,
+  blurb,
+  count,
   onNavigate,
 }: {
   href: string;
   children: React.ReactNode;
-  sub?: string;
-  meta?: string;
-  accent?: string;
+  blurb: string;
+  count: number;
   onNavigate: () => void;
 }) {
   return (
     <Link
       href={href}
       onClick={onNavigate}
-      className="group hover:bg-elevated flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors"
+      className="group -mx-3 block rounded-xl px-3 py-2.5 transition-colors hover:bg-white/[0.04]"
     >
-      {accent && (
-        <span
-          aria-hidden="true"
-          className="mt-1.5 h-2 w-2 shrink-0 rounded-full"
-          style={{ background: accent }}
-        />
-      )}
-      <span className="min-w-0 flex-1">
-        <span className="text-text block text-[15px] font-semibold">
-          {children}
-        </span>
-        {sub && (
-          <span className="text-muted block truncate text-[13px]">{sub}</span>
-        )}
+      <span className="font-display group-hover:text-accent block text-[1.25rem] leading-tight transition-colors">
+        {children}
       </span>
-      {meta && (
-        <span className="text-muted shrink-0 text-[12px] tabular-nums">
-          {meta}
-        </span>
-      )}
+      <span className="text-muted mt-1 block text-[13.5px]">
+        {blurb} · {count} {count === 1 ? "pack" : "packs"}
+      </span>
     </Link>
   );
 }
@@ -205,19 +192,23 @@ function MiniCard({
       onClick={onNavigate}
       className="group block"
     >
-      <div className="bg-surface ring-line group-hover:ring-line-bright relative aspect-[4/3] overflow-hidden rounded-lg ring-1 transition-all">
+      <div className="bg-surface ring-line group-hover:ring-line-bright relative aspect-[4/3] overflow-hidden rounded-xl ring-1 transition-all">
         <Image
           src={product.thumbnail}
           alt=""
           fill
-          sizes="200px"
+          sizes="220px"
           className="object-cover transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:scale-105"
         />
-        <span className="bg-ink/85 group-hover:bg-accent group-hover:text-ink absolute right-1.5 bottom-1.5 rounded-full px-2 py-0.5 text-[11px] font-bold backdrop-blur-md transition-colors">
+      </div>
+      <p className="mt-2.5 flex items-baseline justify-between gap-2">
+        <span className="truncate text-[13.5px] font-semibold">
+          {product.title}
+        </span>
+        <span className="text-muted shrink-0 text-[13px] font-semibold">
           {formatPrice(product.price)}
         </span>
-      </div>
-      <p className="mt-2 truncate text-[13px] font-semibold">{product.title}</p>
+      </p>
     </Link>
   );
 }

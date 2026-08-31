@@ -90,11 +90,14 @@ export default async function ProductPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <nav aria-label="Breadcrumb" className="text-muted text-[13px]">
+      <nav
+        aria-label="Breadcrumb"
+        className="text-muted flex justify-center gap-2 text-[13px]"
+      >
         <Link href="/browse" className="hover:text-text transition-colors">
           Shop
         </Link>
-        <span className="mx-2">/</span>
+        <span>/</span>
         {category && (
           <>
             <Link
@@ -103,11 +106,28 @@ export default async function ProductPage({
             >
               {category.name}
             </Link>
-            <span className="mx-2">/</span>
+            <span>/</span>
           </>
         )}
         <span className="text-dim">{product.title}</span>
       </nav>
+
+      {/* Name leads as a poster, so what the page is about is unmistakable. */}
+      <header className="hero-glow pt-8 pb-10 text-center sm:pt-10 sm:pb-12">
+        <h1 className="font-display-tight text-[clamp(2.25rem,6vw,4.75rem)] leading-[0.92] uppercase">
+          {product.title}
+        </h1>
+        <p className="text-dim mx-auto mt-5 max-w-xl text-[17px] leading-relaxed sm:text-[19px]">
+          {product.valueProp}
+        </p>
+        {product.rating && (
+          <p className="text-muted mt-4 text-[14px]">
+            <span className="text-accent">★</span>{" "}
+            {product.rating.average.toFixed(1)} from {product.rating.count}{" "}
+            {product.rating.count === 1 ? "review" : "reviews"}
+          </p>
+        )}
+      </header>
 
       {/*
         Explicit grid placement so the source order stays gallery, purchase
@@ -115,7 +135,7 @@ export default async function ProductPage({
         under the artwork; on desktop the panel spans both rows and stays
         stuck beside the whole read.
       */}
-      <div className="mt-6 grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:gap-14">
+      <div className="grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:gap-14">
         <div className="min-w-0 lg:col-start-1 lg:row-start-1">
           <ProductGallery
             images={product.previewImages}

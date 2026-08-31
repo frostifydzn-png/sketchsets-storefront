@@ -7,7 +7,6 @@ import { Newsletter } from "@/components/Newsletter";
 import { ProductCard } from "@/components/ProductCard";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeader } from "@/components/SectionHeader";
-import { TextTicker } from "@/components/TextTicker";
 import { getCreator, monogram } from "@/lib/creators";
 import {
   byCreator,
@@ -20,18 +19,18 @@ import {
 } from "@/lib/products";
 import { site } from "@/lib/site";
 
-const assurances = [
+const howItWorks = [
   {
-    title: "Instant download",
-    body: "Files land the moment you pay. Nothing to wait for.",
+    title: "Curated, not endless",
+    body: "Every pack is made or vetted by Frostify before it goes up. The catalogue stays small on purpose, so browsing it is quick and nothing in here is filler.",
   },
   {
-    title: "Commercial licence",
-    body: "Use everything in client work and monetised content.",
+    title: "Yours to use commercially",
+    body: "A commercial licence comes with every pack. Client work, sponsored videos, monetised channels: all covered, with no extra fee and no per-project limit.",
   },
   {
-    title: "No account needed",
-    body: "Checkout runs through Payhip. Buy it and go.",
+    title: "Buy it and go",
+    body: "Checkout runs through Payhip, so there is no account to create and nothing to subscribe to. Pay once and the files download straight away.",
   },
 ];
 
@@ -69,14 +68,21 @@ export default function HomePage() {
 
       <ArtworkMarquee products={products} />
 
-      <TextTicker text="Instant download. Commercial licence included." />
-
+      {/* How the shop actually works, before asking anyone to buy. */}
       <section className="shell section-gap">
-        <Reveal className="grid gap-10 sm:grid-cols-3 sm:gap-14">
-          {assurances.map((item) => (
-            <div key={item.title}>
-              <h2 className="text-[17px] font-semibold">{item.title}</h2>
-              <p className="text-muted mt-2.5 text-[15px] leading-relaxed">
+        <SectionHeader
+          eyebrow="The short version"
+          title="How SketchSets works"
+          note="A small, hand-picked shop rather than a marketplace you have to dig through."
+        />
+        {/* gap-px over a line-coloured base draws the dividers between panels. */}
+        <Reveal className="bg-line grid gap-px overflow-hidden rounded-2xl sm:grid-cols-3">
+          {howItWorks.map((item) => (
+            <div key={item.title} className="bg-surface p-7 sm:p-8">
+              <h3 className="font-display text-[1.375rem] leading-tight">
+                {item.title}
+              </h3>
+              <p className="text-dim mt-3 text-[15px] leading-relaxed">
                 {item.body}
               </p>
             </div>

@@ -61,31 +61,6 @@ export function SiteHeader() {
       className="bg-ink border-line sticky top-0 z-40 border-b"
       onMouseLeave={scheduleClose}
     >
-      {/* Utility strip. States the offer before anyone has to ask. */}
-      <div className="border-line hidden border-b lg:block">
-        <div className="shell text-muted flex h-10 items-center gap-8 text-[12.5px]">
-          {trustPoints.map((point) => (
-            <span key={point}>{point}</span>
-          ))}
-          <a
-            href={site.links.frostify}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-text ml-auto transition-colors"
-          >
-            {site.parent} ↗
-          </a>
-          <a
-            href={site.links.frostoria}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-text transition-colors"
-          >
-            Frostoria ↗
-          </a>
-        </div>
-      </div>
-
       {/* Main row */}
       <div className="shell flex h-[76px] items-center gap-10">
         <Link
