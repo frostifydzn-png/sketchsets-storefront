@@ -96,18 +96,19 @@ body {
  * condensed all-caps poster treatment it used to carry: the caps read loud and
  * dated, and at small sizes they were harder to scan.
  */
+/* Heavy, semi-condensed poster type: the look the shop is built around. */
 .font-display {
   font-family: var(--font-display);
-  font-variation-settings: "wdth" 96;
-  font-weight: 700;
-  letter-spacing: -0.022em;
+  font-variation-settings: "wdth" 88;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .font-display-tight {
   font-family: var(--font-display);
-  font-variation-settings: "wdth" 94;
+  font-variation-settings: "wdth" 80;
   font-weight: 800;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.028em;
 }
 
 ::selection {

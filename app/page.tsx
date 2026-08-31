@@ -1,25 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArtworkMarquee } from "@/components/ArtworkMarquee";
 import { Newsletter } from "@/components/Newsletter";
+import { ProductCard } from "@/components/ProductCard";
 import { Reveal } from "@/components/Reveal";
-import { ShopGrid } from "@/components/ShopGrid";
+import { SectionHeader } from "@/components/SectionHeader";
+import { TextTicker } from "@/components/TextTicker";
 import {
   bundleContents,
   bundleTotal,
+  byCategory,
+  categories,
   formatPrice,
+  frostifyPicks,
   getProduct,
+  newDrops,
   products,
+  under,
 } from "@/lib/products";
 import { site } from "@/lib/site";
 
-const trustPoints = [
-  "Instant download",
-  "Commercial licence",
-  "One-time purchase",
-  "Curated by Frostify",
-];
-
-/* The questions people actually arrive with. */
 const faqs = [
   {
     q: "What am I actually buying?",
@@ -37,7 +37,10 @@ const faqs = [
 
 export default function HomePage() {
   const vault = getProduct("sketchsets-vault");
+  const picks = frostifyPicks();
+  const drops = newDrops();
   const free = products.filter((p) => p.price === 0);
+  const cheap = under(10);
   const lowest = Math.min(
     ...products.filter((p) => p.price > 0).map((p) => p.price),
   );
@@ -48,108 +51,211 @@ export default function HomePage() {
 
   return (
     <>
-      {/*
-        Compact hero. Kept deliberately short so the catalogue itself is the
-        first substantial thing on the page rather than a screen of brand copy.
-      */}
-      <section className="shell pt-16 pb-14 sm:pt-24 sm:pb-16">
-        <div className="max-w-3xl">
-          <h1 className="font-display-tight text-[clamp(2.5rem,6.4vw,4.75rem)] leading-[1]">
-            Resources for people who make the internet.
+      {/* Hero: centred poster type, then straight into product. */}
+      <section className="relative pt-16 pb-14 text-center sm:pt-24 sm:pb-16">
+        <div
+          aria-hidden="true"
+          className="hero-glow pointer-events-none absolute inset-0 z-0"
+        />
+        <div className="shell relative z-10">
+          <h1 className="font-display-tight text-[clamp(2.5rem,7.6vw,6.5rem)] leading-[0.88] uppercase">
+            <span className="block">Resources for people</span>
+            <span className="block">who make the internet</span>
           </h1>
-          <p className="text-dim mt-6 max-w-xl text-[17px] leading-relaxed sm:text-[18px]">
+          <p className="text-dim mx-auto mt-6 max-w-xl text-[17px] leading-relaxed">
             Presets, assets and creator tools, curated for editors, thumbnail
             designers and people making stuff online.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-3">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
-              href="#shop"
-              className="bg-accent text-ink rounded-full px-7 py-3.5 text-[15px] font-bold transition-transform hover:scale-[1.02]"
+              href="/browse"
+              className="bg-accent text-ink rounded-full px-8 py-4 text-[15px] font-bold transition-transform hover:scale-[1.02]"
             >
-              Browse the shop
+              Browse SketchSets
             </Link>
             <Link
               href="/free"
-              className="border-line hover:border-line-bright hover:bg-elevated rounded-full border px-7 py-3.5 text-[15px] font-semibold transition-colors"
+              className="border-line hover:border-line-bright hover:bg-elevated rounded-full border px-8 py-4 text-[15px] font-semibold transition-colors"
             >
-              Start free
+              Start with a freebie
             </Link>
-            <p className="text-muted ml-1 text-[14px]">
-              {products.length} packs · {free.length} free · from{" "}
-              {formatPrice(lowest)}
-            </p>
           </div>
+          <p className="text-muted mt-5 text-[14px]">
+            {products.length} packs · {free.length} free · from{" "}
+            {formatPrice(lowest)}
+          </p>
         </div>
       </section>
 
-      {/* The shop. Everything, one click away, filtered without navigating. */}
-      <section id="shop" className="shell scroll-mt-24">
-        <ShopGrid products={products} />
+      <ArtworkMarquee products={products} />
+
+      {/* New drops */}
+      {drops.length > 0 && (
+        <section className="shell section-gap">
+          <SectionHeader
+            eyebrow="From the shop"
+            title="New drops"
+            action={{ href: "/new", label: "See more" }}
+          />
+          <div className="grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-3">
+            {drops.map((product, i) => (
+              <Reveal key={product.id} delay={i * 70}>
+                <ProductCard product={product} priority={i < 3} />
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Frostify Picks */}
+      <section className="shell section-gap">
+        <SectionHeader
+          eyebrow="From the shop"
+          title="Frostify Picks"
+          action={{ href: "/browse", label: "View all products" }}
+        />
+        <div className="grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-4">
+          {picks.map((product, i) => (
+            <Reveal key={product.id} delay={i * 70}>
+              <ProductCard product={product} priority={i < 4} />
+            </Reveal>
+          ))}
+        </div>
       </section>
 
-      {/* The bundle */}
-      {vault && vaultContents.length > 0 && (
+      {/* Free */}
+      {free.length > 0 && (
         <section className="shell section-gap">
+          <SectionHeader
+            eyebrow="From the shop"
+            title="Free downloads"
+            action={{ href: "/free", label: "All free packs" }}
+          />
+          <div className="grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-4">
+            {free.map((product, i) => (
+              <Reveal key={product.id} delay={i * 70}>
+                <ProductCard product={product} />
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* The Vault, as the big centred offer. */}
+      {vault && vaultContents.length > 0 && (
+        <section className="section-gap">
           <Reveal>
-            <Link
-              href={`/products/${vault.slug}`}
-              className="group bg-surface ring-line hover:ring-line-bright block overflow-hidden rounded-3xl ring-1 transition-all"
-            >
-              <div className="grid items-center gap-8 p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:gap-16 lg:p-12">
-                <div>
-                  <p className="text-accent text-[13px] font-semibold">
-                    Best value
-                  </p>
-                  <h2 className="font-display mt-2 text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.05]">
-                    {vault.title}
-                  </h2>
-                  <p className="text-dim mt-3 max-w-lg text-[16px] leading-relaxed">
-                    All {vaultContents.length} packs in one download. Everything
-                    in Collection V1, bought once.
-                  </p>
+            <div className="bg-surface border-line border-y">
+              <div className="shell py-16 text-center sm:py-20">
+                <h2 className="font-display-tight text-[clamp(2rem,5.6vw,4.5rem)] leading-[0.92] uppercase">
+                  The Vault
+                </h2>
+                <p className="text-dim mx-auto mt-5 max-w-lg text-[17px] leading-relaxed">
+                  All {vaultContents.length} packs in one download. Everything
+                  in Collection V1, bought once.
+                </p>
 
-                  <ul className="mt-7 flex flex-wrap gap-2">
-                    {vaultContents.map((p) => (
-                      <li
-                        key={p.id}
-                        title={p.title}
-                        className="bg-elevated relative h-12 w-16 overflow-hidden rounded-md sm:h-14 sm:w-20"
-                      >
-                        <Image
-                          src={p.thumbnail}
-                          alt={p.title}
-                          fill
-                          sizes="80px"
-                          className="object-cover"
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <ul className="mt-9 flex flex-wrap items-center justify-center gap-2.5">
+                  {vaultContents.map((p) => (
+                    <li
+                      key={p.id}
+                      title={p.title}
+                      className="bg-elevated relative h-14 w-20 overflow-hidden rounded-lg sm:h-16 sm:w-24"
+                    >
+                      <Image
+                        src={p.thumbnail}
+                        alt={p.title}
+                        fill
+                        sizes="96px"
+                        className="object-cover"
+                      />
+                    </li>
+                  ))}
+                </ul>
 
-                <div className="lg:text-right">
-                  <p className="font-display text-accent text-[3rem] leading-none">
+                <div className="mt-9 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+                  <span className="font-display text-accent text-[3.25rem] leading-none">
                     {formatPrice(vault.price)}
-                  </p>
-                  <p className="text-muted mt-2 text-[15px]">
+                  </span>
+                  <span className="text-muted text-[16px]">
                     <s>${vaultTotal.toFixed(2)}</s> separately
-                  </p>
-                  <p className="text-accent mt-1 text-[15px] font-bold">
+                  </span>
+                  <span className="bg-accent/15 text-accent rounded-full px-3.5 py-1.5 text-[14px] font-bold">
                     Save ${saving.toFixed(2)} ·{" "}
                     {Math.round((saving / vaultTotal) * 100)}%
-                  </p>
-                  <span className="bg-accent text-ink mt-6 inline-block rounded-full px-6 py-3.5 text-[15px] font-bold transition-transform group-hover:scale-[1.02]">
-                    Explore the Vault
                   </span>
                 </div>
+
+                <Link
+                  href={`/products/${vault.slug}`}
+                  className="bg-accent text-ink mt-9 inline-block rounded-full px-8 py-4 text-[16px] font-bold transition-transform hover:scale-[1.02]"
+                >
+                  Explore the Vault
+                </Link>
               </div>
-            </Link>
+            </div>
           </Reveal>
         </section>
       )}
 
-      {/* How it works, kept to three answers and a trust line. */}
+      {/* Under $10 */}
+      {cheap.length > 0 && (
+        <section className="shell section-gap">
+          <SectionHeader
+            eyebrow="From the shop"
+            title="Under $10"
+            action={{ href: "/browse", label: "View all products" }}
+          />
+          <div className="grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-4">
+            {cheap.map((product, i) => (
+              <Reveal key={product.id} delay={i * 70}>
+                <ProductCard product={product} />
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <div className="section-gap">
+        <TextTicker text="Instant download · Commercial licence included · Curated by Frostify" />
+      </div>
+
+      {/* Categories as a word list, their closing-shelf pattern. */}
+      <section className="shell section-gap text-center">
+        <p className="text-muted text-[13px]">The shop is open</p>
+        <h2 className="font-display-tight mx-auto mt-3 max-w-[18ch] text-[clamp(1.875rem,4.6vw,3.5rem)] leading-[0.95] uppercase">
+          Make great things with our packs
+        </h2>
+
+        <ul className="mt-10 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+          {categories.map((c) => (
+            <li key={c.id}>
+              <Link
+                href={`/${c.id}`}
+                className="font-display hover:text-accent text-[clamp(1.5rem,3vw,2.25rem)] leading-none transition-colors"
+              >
+                {c.name}
+                <span className="text-muted ml-2 align-super text-[13px]">
+                  {byCategory(c.id).length}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <p className="text-dim mx-auto mt-8 max-w-lg text-[16px] leading-relaxed">
+          Small catalogue, hand-picked. Nothing here is filler.
+        </p>
+        <Link
+          href="/browse"
+          className="bg-accent text-ink mt-8 inline-block rounded-full px-8 py-4 text-[15px] font-bold transition-transform hover:scale-[1.02]"
+        >
+          View all products
+        </Link>
+      </section>
+
+      {/* How it works */}
       <section className="shell section-gap">
         <Reveal>
           <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
@@ -170,21 +276,10 @@ export default function HomePage() {
               ))}
             </dl>
           </div>
-
-          <ul className="text-muted mt-10 flex flex-wrap items-center gap-x-3 gap-y-2 text-[13.5px]">
-            {trustPoints.map((point, i) => (
-              <li key={point} className="flex items-center gap-3">
-                {i > 0 && (
-                  <span aria-hidden="true" className="bg-line h-3 w-px" />
-                )}
-                {point}
-              </li>
-            ))}
-          </ul>
         </Reveal>
       </section>
 
-      {/* Community, last, so it never competes with the shop. */}
+      {/* Frostoria, last, so it never competes with the shop. */}
       <section className="shell section-gap">
         <Reveal>
           <div className="border-line flex flex-col gap-6 rounded-3xl border border-dashed p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10">

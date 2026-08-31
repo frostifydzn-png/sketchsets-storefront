@@ -6,13 +6,12 @@ import { useState } from "react";
 import { SearchDialog } from "@/components/SearchDialog";
 import { site } from "@/lib/site";
 
-/*
- * Three destinations, no dropdowns. The catalogue is small enough that the
- * homepage is the shop, so a mega menu was navigating a structure that does
- * not need navigating.
- */
+/* Flat primary items, no dropdowns. Every destination is one click. */
 const navLinks = [
   { href: "/browse", label: "Shop" },
+  { href: "/editing", label: "Editing" },
+  { href: "/thumbnails", label: "Thumbnails" },
+  { href: "/creator-tools", label: "Creator Tools" },
   { href: "/free", label: "Free" },
   { href: "/products/sketchsets-vault", label: "The Vault" },
 ];
@@ -38,7 +37,10 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
+        <nav
+          aria-label="Primary"
+          className="mx-auto hidden items-center gap-6 lg:flex"
+        >
           {navLinks.map((link) => {
             const active =
               pathname === link.href ||
@@ -67,7 +69,7 @@ export function SiteHeader() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="text-text -mr-2 p-2 md:hidden"
+            className="text-text -mr-2 p-2 lg:hidden"
           >
             <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
               {open ? (
@@ -94,7 +96,7 @@ export function SiteHeader() {
         <nav
           id="mobile-nav"
           aria-label="Mobile"
-          className="border-line bg-ink border-t md:hidden"
+          className="border-line bg-ink border-t lg:hidden"
         >
           <div className="shell py-4">
             {navLinks.map((link) => (
