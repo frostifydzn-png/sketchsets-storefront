@@ -40,6 +40,12 @@ export interface Product {
   bundleOf?: string[];
   /** Payhip product id, the `<id>` in /b/<id>. Combined with CHECKOUT_BASE. */
   payhipId: string;
+  /**
+   * Lemon Squeezy checkout URL. When set, this product checks out through the
+   * Lemon Squeezy overlay instead of Payhip, letting the two run side by side
+   * during migration rather than needing a single cutover.
+   */
+  lemonSqueezyUrl?: string;
   rating?: { average: number; count: number };
 }
 

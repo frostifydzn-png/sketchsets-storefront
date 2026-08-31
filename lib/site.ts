@@ -35,3 +35,24 @@ export const CHECKOUT_BASE = "https://sketchsets.com";
 export const checkoutUrl = (payhipId: string) =>
   `${CHECKOUT_BASE}/b/${payhipId}`;
 export const payhipPage = (path: string) => `${CHECKOUT_BASE}/${path}`;
+
+export type Checkout = {
+  href: string;
+  /** True when the link should open in the Lemon Squeezy overlay. */
+  overlay: boolean;
+};
+
+/**
+ * Resolves where a product's buy button points.
+ *
+ * A product moves to Lemon Squeezy the moment it is given a lemonSqueezyUrl;
+ * everything else keeps going to Payhip. That makes the migration per-product
+ * and reversible, with no window where checkout is down.
+ */
+export const checkoutFor = (product: {
+  payhipId: string;
+  lemonSqueezyUrl?: string;
+}): Checkout =>
+  product.lemonSqueezyUrl
+    ? { href: product.lemonSqueezyUrl, overlay: true }
+    : { href: checkoutUrl(product.payhipId), overlay: false };

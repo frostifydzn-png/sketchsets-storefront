@@ -1,12 +1,12 @@
 import { bundleTotal, formatPrice, type Product } from "@/lib/products";
-import { checkoutUrl, payhipPage } from "@/lib/site";
+import { checkoutFor, payhipPage } from "@/lib/site";
 
 /**
  * Purchase card. Everything needed to decide and buy, raised off the page so
  * it reads as one object rather than a column of loose text.
  */
 export function BuyPanel({ product }: { product: Product }) {
-  const buyHref = checkoutUrl(product.payhipId);
+  const checkout = checkoutFor(product);
 
   return (
     <div className="lg:sticky lg:top-24">
@@ -29,14 +29,16 @@ export function BuyPanel({ product }: { product: Product }) {
 
         <a
           id="buy-button"
-          href={buyHref}
-          className="bg-accent text-ink mt-6 block rounded-xl px-6 py-4 text-center text-[16px] font-bold transition-transform hover:scale-[1.015] active:scale-[0.99]"
+          href={checkout.href}
+          className={`bg-accent text-ink mt-6 block rounded-xl px-6 py-4 text-center text-[16px] font-bold transition-transform hover:scale-[1.015] active:scale-[0.99] ${
+            checkout.overlay ? "lemonsqueezy-button" : ""
+          }`}
         >
           {product.price === 0 ? "Get it free" : "Get the pack"}
         </a>
 
         <p className="text-muted mt-3.5 text-center text-[13px]">
-          Secure checkout via Payhip
+          Secure checkout via {checkout.overlay ? "Lemon Squeezy" : "Payhip"}
         </p>
 
         <dl className="border-line mt-6 space-y-4 border-t pt-6 text-[14.5px]">

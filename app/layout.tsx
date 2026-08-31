@@ -3,7 +3,9 @@ import { Archivo, Inter_Tight } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { site } from "@/lib/site";
+import { products } from "@/lib/products";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
+import { LemonSqueezyOverlay } from "@/components/LemonSqueezyOverlay";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import "./globals.css";
@@ -76,6 +78,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <SiteFooter />
+        {/* Only shipped once a product actually checks out through the overlay. */}
+        {products.some((p) => p.lemonSqueezyUrl) && <LemonSqueezyOverlay />}
         {/* Scoped to this Vercel project only. No shared analytics with Frostify. */}
         <Analytics />
         <SpeedInsights />

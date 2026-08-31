@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { formatPrice, type Product } from "@/lib/products";
-import { checkoutUrl } from "@/lib/site";
+import { checkoutFor } from "@/lib/site";
 
 /**
  * Sticky mobile purchase bar. Hides itself while the real buy button is on
@@ -10,6 +10,7 @@ import { checkoutUrl } from "@/lib/site";
  */
 export function MobileBuyBar({ product }: { product: Product }) {
   const [visible, setVisible] = useState(false);
+  const checkout = checkoutFor(product);
 
   useEffect(() => {
     // BuyPanel always renders this anchor; with no target the bar stays hidden
@@ -37,8 +38,10 @@ export function MobileBuyBar({ product }: { product: Product }) {
           <p className="text-muted text-[12px]">Instant download</p>
         </div>
         <a
-          href={checkoutUrl(product.payhipId)}
-          className="bg-accent text-ink shrink-0 rounded-lg px-5 py-3 text-[14px] font-bold"
+          href={checkout.href}
+          className={`bg-accent text-ink shrink-0 rounded-lg px-5 py-3 text-[14px] font-bold ${
+            checkout.overlay ? "lemonsqueezy-button" : ""
+          }`}
         >
           {formatPrice(product.price)} · Get pack
         </a>

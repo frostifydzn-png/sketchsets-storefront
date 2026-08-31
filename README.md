@@ -83,6 +83,47 @@ The store is only as good as its artwork. Every product should ship:
 Anything that does not clear this bar should not go live, third-party sellers
 included.
 
+## Moving checkout to Lemon Squeezy
+
+The goal is an overlay checkout that opens on sketchsets.com, with Lemon
+Squeezy handling payment, file delivery and the download email. They stay
+Merchant of Record, so EU/UK VAT and US/Canada sales tax remain their
+liability rather than ours.
+
+The switch is **per product and reversible**. A product moves the moment it is
+given a `lemonSqueezyUrl` in [`lib/products.ts`](lib/products.ts); everything
+without one keeps checking out through Payhip. There is no cutover window and
+no point where checkout is down.
+
+```ts
+{
+  slug: "paper-tears",
+  payhipId: "pm6Iy",
+  lemonSqueezyUrl: "https://sketchsets.lemonsqueezy.com/buy/<uuid>",
+}
+```
+
+What that flips automatically:
+
+- The buy button and the mobile buy bar point at Lemon Squeezy and gain the
+  `lemonsqueezy-button` class, which is what opens the overlay
+- `lemon.js` is only loaded once at least one product has a URL
+- The reassurance line under the button reads "Secure checkout via Lemon
+  Squeezy" instead of Payhip
+
+`components/LemonSqueezyOverlay.tsx` re-runs `window.createLemonSqueezy()` on
+every route change. Lemon.js binds to buttons on load, which in a React app
+happens before ours exist and goes stale after client-side navigation; this is
+the documented fix.
+
+### Steps that need a human
+
+1. Create the Lemon Squeezy store and connect payouts
+2. Upload each pack and its ZIP, set the price
+3. Copy each product's checkout URL into `lemonSqueezyUrl`
+4. Test one real purchase end to end: click, pay, email arrives, file downloads
+5. Once all ten are live and verified, retire the Payhip products
+
 ## The checkout URL — important
 
 All buy buttons build from a single constant in [`lib/site.ts`](lib/site.ts):
