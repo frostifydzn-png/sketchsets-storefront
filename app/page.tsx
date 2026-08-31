@@ -58,9 +58,14 @@ export default function HomePage() {
           className="hero-glow pointer-events-none absolute inset-0 z-0"
         />
         <div className="shell relative z-10">
-          <h1 className="font-display-tight text-[clamp(2.5rem,7.6vw,6.5rem)] leading-[0.88] uppercase">
-            <span className="block">Resources for people</span>
-            <span className="block">who make the internet</span>
+          {/* Each line rises out of its own mask rather than fading in. */}
+          <h1 className="font-display-tight rise-now text-[clamp(2.5rem,7.6vw,6.5rem)] leading-[0.88] uppercase">
+            <span className="rise-line">
+              <span>Resources for people</span>
+            </span>
+            <span className="rise-line">
+              <span>who make the internet</span>
+            </span>
           </h1>
           <p className="text-dim mx-auto mt-6 max-w-xl text-[17px] leading-relaxed">
             Presets, assets and creator tools, curated for editors, thumbnail
@@ -146,7 +151,7 @@ export default function HomePage() {
       {vault && vaultContents.length > 0 && (
         <section className="section-gap">
           <Reveal>
-            <div className="bg-surface border-line border-y">
+            <div className="bg-surface border-line grid-lines crop-marks relative border-y">
               <div className="shell py-16 text-center sm:py-20">
                 <h2 className="font-display-tight text-[clamp(2rem,5.6vw,4.5rem)] leading-[0.92] uppercase">
                   The Vault
@@ -224,9 +229,16 @@ export default function HomePage() {
       {/* Categories as a word list, their closing-shelf pattern. */}
       <section className="shell section-gap text-center">
         <p className="text-muted text-[13px]">The shop is open</p>
-        <h2 className="font-display-tight mx-auto mt-3 max-w-[18ch] text-[clamp(1.875rem,4.6vw,3.5rem)] leading-[0.95] uppercase">
-          Make great things with our packs
-        </h2>
+        <Reveal>
+          <h2 className="font-display-tight mx-auto mt-3 max-w-[18ch] text-[clamp(1.875rem,4.6vw,3.5rem)] leading-[0.95] uppercase">
+            <span className="rise-line">
+              <span>Make great things</span>
+            </span>
+            <span className="rise-line">
+              <span>with our packs</span>
+            </span>
+          </h2>
+        </Reveal>
 
         {/* Tall tiles carrying each category's identity colour, no icons. */}
         <ul className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3">

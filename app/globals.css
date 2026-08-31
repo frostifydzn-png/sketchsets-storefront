@@ -141,6 +141,62 @@ textarea:focus-visible {
 
 /* ---------- motion ---------- */
 
+/*
+ * Mask rise. Each line sits in its own clipped box and slides up from beneath
+ * it, so type arrives rather than fades. Reads far more deliberate than an
+ * opacity change and costs nothing extra.
+ */
+.rise-line {
+  display: block;
+  overflow: hidden;
+}
+.rise-line > span {
+  display: block;
+  transform: translateY(115%);
+  transition: transform 0.9s var(--ease-glide);
+}
+.rise-now .rise-line > span,
+.reveal.is-visible .rise-line > span {
+  transform: none;
+}
+.rise-line:nth-child(2) > span {
+  transition-delay: 0.08s;
+}
+.rise-line:nth-child(3) > span {
+  transition-delay: 0.16s;
+}
+
+/* Blueprint grid, for sections that would otherwise be flat black. */
+.grid-lines {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+/* Crop marks: a print motif, and the opposite of a rounded SaaS card. */
+.crop-marks::before,
+.crop-marks::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--color-accent);
+  pointer-events: none;
+}
+.crop-marks::before {
+  top: 14px;
+  left: 14px;
+  border-top: 2px solid;
+  border-left: 2px solid;
+}
+.crop-marks::after {
+  right: 14px;
+  bottom: 14px;
+  border-right: 2px solid;
+  border-bottom: 2px solid;
+}
+
 /* Scroll reveal. JS adds .is-visible; reduced motion skips straight to shown. */
 .reveal {
   opacity: 0;
@@ -246,6 +302,10 @@ textarea:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .rise-line > span {
     transform: none;
     transition: none;
   }

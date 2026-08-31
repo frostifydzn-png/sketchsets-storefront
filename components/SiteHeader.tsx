@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { Logomark } from "@/components/Logomark";
 import { SearchDialog } from "@/components/SearchDialog";
 import { site } from "@/lib/site";
 
@@ -24,23 +25,32 @@ export function SiteHeader() {
 
   return (
     <header className="bg-ink/85 border-line sticky top-0 z-40 border-b backdrop-blur-xl">
-      <div className="shell flex h-[68px] items-center gap-8">
+      {/*
+        Three-column grid rather than flex with mx-auto: the wordmark and the
+        search cluster are different widths, so auto margins were centring the
+        nav in the leftover space rather than in the header. Equal 1fr rails
+        put it dead centre regardless.
+      */}
+      <div className="shell grid h-[68px] grid-cols-[1fr_auto_1fr] items-center gap-6">
         <Link
           href="/"
           onClick={close}
-          className="flex shrink-0 items-baseline gap-2"
+          className="group flex shrink-0 items-center gap-2.5"
         >
-          <span className="font-display-tight text-[20px] leading-none">
-            SketchSets
-          </span>
-          <span className="text-muted hidden text-[11px] leading-none sm:inline">
-            by {site.parent}
+          <Logomark className="text-text h-7 w-7 shrink-0 transition-transform duration-500 ease-[var(--ease-glide)] group-hover:-rotate-6" />
+          <span className="flex items-baseline gap-2">
+            <span className="font-display-tight text-[20px] leading-none">
+              SketchSets
+            </span>
+            <span className="text-muted hidden text-[11px] leading-none sm:inline">
+              by {site.parent}
+            </span>
           </span>
         </Link>
 
         <nav
           aria-label="Primary"
-          className="mx-auto hidden items-center gap-6 lg:flex"
+          className="hidden items-center justify-center gap-6 lg:flex"
         >
           {navLinks.map((link) => {
             const active =
@@ -62,7 +72,7 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <div className="ml-auto flex items-center gap-3">
+        <div className="col-start-3 flex items-center justify-end gap-3">
           <SearchDialog />
           <button
             type="button"

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logomark } from "@/components/Logomark";
 import { categories } from "@/lib/products";
 import { PAYHIP_ACCOUNT, payhipPage, site } from "@/lib/site";
 
@@ -25,9 +26,10 @@ export function SiteFooter() {
       <div className="shell py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <div className="flex items-baseline gap-2">
+            <div className="flex items-center gap-2.5">
+              <Logomark className="text-text h-7 w-7 shrink-0" />
               <span className="font-display-tight text-[19px] leading-none">
-                SKETCHSETS
+                SketchSets
               </span>
               <span className="text-muted text-[11px] font-medium">
                 · by {site.parent}
