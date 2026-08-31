@@ -84,7 +84,7 @@ export default async function ProductPage({
   };
 
   return (
-    <div className="mx-auto max-w-[1440px] px-5 pt-6 pb-24 sm:px-8 lg:pb-0">
+    <div className="shell pt-6 pb-24 lg:pb-0">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

@@ -34,7 +34,7 @@ export function SiteHeader() {
       }`}
     >
       <div
-        className={`mx-auto flex max-w-[1440px] items-center gap-8 px-5 transition-all duration-300 sm:px-8 ${
+        className={`shell flex items-center gap-8 transition-all duration-300 ${
           scrolled ? "h-14" : "h-[72px]"
         }`}
       >
@@ -106,7 +106,7 @@ export function SiteHeader() {
           aria-label="Mobile"
           className="border-line bg-ink border-t md:hidden"
         >
-          <div className="mx-auto max-w-[1440px] px-5 py-4 sm:px-8">
+          <div className="shell py-4">
             {navLinks.map((link) => (
               <Link
                 key={link.href}

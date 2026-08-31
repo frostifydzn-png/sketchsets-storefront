@@ -8,7 +8,7 @@ export function Newsletter() {
   if (!NEWSLETTER_ENDPOINT) return null;
 
   return (
-    <section className="mx-auto max-w-[1440px] px-5 pt-20 sm:px-8">
+    <section className="shell pt-20">
       <div className="bg-surface ring-line rounded-2xl p-7 ring-1 sm:p-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-md">

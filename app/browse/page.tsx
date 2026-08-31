@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function BrowsePage() {
   return (
-    <div className="mx-auto max-w-[1440px] px-5 pt-12 sm:px-8 sm:pt-16">
+    <div className="shell pt-12 sm:pt-16">
       <header>
         <h1 className="font-display-tight text-[clamp(2.5rem,6vw,4.5rem)] leading-[0.95]">
           Everything

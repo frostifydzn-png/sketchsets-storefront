@@ -40,7 +40,7 @@ export default async function CreatorPage({
   const items = byCreator(creator.slug);
 
   return (
-    <div className="mx-auto max-w-[1440px] px-5 pt-12 sm:px-8 sm:pt-16">
+    <div className="shell pt-12 sm:pt-16">
       <header className="max-w-2xl">
         <span className="bg-elevated ring-line flex h-16 w-16 items-center justify-center rounded-full text-[20px] font-bold ring-1">
           {monogram(creator.name)}

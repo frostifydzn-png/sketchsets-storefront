@@ -20,7 +20,7 @@ const supportLinks = [
 export function SiteFooter() {
   return (
     <footer className="border-line mt-28 border-t">
-      <div className="mx-auto max-w-[1440px] px-5 py-14 sm:px-8">
+      <div className="shell py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <div className="flex items-baseline gap-2">
