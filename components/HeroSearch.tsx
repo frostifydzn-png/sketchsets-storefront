@@ -34,7 +34,13 @@ export function HeroSearch() {
           aria-hidden="true"
           className="text-muted shrink-0"
         >
-          <circle cx="8.5" cy="8.5" r="6" stroke="currentColor" strokeWidth="1.8" />
+          <circle
+            cx="8.5"
+            cy="8.5"
+            r="6"
+            stroke="currentColor"
+            strokeWidth="1.8"
+          />
           <path
             d="M13 13l4.5 4.5"
             stroke="currentColor"
@@ -72,7 +78,7 @@ export function HeroSearch() {
         </Link>
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center gap-2">
+      <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
         <span className="text-muted text-[13px]">Popular:</span>
         {suggestions.map((s) => (
           <button

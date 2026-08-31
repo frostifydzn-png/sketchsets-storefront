@@ -3,6 +3,7 @@ import { Archivo, Inter_Tight } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { site } from "@/lib/site";
+import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import "./globals.css";
@@ -69,6 +70,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
+        <AnnouncementBar />
         <SiteHeader />
         <main id="main" className="flex-1">
           {children}

@@ -65,7 +65,9 @@ export function SearchDialog() {
       >
         <SearchIcon />
         <span className="hidden lg:inline">Search</span>
-        <kbd className="text-muted hidden font-sans text-[11px] lg:inline">⌘K</kbd>
+        <kbd className="text-muted hidden font-sans text-[11px] lg:inline">
+          ⌘K
+        </kbd>
       </button>
 
       {open && (
@@ -166,7 +168,13 @@ function SearchIcon() {
       aria-hidden="true"
       className="shrink-0"
     >
-      <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" strokeWidth="1.5" />
+      <circle
+        cx="6.5"
+        cy="6.5"
+        r="4.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
       <path
         d="M10 10l3.5 3.5"
         stroke="currentColor"

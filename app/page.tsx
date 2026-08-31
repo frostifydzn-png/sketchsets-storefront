@@ -7,6 +7,7 @@ import { Newsletter } from "@/components/Newsletter";
 import { ProductCard } from "@/components/ProductCard";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeader } from "@/components/SectionHeader";
+import { TextTicker } from "@/components/TextTicker";
 import { getCreator, monogram } from "@/lib/creators";
 import {
   byCreator,
@@ -46,26 +47,29 @@ export default function HomePage() {
 
   return (
     <>
-      {/* Hero. Search is the primary action. */}
-      <section className="shell pt-16 pb-16 sm:pt-24 sm:pb-20">
-        <h1 className="font-display-tight line-rise max-w-[16ch] text-[clamp(2.75rem,7vw,5.5rem)] leading-[0.94]">
-          <span>Resources for</span>
-          <span>people who make</span>
-          <span>the internet.</span>
+      {/* Hero. Poster type up top, search immediately under it. */}
+      <section className="hero-glow shell pt-14 pb-14 text-center sm:pt-20 sm:pb-16">
+        {/* Lines are held together from sm up so the three-line break is exact. */}
+        <h1 className="font-display-tight line-rise text-[clamp(2.5rem,7.4vw,6.25rem)] leading-[0.9] uppercase">
+          <span className="sm:whitespace-nowrap">Resources for</span>
+          <span className="sm:whitespace-nowrap">people who make</span>
+          <span className="sm:whitespace-nowrap">the internet</span>
         </h1>
-        <p className="text-dim mt-6 max-w-xl text-[17px] leading-relaxed">
+        <p className="text-dim mx-auto mt-6 max-w-xl text-[17px] leading-relaxed">
           Presets, assets, templates and creative tools curated for editors,
           thumbnail designers and creators.{" "}
           <span className="text-text font-semibold">
             {products.length} packs from {formatPrice(lowest)}.
           </span>
         </p>
-        <div className="mt-8">
+        <div className="mt-9 flex justify-center">
           <HeroSearch />
         </div>
       </section>
 
       <ArtworkMarquee products={products} />
+
+      <TextTicker text="Instant download. Commercial licence included." />
 
       <section className="shell section-gap">
         <Reveal className="grid gap-10 sm:grid-cols-3 sm:gap-14">
@@ -83,6 +87,7 @@ export default function HomePage() {
       {/* Curated */}
       <section className="shell section-gap">
         <SectionHeader
+          eyebrow="From the shop"
           title="Frostify Picks"
           note="The packs Frostify actually reaches for."
           action={{ href: "/browse", label: "All packs" }}
@@ -99,6 +104,7 @@ export default function HomePage() {
       {/* Categories */}
       <section className="shell section-gap">
         <SectionHeader
+          eyebrow="Categories"
           title="Shop by what you make"
           note="Whether you are cutting video, building thumbnails, or kitting out a workflow."
         />
@@ -115,6 +121,7 @@ export default function HomePage() {
       {vault && vault.bundleValue && (
         <section className="shell section-gap">
           <SectionHeader
+            eyebrow="Bundle"
             title="Buy the lot, pay less"
             note="The whole Collection V1 library in a single download."
           />
@@ -174,6 +181,7 @@ export default function HomePage() {
       {cheap.length > 0 && (
         <section className="shell section-gap">
           <SectionHeader
+            eyebrow="From the shop"
             title="Under $10"
             note="A low-risk way to try the quality before committing to the bundle."
             action={{ href: "/browse", label: "See all" }}
@@ -192,6 +200,7 @@ export default function HomePage() {
       {frostify && (
         <section className="shell section-gap">
           <SectionHeader
+            eyebrow="Who makes this"
             title="Meet the maker"
             action={{
               href: `/creators/${frostify.slug}`,
