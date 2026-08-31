@@ -29,23 +29,28 @@
    ============================================================ */
 
 :root {
-  /* ---- brand ---- */
-  --ss-accent: #00bcff;
-  --ss-accent-ink: #0a1520; /* text on top of accent fills */
+  /* ---- brand ----
+     Magenta and violet, per the reference design. NOTE: the store
+     logo still carries a cyan mark, which now clashes. Either update
+     the logo artwork or set --ss-accent back to #00bcff. */
+  --ss-accent: #ff3d9e;
+  --ss-accent-hover: #ff5cae;
+  --ss-violet: #a855f7;
+  --ss-accent-ink: #ffffff; /* text on top of accent fills */
   --ss-gold: #f2c53d; /* Premium pill only */
   --ss-gold-ink: #12161b;
 
-  /* ---- surfaces ---- */
-  --ss-bg: #080d13;
-  --ss-panel: #0f151d;
-  --ss-panel-2: #131b25;
-  --ss-line: rgba(255, 255, 255, 0.09);
+  /* ---- surfaces ---- Every one carries a violet cast. */
+  --ss-bg: #0a0512;
+  --ss-panel: #120a1e;
+  --ss-panel-2: #1a1029;
+  --ss-line: rgba(255, 255, 255, 0.08);
   --ss-line-strong: rgba(255, 255, 255, 0.16);
 
   /* ---- text ---- */
   --ss-text: #ffffff;
-  --ss-dim: #b3c0cf;
-  --ss-muted: #8494a5;
+  --ss-dim: #b6a6c9;
+  --ss-muted: #877796;
 
   /* ---- shape ---- */
   --ss-radius-card: 18px;
@@ -70,50 +75,102 @@
 }
 
 /* ============================================================
-   1. RHYTHM AND WIDTH
-   Measured on the live store, not guessed. Three things were
-   fighting each other:
-
-   a) Payhip already pads .section-contents-wrapper by 52.8px
-      top and bottom. An earlier version of this file added its
-      own padding to .section-contents *inside* that, so every
-      gap between sections was ~330px of dead space. Own the
-      wrapper's padding rather than stacking on top of it.
-
-   b) The wrapper is capped at max-width 1260px with 64px
-      gutters, leaving content at 1132px no matter how wide the
-      screen is. On a large monitor the shop sat in a narrow
-      column with the artwork shrunk to 274px cards.
-
-   c) The builder forces min-height 297px on every section, so
-      an empty section is 300px of void rather than nothing.
+   1. LAYOUT: HEADER CLEARANCE, PANELS, RHYTHM
    ============================================================ */
 
-/* (a) One source of vertical rhythm: the wrapper. */
+/* The header is fixed (see section 4). It used to be absolutely
+   positioned over the hero, so making it fixed hid the top 96px of
+   every page that does not open with a hero — the product page lost
+   the top of its gallery. Content clears it everywhere instead; the
+   reference design also puts the header on flat dark rather than
+   over artwork. */
+.content-main-wrapper {
+  padding-top: 96px !important;
+}
+
+body {
+  background: var(--ss-bg) !important;
+}
+
+/* Each section becomes a bordered panel on the page background,
+   which is the reference design's core move. The hero is excluded:
+   it is full-bleed artwork and must not be boxed. */
+.content-main-wrapper .js-section-wrapper[data-section-key]:not([data-section-key="headline"]) .section-contents-wrapper {
+  background: var(--ss-panel) !important;
+  border: 1px solid var(--ss-line) !important;
+  border-radius: 22px !important;
+  max-width: min(1500px, calc(100% - 40px)) !important;
+  padding: clamp(24px, 2.6vw, 40px) !important;
+  margin-inline: auto !important;
+}
+
+/* Gap between panels. This is the only vertical rhythm control;
+   Payhip's own section padding is neutralised below. */
+.content-main-wrapper .js-section-wrapper[data-section-key] {
+  padding-top: var(--ss-section-y) !important;
+  padding-bottom: 0 !important;
+}
+
+.content-main-wrapper .js-section-wrapper[data-section-key="headline"] {
+  padding-top: 0 !important;
+}
+
+/* Payhip pads .section-contents-wrapper by 52.8px and caps it at
+   1260px. Stacking more padding inside gave ~330px gaps, and the cap
+   left content at 1132px on any screen. The panel rule above owns
+   both now, so the inner element must not add its own. */
 .js-section-wrapper .section-contents {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
   max-width: none !important;
 }
 
-.content-main-wrapper .section-contents-wrapper {
-  padding-top: var(--ss-section-y) !important;
-  padding-bottom: var(--ss-section-y) !important;
-  padding-left: var(--ss-gutter) !important;
-  padding-right: var(--ss-gutter) !important;
-  /* (b) Let the shop use the screen it is given. */
-  max-width: min(1660px, 100%) !important;
-}
-
-/* (c) Empty sections collapse. `:has(img)` means a logo row
-   reappears by itself the moment a logo is actually added, so
-   this hides a placeholder without hiding real content. The
-   tidier fix is to delete the empty sections in the builder. */
+/* The builder forces min-height 297px on every section, so an empty
+   one is 300px of void. `:has(img)` lets a logo row reappear on its
+   own once a logo is added; deleting the empty sections in the
+   builder is the tidier fix. */
 .js-section-wrapper[data-section-key="logo-list"]:not(:has(img)) {
   display: none !important;
 }
 
-/* Product grids sat 12px apart inside that narrow cap: cramped
+/* --- the reference design's signature: label left, content right ---
+   Payhip's featured-collection section has exactly three children of
+   .section-contents (heading, grid, button), which is what makes this
+   possible without touching the markup. */
+@media (min-width: 900px) {
+  [data-section-key="featured-collection"] .section-contents {
+    display: grid !important;
+    grid-template-columns: 13rem minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "title grid"
+      "cta   grid";
+    column-gap: 2.5rem;
+    align-items: start;
+  }
+
+  [data-section-key="featured-collection"] .heading-text {
+    grid-area: title;
+    text-align: left !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 14px !important;
+  }
+
+  [data-section-key="featured-collection"] .grid-block {
+    grid-area: grid;
+  }
+
+  [data-section-key="featured-collection"] .view-all-button-wrapper {
+    grid-area: cta;
+    justify-self: start;
+    margin: 0 !important;
+  }
+}
+
+/* Product grids sat 12px apart inside the old narrow cap: cramped
    across, cavernous down. */
 .grid-list.js-grid-list {
   gap: var(--ss-grid-gap) !important;
@@ -193,7 +250,7 @@ button.btn.btn-primary.add-to-cart-button,
 button.add-to-cart-button:hover,
 .btn.payhip-buy-button:hover,
 .js-section-wrapper .button-wrapper .btn:hover {
-  background: #33cbff !important;
+  background: var(--ss-accent-hover) !important;
   transform: translateY(-1px);
 }
 
@@ -230,7 +287,7 @@ button.add-to-cart-button[disabled] {
   right: 0;
   left: 0;
   z-index: 200 !important;
-  background: rgba(9, 14, 20, 0.82) !important;
+  background: rgba(10, 5, 18, 0.88) !important;
   backdrop-filter: blur(16px) saturate(130%);
   -webkit-backdrop-filter: blur(16px) saturate(130%);
   border-bottom: 1px solid var(--ss-line) !important;
@@ -238,7 +295,7 @@ button.add-to-cart-button[disabled] {
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   #header {
-    background: rgba(9, 14, 20, 0.97) !important;
+    background: rgba(10, 5, 18, 0.98) !important;
   }
 }
 
@@ -388,7 +445,7 @@ button.add-to-cart-button[disabled] {
   margin-top: 10px;
   padding: 12px !important;
   border-radius: var(--ss-radius-card) !important;
-  background: rgba(12, 18, 25, 0.94) !important;
+  background: rgba(18, 10, 30, 0.95) !important;
   backdrop-filter: blur(14px) saturate(120%);
   -webkit-backdrop-filter: blur(14px) saturate(120%);
   border: 1px solid var(--ss-line) !important;
@@ -397,7 +454,7 @@ button.add-to-cart-button[disabled] {
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .header-dropdown-wrapper {
-    background: rgba(12, 18, 25, 0.98) !important;
+    background: rgba(18, 10, 30, 0.99) !important;
   }
 }
 
@@ -556,7 +613,7 @@ button.add-to-cart-button[disabled] {
    ============================================================ */
 
 .product-card-wrapper .card {
-  background: var(--ss-panel) !important;
+  background: var(--ss-panel-2) !important;
   border: 1px solid var(--ss-line) !important;
   border-radius: var(--ss-radius-card) !important;
   padding: 0 0 4px !important;
