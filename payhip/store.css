@@ -379,8 +379,10 @@ button.btn.btn-primary.add-to-cart-button,
   font-weight: 700 !important;
   letter-spacing: 0.01em !important;
   box-shadow: none !important;
+  /* A gradient cannot be transitioned, so the hover brightens the whole
+     fill instead of interpolating between two backgrounds. */
   transition:
-    background-color 0.2s var(--ss-ease),
+    filter 0.2s var(--ss-ease),
     transform 0.15s var(--ss-ease);
 }
 
