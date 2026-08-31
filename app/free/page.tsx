@@ -16,22 +16,21 @@ export default function FreePage() {
   const free = products.filter((p) => p.price === 0);
 
   return (
-    <div className="shell stack-bottom">
+    <div className="shell page-bottom">
       <PageHeader
         marker="No charge"
-        title="Real packs, not"
-        titleAccent="trials."
+        title="Real packs, not trials"
         note="Free downloads carrying the same commercial licence as everything else. No email gate, no watermarks, no expiry. Take them and see whether the quality holds up before you spend anything."
-        index={[
-          { term: "Packs", value: String(free.length) },
-          { term: "Price", value: "Free", accent: true },
-          { term: "Licence", value: "Commercial" },
+        facts={[
+          `${free.length} packs`,
+          "no charge",
+          "commercial licence included",
         ]}
       />
 
-      <div className="panel">
+      <div className="section-gap-sm">
         {free.length > 0 ? (
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-x-7 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
             {free.map((product, i) => (
               <Reveal key={product.id} delay={Math.min(i, 7) * 60}>
                 <ProductCard product={product} priority={i < 4} />

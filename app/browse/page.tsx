@@ -17,20 +17,19 @@ export default function BrowsePage() {
   );
 
   return (
-    <div className="shell stack-bottom">
+    <div className="shell page-bottom">
       <PageHeader
         marker="The whole shop"
-        title="Everything we"
-        titleAccent="stock."
+        title="Everything we stock"
         note="The full catalogue in one place. Small on purpose — every pack here earned its slot."
-        index={[
-          { term: "Packs", value: String(products.length) },
-          { term: "Free", value: String(free.length) },
-          { term: "From", value: formatPrice(lowest), accent: true },
+        facts={[
+          `${products.length} packs`,
+          `${free.length} free`,
+          `from ${formatPrice(lowest)}`,
         ]}
       />
 
-      <div className="panel">
+      <div className="section-gap-sm">
         <ShopBrowser products={products} />
       </div>
     </div>

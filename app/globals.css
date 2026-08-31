@@ -91,70 +91,37 @@ body {
   }
 }
 
-/* ---------- the panel stack ---------- */
+/* ---------- rhythm ---------- */
 
 /*
- * The page's core unit. Sections are cards on the background rather than bands
- * running edge to edge, and the gap between them is deliberately even so the
- * stack reads as a considered rhythm instead of arbitrary whitespace.
+ * Sections sit on the page with air around them rather than inside bordered
+ * cards. Boxing every block was what made the site read as a dashboard: a
+ * stack of panels is software chrome, whereas a shop separates things with
+ * space. Where a division is genuinely needed, a hairline does it.
+ *
+ * The gap is large on purpose. It is the main thing making the catalogue feel
+ * considered rather than crowded, and it costs nothing.
  */
-.panel {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-line);
-  border-radius: 22px;
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-}
-
-/* Vertical rhythm for the stack. One value, applied everywhere. */
-.stack > * + * {
-  margin-top: clamp(1.25rem, 2.2vw, 1.75rem);
-}
-
-/* Breathing room above and below the whole stack. */
-.stack-top {
-  padding-top: clamp(1.25rem, 2.2vw, 1.75rem);
-}
-.stack-bottom {
-  padding-bottom: clamp(3rem, 6vw, 5rem);
-}
-
-/* Interior rhythm between a panel's own sub-blocks. */
 .section-gap {
-  padding-top: clamp(3.5rem, 7vw, 6rem);
+  padding-top: clamp(6rem, 12vw, 11rem);
 }
 .section-gap-sm {
-  padding-top: clamp(2rem, 4vw, 3rem);
+  padding-top: clamp(3rem, 6vw, 5rem);
 }
 
-/* ---------- brand gradient ---------- */
+.page-top {
+  padding-top: clamp(2.5rem, 5vw, 4.5rem);
+}
+.page-bottom {
+  padding-bottom: clamp(6rem, 12vw, 11rem);
+}
+
+/* ---------- controls ---------- */
 
 /*
- * Pink into violet into blue. Applied as a text clip for headline accents and
- * as a fill for primary buttons. Kept as variables so the angle and stops stay
- * identical everywhere it appears.
- */
-.grad-text {
-  background-image: linear-gradient(
-    96deg,
-    #ff3d9e 0%,
-    #c04ae8 52%,
-    #6b8bff 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  /* Descenders clip against the text box without this. */
-  padding-bottom: 0.06em;
-}
-
-.grad-fill {
-  background-image: linear-gradient(92deg, #f0389f 0%, #c93bd4 100%);
-}
-
-/*
- * Primary call to action. Pill, gradient, and a pink bloom underneath that
- * tightens on hover — the glow is what makes it read as neon rather than as a
- * flat coloured rectangle.
+ * Primary call to action. Flat pink, no gradient and no bloom underneath:
+ * a glowing gradient pill is the single most recognisable piece of software
+ * marketing furniture, and this is a shop counter.
  */
 .btn-primary {
   display: inline-flex;
@@ -162,17 +129,13 @@ body {
   justify-content: center;
   gap: 0.5rem;
   border-radius: 999px;
-  background-image: linear-gradient(92deg, #f0389f 0%, #c93bd4 100%);
+  background-color: var(--color-accent);
   color: #fff;
   font-weight: 600;
-  box-shadow: 0 8px 30px -8px rgba(255, 61, 158, 0.55);
-  transition:
-    box-shadow 0.35s var(--ease-out-soft),
-    transform 0.35s var(--ease-out-soft);
+  transition: background-color 0.3s var(--ease-out-soft);
 }
 .btn-primary:hover {
-  box-shadow: 0 12px 38px -8px rgba(255, 61, 158, 0.8);
-  transform: translateY(-1px);
+  background-color: var(--color-accent-dim);
 }
 
 .btn-ghost {
@@ -191,6 +154,19 @@ body {
 }
 .btn-ghost:hover {
   background-color: var(--color-elevated);
+  border-color: var(--color-accent);
+}
+
+/* A quiet text link with a rule under it, for secondary actions. */
+.link-rule {
+  border-bottom: 1px solid var(--color-line-bright);
+  padding-bottom: 0.15rem;
+  transition:
+    color 0.3s var(--ease-out-soft),
+    border-color 0.3s var(--ease-out-soft);
+}
+.link-rule:hover {
+  color: var(--color-accent);
   border-color: var(--color-accent);
 }
 
@@ -238,14 +214,14 @@ body {
 .glow-pink {
   background: radial-gradient(
     50% 50% at 50% 50%,
-    rgba(255, 61, 158, 0.28),
+    rgba(255, 61, 158, 0.13),
     transparent 70%
   );
 }
 .glow-violet {
   background: radial-gradient(
     50% 50% at 50% 50%,
-    rgba(168, 85, 247, 0.24),
+    rgba(168, 85, 247, 0.11),
     transparent 70%
   );
 }

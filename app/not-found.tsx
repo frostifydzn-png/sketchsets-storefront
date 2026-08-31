@@ -3,9 +3,7 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <div className="shell py-28 sm:py-40">
-      <span className="border-accent/35 bg-accent/10 text-accent label mb-6 inline-flex items-center rounded-full border px-3.5 py-1.5">
-        Error 404 &mdash; not in stock
-      </span>
+      <p className="text-muted text-[13px]">Error 404 &mdash; not in stock</p>
       <h1 className="font-extrabold tracking-[-0.03em] max-w-[14ch] text-[clamp(2.5rem,6vw,4.5rem)] leading-[0.95]">
         This page doesn&rsquo;t exist.
       </h1>

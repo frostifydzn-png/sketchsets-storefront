@@ -1,68 +1,42 @@
 /**
  * Standard header for a list page.
  *
- * Sits on the bare page above the panel stack, mirroring the home page hero:
- * a pill marker, a heavy left-aligned title with an optional trailing clause in
- * the brand gradient, and a small index of what the page contains. Keeping it
- * out of a panel is what signals "this is the top of the page" rather than
- * "this is another shelf".
+ * A quiet line of context, a heading, a sentence, and one plain line of facts.
+ * The pill badge, the gradient clause and the dt/dd metrics row all went: a
+ * coloured eyebrow chip over a gradient headline over a row of big numbers is
+ * a software landing page, and none of it helped anyone find a pack.
  */
 export function PageHeader({
   marker,
   title,
-  titleAccent,
   note,
-  index,
+  facts,
 }: {
   marker: string;
   title: string;
-  /** Optional trailing clause, set in the brand gradient. */
-  titleAccent?: string;
   note?: string;
-  /** Facts about this page, printed as a small index beside the title. */
-  index?: { term: string; value: string; accent?: boolean }[];
+  /** Short plain-text facts, joined into one line beneath the copy. */
+  facts?: string[];
 }) {
   return (
-    <header className="pt-10 pb-10 sm:pt-14 sm:pb-12">
-      <span className="border-accent/35 bg-accent/10 text-accent label inline-flex items-center rounded-full border px-3.5 py-1.5">
-        {marker}
-      </span>
+    <header className="page-top pb-4">
+      <p className="text-muted text-[13px]">{marker}</p>
 
-      <div className="mt-6 grid items-end gap-x-14 gap-y-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)]">
-        <div>
-          <h1 className="text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.04] font-extrabold tracking-[-0.03em]">
-            {title}
-            {titleAccent && (
-              <>
-                {" "}
-                <span className="grad-text">{titleAccent}</span>
-              </>
-            )}
-          </h1>
-          {note && (
-            <p className="text-dim mt-4 max-w-[52ch] text-[16px] leading-relaxed">
-              {note}
-            </p>
-          )}
-        </div>
+      <h1 className="mt-4 max-w-[20ch] text-[clamp(2.25rem,4.6vw,3.5rem)] leading-[1.06] font-bold tracking-[-0.035em] text-white">
+        {title}
+      </h1>
 
-        {index && index.length > 0 && (
-          <dl className="border-line flex flex-wrap gap-x-8 gap-y-3 border-t pt-5 lg:justify-end">
-            {index.map((row) => (
-              <div key={row.term}>
-                <dt className="text-muted label">{row.term}</dt>
-                <dd
-                  className={`mt-1 text-[18px] font-extrabold ${
-                    row.accent ? "text-accent" : "text-white"
-                  }`}
-                >
-                  {row.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        )}
-      </div>
+      {note && (
+        <p className="text-dim mt-5 max-w-[56ch] text-[16.5px] leading-relaxed">
+          {note}
+        </p>
+      )}
+
+      {facts && facts.length > 0 && (
+        <p className="text-muted mt-7 text-[13.5px]">
+          {facts.join(" · ")}
+        </p>
+      )}
     </header>
   );
 }

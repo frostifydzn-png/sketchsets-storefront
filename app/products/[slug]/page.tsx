@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { LicencePicker } from "@/components/LicencePicker";
 import { MobileBuyBar } from "@/components/MobileBuyBar";
 import { ProductCard } from "@/components/ProductCard";
-import { LabelPanel } from "@/components/LabelPanel";
+import { Section } from "@/components/Section";
 import { ProductGallery } from "@/components/ProductGallery";
 import { getCreator, monogram } from "@/lib/creators";
 import {
@@ -86,7 +86,7 @@ export default async function ProductPage({
   };
 
   return (
-    <div className="shell stack-bottom pt-6">
+    <div className="shell page-bottom pt-6">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -116,9 +116,7 @@ export default async function ProductPage({
 
       {/* Catalogue number sits with the name, the way an archive labels a piece. */}
       <header className="pt-10 pb-10 sm:pt-12 sm:pb-14">
-        <span className="border-accent/35 bg-accent/10 text-accent label mb-6 inline-flex items-center rounded-full border px-3.5 py-1.5">
-          Set {product.setNumber}
-        </span>
+        <p className="text-muted text-[13px]">Set {product.setNumber}</p>
         <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
           <div>
             <h1 className="max-w-[16ch] text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.02] font-extrabold tracking-[-0.03em]">
@@ -157,7 +155,7 @@ export default async function ProductPage({
         </div>
 
         <div className="min-w-0 lg:col-start-1 lg:row-start-2">
-          <div className="panel mt-6 max-w-[70ch]">
+          <div className="section-gap-sm max-w-[68ch]">
             {/* Lead runs bold and large; the rest is body copy. */}
             <p className="text-text text-[19px] leading-snug font-semibold sm:text-[21px]">
               {product.valueProp}
@@ -293,18 +291,17 @@ export default async function ProductPage({
       </div>
 
       {related.length > 0 && (
-        <section className="mt-6">
-          <LabelPanel
+        <section>
+          <Section
             title="More like this"
-            description="Other packs that sit near this one."
             action={{ href: "/browse", label: "Browse everything" }}
           >
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+            <div className="grid grid-cols-2 gap-x-7 gap-y-12 md:grid-cols-3">
               {related.map((item) => (
                 <ProductCard key={item.id} product={item} />
               ))}
             </div>
-          </LabelPanel>
+          </Section>
         </section>
       )}
 
@@ -387,7 +384,7 @@ function PairsWith({ slug }: { slug: string }) {
   if (!bundle) return null;
 
   return (
-    <section className="mt-6">
+    <section className="section-gap">
       <Link
         href={`/products/${bundle.slug}`}
         className="bg-surface border-line hover:border-accent/60 flex flex-col gap-4 rounded-2xl border p-6 transition-colors sm:flex-row sm:items-center sm:justify-between sm:p-8"

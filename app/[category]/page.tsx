@@ -50,67 +50,30 @@ export default async function CategoryPage({
   const from = items.length > 0 ? Math.min(...items.map((p) => p.price)) : 0;
 
   return (
-    <div data-room={found.id} className="shell stack-bottom">
-      <header className="relative pt-10 pb-10 sm:pt-14 sm:pb-12">
-        {/* The bloom takes the room's own hue rather than a fixed violet. */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -top-[60%] -left-[15%] h-[260%] w-[75%]"
-          style={{
-            background:
-              "radial-gradient(45% 45% at 45% 50%, color-mix(in srgb, var(--room) 13%, transparent), transparent 72%)",
-          }}
-        />
+    <div data-room={found.id} className="shell page-bottom">
+      {/*
+        The category's own accent survives as one word of colour, which is all
+        it needs. The tinted pill, the bloom and the row of big numbers were
+        three pieces of furniture doing the job one line of text does.
+      */}
+      <header className="page-top pb-4">
+        <p className="room-accent text-[13px]">Category</p>
 
-        <div className="relative">
-          <span
-            className="label inline-flex items-center rounded-full border px-3.5 py-1.5"
-            style={{
-              color: "var(--room)",
-              borderColor: "color-mix(in srgb, var(--room) 40%, transparent)",
-              backgroundColor:
-                "color-mix(in srgb, var(--room) 12%, transparent)",
-            }}
-          >
-            Category
-          </span>
-
-          <div className="mt-6 grid items-end gap-x-14 gap-y-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)]">
-            <div>
-              <h1 className="text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.04] font-extrabold tracking-[-0.03em]">
-                {found.name}
-              </h1>
-              <p className="text-dim mt-4 max-w-[52ch] text-[16px] leading-relaxed">
-                {found.intro}
-              </p>
-            </div>
-
-            <dl className="border-line flex flex-wrap gap-x-8 gap-y-3 border-t pt-5 lg:justify-end">
-              <div>
-                <dt className="text-muted label">Packs</dt>
-                <dd className="mt-1 text-[18px] font-extrabold text-white">
-                  {items.length}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-muted label">From</dt>
-                <dd className="room-accent mt-1 text-[18px] font-extrabold">
-                  {from > 0 ? formatPrice(from) : "Free"}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-muted label">Works in</dt>
-                <dd className="mt-1 text-[18px] font-extrabold text-white">
-                  {software.length} apps
-                </dd>
-              </div>
-            </dl>
-          </div>
-        </div>
+        <h1 className="mt-4 text-[clamp(2.25rem,4.6vw,3.5rem)] leading-[1.06] font-bold tracking-[-0.035em] text-white">
+          {found.name}
+        </h1>
+        <p className="text-dim mt-5 max-w-[56ch] text-[16.5px] leading-relaxed">
+          {found.intro}
+        </p>
+        <p className="text-muted mt-7 text-[13.5px]">
+          {items.length} {items.length === 1 ? "pack" : "packs"} &middot;{" "}
+          {from > 0 ? `from ${formatPrice(from)}` : "free options"} &middot;
+          works in {software.length} apps
+        </p>
       </header>
 
-      <div className="stack">
-        <div className="panel">
+      <div>
+        <div className="section-gap-sm">
           <ProductBrowser
             products={items}
             software={software}
@@ -119,8 +82,10 @@ export default async function CategoryPage({
         </div>
 
         {/* The way out, so a category is never a dead end. */}
-        <nav className="panel">
-          <h2 className="label text-muted">Elsewhere in the shop</h2>
+        <nav className="section-gap">
+          <h2 className="text-muted border-line border-t pt-12 text-[13px] sm:pt-14">
+            Elsewhere in the shop
+          </h2>
           <ul className="mt-5 flex flex-wrap gap-x-10 gap-y-4">
             {categories
               .filter((c) => c.id !== found.id)

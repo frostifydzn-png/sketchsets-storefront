@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { LabelPanel } from "@/components/LabelPanel";
+import { Section } from "@/components/Section";
 import { ProductCard } from "@/components/ProductCard";
 import { creators, getCreator, monogram } from "@/lib/creators";
 import { byCreator } from "@/lib/products";
@@ -41,7 +41,7 @@ export default async function CreatorPage({
   const items = byCreator(creator.slug);
 
   return (
-    <div className="shell stack-bottom">
+    <div className="shell page-bottom">
       <header className="max-w-2xl pt-10 pb-10 sm:pt-14 sm:pb-12">
         <span className="bg-elevated border-line flex h-16 w-16 items-center justify-center rounded-2xl border text-[20px] font-extrabold">
           {monogram(creator.name)}
@@ -70,17 +70,17 @@ export default async function CreatorPage({
         )}
       </header>
 
-      <LabelPanel
+      <Section
         title={`${items.length} ${items.length === 1 ? "pack" : "packs"}`}
-        description={`Everything ${creator.name} has in the shop.`}
+        note={`Everything ${creator.name} has in the shop.`}
         action={{ href: "/browse", label: "Browse everything" }}
       >
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-x-7 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
           {items.map((product, i) => (
             <ProductCard key={product.id} product={product} priority={i < 4} />
           ))}
         </div>
-      </LabelPanel>
+      </Section>
     </div>
   );
 }

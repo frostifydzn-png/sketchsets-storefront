@@ -12,12 +12,10 @@ export const metadata: Metadata = {
 
 export default function SupportPage() {
   return (
-    <div className="shell stack-bottom">
+    <div className="shell page-bottom">
       <header className="pt-10 pb-10 sm:pt-14 sm:pb-12">
         <div>
-          <span className="border-accent/35 bg-accent/10 text-accent label mb-6 inline-flex items-center rounded-full border px-3.5 py-1.5">
-            Ask us anything
-          </span>
+          <p className="text-muted text-[13px]">Ask us anything</p>
 
           <div className="grid items-end gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
             <div>
@@ -52,19 +50,19 @@ export default function SupportPage() {
         </div>
       </header>
 
-      <div className="stack">
+      <div>
         {supportSections.map((section) => (
           <section
             key={section.id}
             id={section.id}
-            className="panel scroll-mt-24"
+            className="section-gap scroll-mt-24"
           >
-            <div className="grid gap-6 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.6fr)] lg:gap-12">
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.5fr)] lg:gap-16">
               <div className="lg:sticky lg:top-24 lg:self-start">
-                <h2 className="text-[15px] font-extrabold tracking-[0.06em] text-white uppercase">
+                <h2 className="text-[clamp(1.375rem,2.4vw,1.75rem)] leading-tight font-bold tracking-[-0.02em] text-white">
                   {section.title}
                 </h2>
-                <p className="text-dim mt-3 text-[14px] leading-relaxed">
+                <p className="text-dim mt-3 text-[15px] leading-relaxed">
                   {section.intro}
                 </p>
               </div>
@@ -96,20 +94,16 @@ export default function SupportPage() {
         ))}
 
         {/* Contact */}
-        <section>
-          <div className="panel relative overflow-hidden text-center">
-            <div
-              aria-hidden="true"
-              className="glow-pink pointer-events-none absolute -top-1/2 left-1/4 h-[200%] w-1/2"
-            />
-            <h2 className="relative text-[clamp(1.75rem,3.4vw,2.5rem)] leading-[1.1] font-extrabold tracking-[-0.02em]">
+        <section className="section-gap">
+          <div className="border-line border-t pt-14 sm:pt-16">
+            <h2 className="text-[clamp(1.75rem,3.2vw,2.25rem)] leading-[1.1] font-bold tracking-[-0.03em] text-white">
               Still stuck?
             </h2>
-            <p className="text-dim mx-auto mt-4 max-w-md text-[16px] leading-relaxed">
+            <p className="text-dim mt-4 max-w-md text-[16px] leading-relaxed">
               Send a message and a real person will get back to you. No ticket
               queue, no bots.
             </p>
-            <div className="relative mt-8 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <a
                 href={payhipPage("contact")}
                 className="btn-primary px-7 py-3.5 text-[15px]"

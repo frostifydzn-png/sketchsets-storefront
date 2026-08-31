@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { LabelPanel } from "@/components/LabelPanel";
+import { Section } from "@/components/Section";
 import { PageHeader } from "@/components/PageHeader";
 import { ProductCard } from "@/components/ProductCard";
 import { Reveal } from "@/components/Reveal";
@@ -19,24 +19,23 @@ export default function NewPage() {
   const [lead, ...others] = drops;
 
   return (
-    <div className="shell stack-bottom">
+    <div className="shell page-bottom">
       <PageHeader
         marker="Just landed"
-        title="The newest things"
-        titleAccent="in the shop."
+        title="The newest things in the shop"
         note="The most recent additions to the catalogue, newest first."
-        index={[
-          { term: "New", value: String(drops.length), accent: true },
-          { term: "Catalogue", value: String(products.length) },
+        facts={[
+          `${drops.length} new`,
+          `${products.length} packs in total`,
         ]}
       />
 
-      <div className="stack">
+      <div>
         {lead && (
-          <section className="panel">
-            <div className="grid gap-5 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+          <section className="section-gap-sm">
+            <div className="grid gap-x-7 gap-y-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
               <ProductCard product={lead} priority size="lead" />
-              <div className="grid gap-4 sm:grid-cols-2 lg:content-start">
+              <div className="grid gap-x-7 gap-y-12 sm:grid-cols-2 lg:content-start">
                 {others.map((product, i) => (
                   <ProductCard key={product.id} product={product} priority={i < 2} />
                 ))}
@@ -51,19 +50,19 @@ export default function NewPage() {
           so nothing older is passed off as new.
         */}
         {rest.length > 0 && (
-          <LabelPanel
+          <Section
             title="Also in stock"
-            description="The rest of the catalogue, still worth your time."
+            note="The rest of the catalogue, still worth your time."
             action={{ href: "/browse", label: "Browse everything" }}
           >
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-x-7 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
               {rest.map((product, i) => (
                 <Reveal key={product.id} delay={Math.min(i, 7) * 55}>
                   <ProductCard product={product} />
                 </Reveal>
               ))}
             </div>
-          </LabelPanel>
+          </Section>
         )}
       </div>
     </div>

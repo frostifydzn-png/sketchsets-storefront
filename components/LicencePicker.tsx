@@ -30,11 +30,11 @@ export function LicencePicker({ product }: { product: Product }) {
   const tiersWired = tiers.every((t) => t.payhipId);
 
   return (
-    <div className="border-line bg-surface rounded-2xl border p-6 sm:p-7">
+    <div className="border-line rounded-2xl border p-6 sm:p-7">
       {tiers.length > 0 && (
         <>
           <div className="rule-out text-muted">
-            <span className="label shrink-0">Licence</span>
+            <span className="shrink-0 text-[13px]">Licence</span>
           </div>
 
           <fieldset className="mt-4">
@@ -44,11 +44,13 @@ export function LicencePicker({ product }: { product: Product }) {
               return (
                 <label
                   key={t.id}
-                  className={`mt-2 flex cursor-pointer gap-3 rounded-xl border p-3.5 transition-colors first:mt-0 ${
-                    active
-                      ? "border-accent/60 bg-accent/10"
-                      : "border-line hover:border-line-bright hover:bg-elevated"
-                  }`}
+                  /*
+                   * Plain ruled rows, not three bordered tiles. Boxed
+                   * options side by side read as a software plan
+                   * comparison; the selected one is marked by its colour
+                   * and its radio, which is all the signal it needs.
+                   */
+                  className="border-line flex cursor-pointer gap-3 border-b py-4 last:border-b-0"
                 >
                   <input
                     type="radio"
@@ -61,14 +63,14 @@ export function LicencePicker({ product }: { product: Product }) {
                   <span className="min-w-0 flex-1">
                     <span className="flex flex-wrap items-baseline gap-x-2.5">
                       <span
-                        className={`font-extrabold tracking-[-0.02em] text-[1.125rem] leading-none ${
+                        className={`text-[1.0625rem] leading-none font-semibold ${
                           active ? "text-accent" : "text-text"
                         }`}
                       >
                         {t.label}
                       </span>
                       {t.recommended && (
-                        <span className="label-sm text-muted">Most bought</span>
+                        <span className="text-muted text-[11.5px]">Most bought</span>
                       )}
                       <span className="text-dim ml-auto text-[13px]">
                         {formatPrice(t.price)}
@@ -93,8 +95,8 @@ export function LicencePicker({ product }: { product: Product }) {
       )}
 
       <div className="border-line mt-6 flex items-baseline justify-between gap-4 border-t pt-6">
-        <span className="label text-muted">Total</span>
-        <span className="font-extrabold tracking-[-0.02em] text-[2.5rem] leading-none">
+        <span className="text-muted text-[13px]">Total</span>
+        <span className="text-[2.25rem] leading-none font-bold tracking-[-0.02em] text-white">
           {formatPrice(total)}
         </span>
       </div>

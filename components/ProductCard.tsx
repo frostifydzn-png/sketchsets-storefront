@@ -3,22 +3,15 @@ import Link from "next/link";
 import { getCreator } from "@/lib/creators";
 import { formatPrice, type Product } from "@/lib/products";
 
-/**
- * How much room a card is given. Rails and grids both use `standard`; `lead`
- * is for the one card in a section that should carry more weight than the rest.
- */
 export type CardSize = "lead" | "standard";
 
 /**
  * Product card.
  *
- * Cover art in a rounded panel, then a tight label block: title, creator, and
- * the price pushed to the right in pink. The card is a bordered surface that
- * lifts on hover with a pink bloom, which is what stops a wall of dark violet
- * cards reading as flat.
- *
- * Width comes from the parent — a rail sets a fixed track width, a grid lets
- * the column decide — so this component never fights its container.
+ * Artwork, then the title, creator and price underneath it. No panel around
+ * the whole thing, no border, no hover glow — the cover art is the product,
+ * and wrapping it in a bordered tile with a coloured bloom only put software
+ * chrome between the buyer and the thing they came to look at.
  */
 export function ProductCard({
   product,
@@ -36,10 +29,10 @@ export function ProductCard({
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group bg-elevated border-line hover:border-accent/60 block h-full overflow-hidden rounded-2xl border transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_rgba(255,61,158,0.5)] focus-visible:outline-none"
+      className="group block focus-visible:outline-none"
     >
       <div
-        className={`bg-raised relative overflow-hidden ${
+        className={`bg-elevated relative overflow-hidden rounded-xl ${
           size === "lead" ? "aspect-[16/10]" : "aspect-[16/11]"
         }`}
       >
@@ -49,11 +42,11 @@ export function ProductCard({
           fill
           sizes={
             size === "lead"
-              ? "(max-width: 1024px) 100vw, 50vw"
-              : "(max-width: 640px) 70vw, (max-width: 1024px) 40vw, 260px"
+              ? "(max-width: 1024px) 100vw, 55vw"
+              : "(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
           }
           priority={priority}
-          className={`object-cover transition-all duration-[900ms] ease-[var(--ease-glide)] group-hover:scale-[1.05] ${
+          className={`object-cover transition-all duration-[900ms] ease-[var(--ease-glide)] group-hover:scale-[1.04] ${
             alt ? "group-hover:opacity-0" : ""
           }`}
         />
@@ -63,42 +56,43 @@ export function ProductCard({
             alt=""
             aria-hidden="true"
             fill
-            sizes="(max-width: 640px) 70vw, (max-width: 1024px) 40vw, 260px"
-            className="scale-[1.05] object-cover opacity-0 transition-opacity duration-[900ms] ease-[var(--ease-glide)] group-hover:opacity-100"
+            sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
+            className="scale-[1.04] object-cover opacity-0 transition-opacity duration-[900ms] ease-[var(--ease-glide)] group-hover:opacity-100"
           />
         )}
 
         {product.isNew && (
-          <span className="grad-fill absolute top-2.5 left-2.5 rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide text-white uppercase">
+          <span className="bg-accent absolute top-3 left-3 rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide text-white uppercase">
             New
           </span>
         )}
       </div>
 
-      <div className={size === "lead" ? "p-5" : "p-3.5"}>
-        <h3
-          className={`group-hover:text-accent truncate font-bold text-white transition-colors ${
-            size === "lead" ? "text-[1.0625rem]" : "text-[13.5px]"
-          }`}
-        >
-          {product.title}
-        </h3>
-
-        <div className="mt-1 flex items-baseline justify-between gap-3">
-          <span className="text-muted truncate text-[11.5px]">
-            by {creator?.name ?? product.creatorSlug}
-          </span>
-          <span
-            className={`text-accent shrink-0 font-bold ${
-              size === "lead" ? "text-[15px]" : "text-[13px]"
+      <div className="mt-4">
+        <div className="flex items-baseline justify-between gap-4">
+          <h3
+            className={`group-hover:text-accent truncate font-semibold text-white transition-colors ${
+              size === "lead" ? "text-[1.25rem]" : "text-[15.5px]"
             }`}
           >
-            {free ? "FREE" : formatPrice(product.price)}
+            {product.title}
+          </h3>
+          <span
+            className={`shrink-0 font-semibold ${free ? "text-accent" : "text-dim"} ${
+              size === "lead" ? "text-[1.125rem]" : "text-[15px]"
+            }`}
+          >
+            {free ? "Free" : formatPrice(product.price)}
           </span>
         </div>
 
+        <p className="text-muted mt-1 truncate text-[13px]">
+          {product.subcategory} &middot;{" "}
+          {creator?.name ?? product.creatorSlug}
+        </p>
+
         {size === "lead" && (
-          <p className="text-dim mt-2.5 line-clamp-2 text-[14px] leading-relaxed">
+          <p className="text-dim mt-3 max-w-[48ch] text-[15px] leading-relaxed">
             {product.valueProp}
           </p>
         )}
