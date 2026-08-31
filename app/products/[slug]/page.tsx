@@ -113,20 +113,26 @@ export default async function ProductPage({
       </nav>
 
       {/* Name leads as a poster, so what the page is about is unmistakable. */}
-      <header className="hero-glow pt-8 pb-10 text-center sm:pt-10 sm:pb-12">
-        <h1 className="font-display-tight text-[clamp(2.25rem,6vw,4.75rem)] leading-[0.92] uppercase">
-          {product.title}
-        </h1>
-        <p className="text-dim mx-auto mt-5 max-w-xl text-[17px] leading-relaxed sm:text-[19px]">
-          {product.valueProp}
-        </p>
-        {product.rating && (
-          <p className="text-muted mt-4 text-[14px]">
-            <span className="text-accent">★</span>{" "}
-            {product.rating.average.toFixed(1)} from {product.rating.count}{" "}
-            {product.rating.count === 1 ? "review" : "reviews"}
+      <header className="relative pt-8 pb-10 text-center sm:pt-10 sm:pb-12">
+        <div
+          aria-hidden="true"
+          className="hero-glow pointer-events-none absolute inset-0 z-0"
+        />
+        <div className="relative z-10">
+          <h1 className="font-display-tight text-[clamp(2.25rem,6vw,4.75rem)] leading-[0.92] uppercase">
+            {product.title}
+          </h1>
+          <p className="text-dim mx-auto mt-5 max-w-xl text-[17px] leading-relaxed sm:text-[19px]">
+            {product.valueProp}
           </p>
-        )}
+          {product.rating && (
+            <p className="text-muted mt-4 text-[14px]">
+              <span className="text-accent">★</span>{" "}
+              {product.rating.average.toFixed(1)} from {product.rating.count}{" "}
+              {product.rating.count === 1 ? "review" : "reviews"}
+            </p>
+          )}
+        </div>
       </header>
 
       {/*

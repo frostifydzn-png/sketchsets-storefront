@@ -46,49 +46,36 @@ export default function HomePage() {
 
   return (
     <>
-      {/* Hero. Poster type up top, search immediately under it. */}
-      <section className="hero-glow shell pt-14 pb-14 text-center sm:pt-20 sm:pb-16">
-        {/* Lines are held together from sm up so the three-line break is exact. */}
-        <h1 className="font-display-tight line-rise text-[clamp(2.5rem,7.4vw,6.25rem)] leading-[0.9] uppercase">
-          <span className="sm:whitespace-nowrap">Resources for</span>
-          <span className="sm:whitespace-nowrap">people who make</span>
-          <span className="sm:whitespace-nowrap">the internet</span>
-        </h1>
-        <p className="text-dim mx-auto mt-6 max-w-xl text-[17px] leading-relaxed">
-          Presets, assets, templates and creative tools curated for editors,
-          thumbnail designers and creators.{" "}
-          <span className="text-text font-semibold">
-            {products.length} packs from {formatPrice(lowest)}.
-          </span>
-        </p>
-        <div className="mt-9 flex justify-center">
-          <HeroSearch />
+      {/*
+        Hero sits above the artwork rail in the stacking order so the search
+        dropdown can overlay it. z-10 on the content, glow behind at z-0.
+      */}
+      <section className="relative pt-14 pb-14 text-center sm:pt-20 sm:pb-16">
+        <div
+          aria-hidden="true"
+          className="hero-glow pointer-events-none absolute inset-0 z-0"
+        />
+        <div className="shell relative z-10">
+          {/* Lines held together from sm up so the three-line break is exact. */}
+          <h1 className="font-display-tight line-rise text-[clamp(2.5rem,7.4vw,6.25rem)] leading-[0.9] uppercase">
+            <span className="sm:whitespace-nowrap">Resources for</span>
+            <span className="sm:whitespace-nowrap">people who make</span>
+            <span className="sm:whitespace-nowrap">the internet</span>
+          </h1>
+          <p className="text-dim mx-auto mt-6 max-w-xl text-[17px] leading-relaxed">
+            Presets, assets, templates and creative tools curated for editors,
+            thumbnail designers and creators.{" "}
+            <span className="text-text font-semibold">
+              {products.length} packs from {formatPrice(lowest)}.
+            </span>
+          </p>
+          <div className="mt-9 flex justify-center">
+            <HeroSearch />
+          </div>
         </div>
       </section>
 
       <ArtworkMarquee products={products} />
-
-      {/* How the shop actually works, before asking anyone to buy. */}
-      <section className="shell section-gap">
-        <SectionHeader
-          eyebrow="The short version"
-          title="How SketchSets works"
-          note="A small, hand-picked shop rather than a marketplace you have to dig through."
-        />
-        {/* gap-px over a line-coloured base draws the dividers between panels. */}
-        <Reveal className="bg-line grid gap-px overflow-hidden rounded-2xl sm:grid-cols-3">
-          {howItWorks.map((item) => (
-            <div key={item.title} className="bg-surface p-7 sm:p-8">
-              <h3 className="font-display text-[1.375rem] leading-tight">
-                {item.title}
-              </h3>
-              <p className="text-dim mt-3 text-[15px] leading-relaxed">
-                {item.body}
-              </p>
-            </div>
-          ))}
-        </Reveal>
-      </section>
 
       {/* Curated */}
       <section className="shell section-gap">
@@ -123,66 +110,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Bundle */}
-      {vault && vault.bundleValue && (
-        <section className="shell section-gap">
-          <SectionHeader
-            eyebrow="Bundle"
-            title="Buy the lot, pay less"
-            note="The whole Collection V1 library in a single download."
-          />
-          <Reveal>
-            <Link
-              href={`/products/${vault.slug}`}
-              className="group ring-line hover:ring-line-bright bg-surface relative block overflow-hidden rounded-2xl ring-1 transition-all"
-            >
-              <div className="grid lg:grid-cols-2">
-                <div className="relative aspect-[16/10] lg:aspect-auto lg:min-h-[420px]">
-                  <Image
-                    src={vault.thumbnail}
-                    alt={`${vault.title} preview`}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover transition-transform duration-[900ms] ease-[var(--ease-out-soft)] group-hover:scale-[1.04]"
-                  />
-                </div>
-                <div className="flex flex-col justify-center p-7 sm:p-12">
-                  <h3 className="font-display text-[clamp(1.75rem,3.5vw,2.75rem)] leading-[1]">
-                    {vault.title}
-                  </h3>
-                  <p className="text-dim mt-4 text-[16px] leading-relaxed">
-                    {vault.shortDescription}
-                  </p>
-
-                  <ul className="mt-6 grid gap-x-6 gap-y-1.5 sm:grid-cols-2">
-                    {vault.includedFiles.slice(0, 6).map((f) => (
-                      <li key={f} className="text-muted flex gap-2 text-[13px]">
-                        <span className="text-accent" aria-hidden="true">
-                          +
-                        </span>
-                        {f.split(": ")[0]}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-2">
-                    <span className="font-display text-accent text-5xl">
-                      {formatPrice(vault.price)}
-                    </span>
-                    <span className="text-muted text-[15px]">
-                      <s>${vault.bundleValue.toFixed(2)}</s> separately
-                    </span>
-                    <span className="bg-accent/15 text-accent rounded-full px-3 py-1 text-[13px] font-bold">
-                      Save ${(vault.bundleValue - vault.price).toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </Reveal>
-        </section>
-      )}
-
       {/* Entry price */}
       {cheap.length > 0 && (
         <section className="shell section-gap">
@@ -201,6 +128,83 @@ export default function HomePage() {
           </div>
         </section>
       )}
+
+      {/* Bundle, as a full-bleed poster rather than another card in a grid. */}
+      {vault && vault.bundleValue && (
+        <section className="section-gap">
+          <Reveal>
+            <div className="relative overflow-hidden">
+              <div className="absolute inset-0">
+                <Image
+                  src={vault.thumbnail}
+                  alt=""
+                  fill
+                  sizes="100vw"
+                  className="scale-105 object-cover opacity-25 blur-[2px]"
+                />
+                <div
+                  aria-hidden="true"
+                  className="from-ink via-ink/85 to-ink absolute inset-0 bg-gradient-to-b"
+                />
+              </div>
+
+              <div className="shell relative py-20 text-center sm:py-28">
+                <p className="text-muted text-[12px] font-semibold uppercase">
+                  The whole library
+                </p>
+                <h2 className="font-display-tight mt-4 text-[clamp(2.5rem,7vw,5.5rem)] leading-[0.92] uppercase">
+                  {vault.title}
+                </h2>
+                <p className="text-dim mx-auto mt-5 max-w-lg text-[17px] leading-relaxed">
+                  {vault.includedFiles.length} packs in one download. Everything
+                  in Collection V1, bought once.
+                </p>
+
+                <div className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
+                  <span className="font-display text-accent text-[3.5rem] leading-none">
+                    {formatPrice(vault.price)}
+                  </span>
+                  <span className="text-muted text-[16px]">
+                    <s>${vault.bundleValue.toFixed(2)}</s> separately
+                  </span>
+                  <span className="bg-accent/15 text-accent rounded-full px-3.5 py-1.5 text-[14px] font-bold">
+                    Save ${(vault.bundleValue - vault.price).toFixed(2)}
+                  </span>
+                </div>
+
+                <Link
+                  href={`/products/${vault.slug}`}
+                  className="bg-accent text-ink mt-9 inline-block rounded-xl px-8 py-4 text-[16px] font-bold transition-transform hover:scale-[1.02]"
+                >
+                  Get the Vault
+                </Link>
+              </div>
+            </div>
+          </Reveal>
+        </section>
+      )}
+
+      {/* How the shop works, once there is a reason to care. */}
+      <section className="shell section-gap">
+        <SectionHeader
+          eyebrow="The short version"
+          title="How SketchSets works"
+          note="A small, hand-picked shop rather than a marketplace you have to dig through."
+        />
+        {/* gap-px over a line-coloured base draws the dividers between panels. */}
+        <Reveal className="bg-line grid gap-px overflow-hidden rounded-2xl sm:grid-cols-3">
+          {howItWorks.map((item) => (
+            <div key={item.title} className="bg-surface p-7 sm:p-8">
+              <h3 className="font-display text-[1.375rem] leading-tight">
+                {item.title}
+              </h3>
+              <p className="text-dim mt-3 text-[15px] leading-relaxed">
+                {item.body}
+              </p>
+            </div>
+          ))}
+        </Reveal>
+      </section>
 
       {/* Maker */}
       {frostify && (

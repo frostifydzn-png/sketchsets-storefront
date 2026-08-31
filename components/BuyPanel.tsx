@@ -46,7 +46,6 @@ export function BuyPanel({ product }: { product: Product }) {
           <Row label="Delivery">Instant download after payment</Row>
         </dl>
       </div>
-
     </div>
   );
 }
