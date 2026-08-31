@@ -109,102 +109,108 @@ export default async function ProductPage({
         <span className="text-dim">{product.title}</span>
       </nav>
 
-      <div className="mt-6 grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:gap-14">
-        <ProductGallery
-          images={product.previewImages}
-          video={product.videoPreview}
-          title={product.title}
-        />
+      {/*
+        Gallery and detail share the left column so the purchase panel stays
+        stuck alongside the whole read, rather than leaving dead space.
+      */}
+      <div className="mt-6 grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:items-start lg:gap-14">
+        <div className="min-w-0">
+          <ProductGallery
+            images={product.previewImages}
+            video={product.videoPreview}
+            title={product.title}
+          />
+
+          <div className="section-gap-sm">
+            <Block title="What it does">
+              <div className="space-y-4">
+                {product.description.map((p) => (
+                  <p
+                    key={p.slice(0, 40)}
+                    className="text-dim text-[16px] leading-relaxed"
+                  >
+                    {p}
+                  </p>
+                ))}
+              </div>
+            </Block>
+
+            <Block title="What's included">
+              <ul className="grid gap-x-8 sm:grid-cols-2">
+                {product.includedFiles.map((file) => (
+                  <li
+                    key={file}
+                    className="border-line text-dim border-b py-3 text-[15px]"
+                  >
+                    {file}
+                  </li>
+                ))}
+              </ul>
+            </Block>
+
+            <Block title="Compatibility">
+              <div className="flex flex-wrap gap-2">
+                {product.compatibility.map((app) => (
+                  <span
+                    key={app}
+                    className="bg-surface ring-line rounded-lg px-3 py-2 text-[14px] ring-1"
+                  >
+                    {app}
+                  </span>
+                ))}
+              </div>
+              <p className="text-muted mt-4 text-[14px]">
+                Delivered as {product.fileSize}.
+              </p>
+            </Block>
+
+            <Block title="License">
+              <p className="text-dim text-[16px] leading-relaxed">
+                {product.licenseSummary}
+              </p>
+              <a
+                href={payhipPage("license")}
+                className="text-accent mt-3 inline-block text-[14px] font-medium hover:underline"
+              >
+                Read the full license
+              </a>
+            </Block>
+
+            {creator && (
+              <Block title="Creator">
+                <div className="flex items-start gap-4">
+                  <span className="bg-elevated ring-line flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-[15px] font-bold ring-1">
+                    {monogram(creator.name)}
+                  </span>
+                  <div>
+                    <Link
+                      href={`/creators/${creator.slug}`}
+                      className="font-display hover:text-accent text-xl transition-colors"
+                    >
+                      {creator.name}
+                    </Link>
+                    <p className="text-muted text-[13px]">{creator.role}</p>
+                    <p className="text-dim mt-3 text-[15px] leading-relaxed">
+                      {creator.bio}
+                    </p>
+                    <Link
+                      href={`/creators/${creator.slug}`}
+                      className="text-dim hover:text-text mt-3 inline-block text-[14px] transition-colors"
+                    >
+                      All {byCreator(creator.slug).length} packs →
+                    </Link>
+                  </div>
+                </div>
+              </Block>
+            )}
+          </div>
+        </div>
+
         <BuyPanel product={product} />
       </div>
 
-      {/* Modular sections — scannable without reading everything. */}
-      <div className="mt-20 max-w-3xl">
-        <Block title="What it does">
-          <div className="space-y-4">
-            {product.description.map((p) => (
-              <p
-                key={p.slice(0, 40)}
-                className="text-dim text-[16px] leading-relaxed"
-              >
-                {p}
-              </p>
-            ))}
-          </div>
-        </Block>
-
-        <Block title="What's included">
-          <ul className="grid gap-x-8 sm:grid-cols-2">
-            {product.includedFiles.map((file) => (
-              <li
-                key={file}
-                className="border-line text-dim border-b py-3 text-[15px]"
-              >
-                {file}
-              </li>
-            ))}
-          </ul>
-        </Block>
-
-        <Block title="Compatibility">
-          <div className="flex flex-wrap gap-2">
-            {product.compatibility.map((app) => (
-              <span
-                key={app}
-                className="bg-surface ring-line rounded-lg px-3 py-2 text-[14px] ring-1"
-              >
-                {app}
-              </span>
-            ))}
-          </div>
-          <p className="text-muted mt-4 text-[14px]">
-            Delivered as {product.fileSize}.
-          </p>
-        </Block>
-
-        <Block title="License">
-          <p className="text-dim text-[16px] leading-relaxed">
-            {product.licenseSummary}
-          </p>
-          <a
-            href={payhipPage("license")}
-            className="text-accent mt-3 inline-block text-[14px] font-medium hover:underline"
-          >
-            Read the full license
-          </a>
-        </Block>
-
-        {creator && (
-          <Block title="Creator">
-            <div className="flex items-start gap-4">
-              <span className="bg-elevated ring-line flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-[15px] font-bold ring-1">
-                {monogram(creator.name)}
-              </span>
-              <div>
-                <Link
-                  href={`/creators/${creator.slug}`}
-                  className="font-display hover:text-accent text-xl transition-colors"
-                >
-                  {creator.name}
-                </Link>
-                <p className="text-muted text-[13px]">{creator.role}</p>
-                <p className="text-dim mt-3 text-[15px] leading-relaxed">
-                  {creator.bio}
-                </p>
-                <Link
-                  href={`/creators/${creator.slug}`}
-                  className="text-dim hover:text-text mt-3 inline-block text-[14px] transition-colors"
-                >
-                  All {byCreator(creator.slug).length} packs →
-                </Link>
-              </div>
-            </div>
-          </Block>
-        )}
-      </div>
-
       {related.length > 0 && (
-        <section className="mt-20">
+        <section className="section-gap">
           <h2 className="font-display mb-7 text-[clamp(1.5rem,3vw,2.25rem)] leading-[1.05]">
             More like this
           </h2>
@@ -217,9 +223,7 @@ export default async function ProductPage({
       )}
 
       {/* One contextual pairing, not five. */}
-      {product.bundleOf === undefined && (
-        <PairsWith slug={product.slug} />
-      )}
+      {product.bundleOf === undefined && <PairsWith slug={product.slug} />}
 
       <MobileBuyBar product={product} />
     </div>
@@ -232,7 +236,7 @@ function PairsWith({ slug }: { slug: string }) {
   if (!bundle || !bundle.bundleValue) return null;
 
   return (
-    <section className="mt-16">
+    <section className="section-gap-sm">
       <Link
         href={`/products/${bundle.slug}`}
         className="bg-surface ring-line hover:ring-line-bright flex flex-col gap-4 rounded-2xl p-6 ring-1 transition-all sm:flex-row sm:items-center sm:justify-between sm:p-8"
@@ -266,7 +270,9 @@ function Block({
 }) {
   return (
     <section className="border-line border-t py-9 first:border-t-0 first:pt-0">
-      <h2 className="font-display mb-5 text-[1.375rem] leading-none">{title}</h2>
+      <h2 className="font-display mb-5 text-[1.375rem] leading-none">
+        {title}
+      </h2>
       {children}
     </section>
   );

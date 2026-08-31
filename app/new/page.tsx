@@ -14,7 +14,7 @@ export default function NewPage() {
   const drops = newDrops();
 
   return (
-    <div className="shell pt-12 sm:pt-16">
+    <div className="shell pt-14 sm:pt-20">
       <header>
         <h1 className="font-display-tight text-[clamp(2.5rem,6vw,4.5rem)] leading-[0.95]">
           New drops
@@ -26,7 +26,7 @@ export default function NewPage() {
       </header>
 
       {drops.length > 0 ? (
-        <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-9 lg:grid-cols-4">
+        <div className="mt-12 grid grid-cols-2 gap-x-5 gap-y-9 lg:grid-cols-4">
           {drops.map((product, i) => (
             <ProductCard key={product.id} product={product} priority={i < 4} />
           ))}

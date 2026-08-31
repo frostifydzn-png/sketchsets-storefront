@@ -2,96 +2,173 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { categories } from "@/lib/products";
-import { site } from "@/lib/site";
+import { useEffect, useRef, useState } from "react";
+import { MegaPanel, type MenuId } from "@/components/MegaPanel";
 import { SearchDialog } from "@/components/SearchDialog";
+import { byCategory, categories } from "@/lib/products";
+import { site } from "@/lib/site";
 
-const navLinks = [
-  { href: "/browse", label: "Browse" },
-  ...categories.map((c) => ({ href: `/${c.id}`, label: c.name })),
-  { href: "/new", label: "New" },
+const trustPoints = [
+  "Instant download",
+  "Commercial licence included",
+  "Secure checkout via Payhip",
+];
+
+/** Nav items that open a panel, in order. */
+const menuItems: { id: MenuId; href: string; label: string }[] = [
+  { id: "browse", href: "/browse", label: "Browse" },
+  ...categories.map((c) => ({
+    id: c.id as MenuId,
+    href: `/${c.id}`,
+    label: c.name,
+  })),
 ];
 
 export function SiteHeader() {
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [menu, setMenu] = useState<MenuId | null>(null);
   const pathname = usePathname();
-  const closeMenu = () => setOpen(false);
 
-  // Header compresses and gains a hairline once the page moves.
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const openMenu = (id: MenuId) => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setMenu(id);
+  };
+
+  // Small grace period so moving the cursor into the panel doesn't close it.
+  const scheduleClose = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setMenu(null), 130);
+  };
+
+  const closeAll = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setMenu(null);
+    setMobileOpen(false);
+  };
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenu(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   return (
     <header
-      className={`bg-ink/85 sticky top-0 z-40 backdrop-blur-xl transition-all duration-300 ${
-        scrolled ? "border-line border-b" : "border-b border-transparent"
-      }`}
+      className="bg-ink border-line sticky top-0 z-40 border-b"
+      onMouseLeave={scheduleClose}
     >
-      <div
-        className={`shell flex items-center gap-8 transition-all duration-300 ${
-          scrolled ? "h-14" : "h-[72px]"
-        }`}
-      >
-        <Link href="/" className="flex shrink-0 items-baseline gap-2">
-          <span className="font-display-tight text-[19px] leading-none">
+      {/* Utility strip — states the offer before anyone has to ask. */}
+      <div className="border-line hidden border-b lg:block">
+        <div className="shell text-muted flex h-9 items-center gap-6 text-[12px]">
+          {trustPoints.map((point) => (
+            <span key={point} className="flex items-center gap-1.5">
+              <span className="bg-accent h-1 w-1 rounded-full" aria-hidden="true" />
+              {point}
+            </span>
+          ))}
+          <a
+            href={site.links.frostify}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-text ml-auto transition-colors"
+          >
+            {site.parent} ↗
+          </a>
+          <a
+            href={site.links.frostoria}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-text transition-colors"
+          >
+            Frostoria ↗
+          </a>
+        </div>
+      </div>
+
+      {/* Main row */}
+      <div className="shell flex h-[76px] items-center gap-10">
+        <Link href="/" onClick={closeAll} className="flex shrink-0 items-baseline gap-2">
+          <span className="font-display-tight text-[21px] leading-none">
             SKETCHSETS
           </span>
-          {/* Reads as a quality seal, so it stays visible at every width. */}
           <span className="text-muted text-[10px] leading-none font-medium sm:text-[11px]">
             · by {site.parent}
           </span>
         </Link>
 
-        <nav
-          aria-label="Primary"
-          className="mx-auto hidden items-center gap-7 md:flex"
-        >
-          {navLinks.map((link) => {
-            const active = pathname === link.href;
+        <nav aria-label="Primary" className="hidden items-center gap-1 md:flex">
+          {menuItems.map((item) => {
+            const active = pathname === item.href;
+            const open = menu === item.id;
             return (
               <Link
-                key={link.href}
-                href={link.href}
+                key={item.id}
+                href={item.href}
+                onClick={closeAll}
+                onMouseEnter={() => openMenu(item.id)}
+                onFocus={() => openMenu(item.id)}
                 aria-current={active ? "page" : undefined}
-                className={`text-[14px] transition-colors ${
-                  active ? "text-text" : "text-dim hover:text-text"
+                aria-expanded={open}
+                className={`rounded-lg px-3.5 py-2 text-[15px] font-medium transition-colors ${
+                  active || open
+                    ? "text-text bg-elevated"
+                    : "text-dim hover:text-text"
                 }`}
               >
-                {link.label}
+                {item.label}
               </Link>
             );
           })}
+          <Link
+            href="/new"
+            onClick={closeAll}
+            onMouseEnter={scheduleClose}
+            className={`rounded-lg px-3.5 py-2 text-[15px] font-medium transition-colors ${
+              pathname === "/new" ? "text-text bg-elevated" : "text-dim hover:text-text"
+            }`}
+          >
+            New
+          </Link>
         </nav>
 
-        <div className="ml-auto flex items-center gap-3 md:ml-0">
-          <SearchDialog />
+        <div className="ml-auto flex items-center gap-3">
+          <div onMouseEnter={scheduleClose}>
+            <SearchDialog />
+          </div>
+          <Link
+            href="/browse"
+            onClick={closeAll}
+            onMouseEnter={scheduleClose}
+            className="bg-accent text-ink hidden rounded-xl px-5 py-2.5 text-[14px] font-bold transition-transform hover:scale-[1.03] lg:block"
+          >
+            Browse all
+          </Link>
+
           <button
             type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-expanded={open}
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-expanded={mobileOpen}
             aria-controls="mobile-nav"
-            aria-label={open ? "Close menu" : "Open menu"}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
             className="text-text -mr-2 p-2 md:hidden"
           >
-            <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
-              {open ? (
+            <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
+              {mobileOpen ? (
                 <path
-                  d="M5 5l10 10M15 5L5 15"
+                  d="M6 6l10 10M16 6L6 16"
                   stroke="currentColor"
-                  strokeWidth="1.7"
+                  strokeWidth="1.8"
                   strokeLinecap="round"
                 />
               ) : (
                 <path
-                  d="M3 6h14M3 14h14"
+                  d="M3 7h16M3 15h16"
                   stroke="currentColor"
-                  strokeWidth="1.7"
+                  strokeWidth="1.8"
                   strokeLinecap="round"
                 />
               )}
@@ -100,32 +177,74 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {open && (
+      {/* Mega panel */}
+      {menu && (
+        <div
+          className="absolute inset-x-0 top-full hidden md:block"
+          onMouseEnter={() => openMenu(menu)}
+        >
+          <MegaPanel menu={menu} onNavigate={closeAll} />
+        </div>
+      )}
+
+      {/* Mobile nav */}
+      {mobileOpen && (
         <nav
           id="mobile-nav"
           aria-label="Mobile"
-          className="border-line bg-ink border-t md:hidden"
+          className="border-line bg-ink max-h-[80vh] overflow-y-auto border-t md:hidden"
         >
-          <div className="shell py-4">
-            {navLinks.map((link) => (
+          <div className="shell py-5">
+            {menuItems.map((item) => (
               <Link
-                key={link.href}
-                href={link.href}
-                onClick={closeMenu}
-                className="font-display text-text block py-2.5 text-2xl"
+                key={item.id}
+                href={item.href}
+                onClick={closeAll}
+                className="border-line flex items-baseline justify-between border-b py-3.5"
               >
-                {link.label}
+                <span className="font-display text-2xl">{item.label}</span>
+                {item.id !== "browse" && (
+                  <span className="text-muted text-[13px]">
+                    {byCategory(item.id as "editing").length}
+                  </span>
+                )}
               </Link>
             ))}
-            <a
-              href={site.links.frostify}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={closeMenu}
-              className="font-display text-dim block py-2.5 text-2xl"
+            <Link
+              href="/new"
+              onClick={closeAll}
+              className="border-line block border-b py-3.5"
             >
-              Frostify ↗
-            </a>
+              <span className="font-display text-2xl">New drops</span>
+            </Link>
+
+            <div className="text-muted mt-6 space-y-2 text-[13px]">
+              {trustPoints.map((p) => (
+                <p key={p} className="flex items-center gap-2">
+                  <span className="bg-accent h-1 w-1 rounded-full" aria-hidden="true" />
+                  {p}
+                </p>
+              ))}
+            </div>
+
+            <div className="mt-6 flex gap-5">
+              <a
+                href={site.links.frostify}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-dim text-[14px]"
+              >
+                {site.parent} ↗
+              </a>
+              <a
+                href={site.links.frostoria}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-dim text-[14px]"
+              >
+                Frostoria ↗
+              </a>
+            </div>
           </div>
         </nav>
       )}

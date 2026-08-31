@@ -19,7 +19,7 @@ const supportLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-line mt-28 border-t">
+    <footer className="border-line mt-32 border-t sm:mt-44">
       <div className="shell py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>

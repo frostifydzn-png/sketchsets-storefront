@@ -59,6 +59,17 @@ body {
   }
 }
 
+/*
+ * Rhythm between major sections. Deliberately generous — the whitespace is
+ * what makes a small catalogue read as curated rather than sparse.
+ */
+.section-gap {
+  padding-top: clamp(5.5rem, 11vw, 13rem);
+}
+.section-gap-sm {
+  padding-top: clamp(4rem, 7vw, 8rem);
+}
+
 .font-display {
   font-family: var(--font-display);
   font-variation-settings: "wdth" 88;
@@ -159,6 +170,21 @@ body {
 }
 .group:hover .card-sheen {
   animation: sheen 0.9s var(--ease-out-soft);
+}
+
+/* Mega menu panel drop. */
+@keyframes menu-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-menu-drop {
+  animation: menu-drop 0.22s var(--ease-out-soft) both;
 }
 
 @keyframes fade-up {

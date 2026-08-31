@@ -179,10 +179,10 @@ export function ProductBrowser({
   );
 
   return (
-    <div className="mt-8 flex gap-10">
+    <div className="mt-12 flex gap-10 sm:mt-14 lg:gap-14">
       {/* Desktop sidebar */}
       <aside className="hidden w-[230px] shrink-0 lg:block">
-        <div className="sticky top-24">
+        <div className="sticky top-32">
           <div className="mb-5 flex items-center justify-between">
             <h2 className="font-display text-lg">Filters</h2>
             {active.length > 0 && (

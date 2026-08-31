@@ -48,7 +48,7 @@ export default function HomePage() {
   return (
     <>
       {/* Hero — search is the primary action, not a decorative headline. */}
-      <section className="shell pt-14 pb-10 sm:pt-20">
+      <section className="shell pt-16 pb-16 sm:pt-24 sm:pb-20">
         <h1 className="font-display-tight line-rise max-w-[16ch] text-[clamp(2.75rem,7vw,5.5rem)] leading-[0.94]">
           <span>Resources for</span>
           <span>people who make</span>
@@ -70,7 +70,7 @@ export default function HomePage() {
       <ArtworkMarquee products={products} />
 
       {/* How it works — three lines, removes any doubt about the model. */}
-      <section className="shell pt-20">
+      <section className="shell section-gap">
         <Reveal className="grid gap-6 sm:grid-cols-3">
           {steps.map((step) => (
             <div key={step.n} className="border-line border-t pt-5">
@@ -140,7 +140,7 @@ export default function HomePage() {
 
       {/* Bundle feature */}
       {vault && vault.bundleValue && (
-        <section className="shell pt-20">
+        <section className="shell section-gap">
           <Reveal>
             <Link
               href={`/products/${vault.slug}`}
@@ -270,8 +270,8 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="shell pt-20">
-      <div className="mb-7 flex items-end justify-between gap-6">
+    <section className="shell section-gap">
+      <div className="mb-9 flex items-end justify-between gap-6 sm:mb-12">
         <div>
           <h2 className="font-display text-[clamp(1.625rem,3vw,2.5rem)] leading-[1.05]">
             {title}

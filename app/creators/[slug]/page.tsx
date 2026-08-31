@@ -40,7 +40,7 @@ export default async function CreatorPage({
   const items = byCreator(creator.slug);
 
   return (
-    <div className="shell pt-12 sm:pt-16">
+    <div className="shell pt-14 sm:pt-20">
       <header className="max-w-2xl">
         <span className="bg-elevated ring-line flex h-16 w-16 items-center justify-center rounded-full text-[20px] font-bold ring-1">
           {monogram(creator.name)}
@@ -69,7 +69,7 @@ export default async function CreatorPage({
         )}
       </header>
 
-      <h2 className="font-display border-line mt-12 border-t pt-8 text-[clamp(1.5rem,3vw,2rem)] leading-none">
+      <h2 className="font-display border-line mt-16 border-t pt-10 text-[clamp(1.5rem,3vw,2rem)] leading-none">
         {items.length} {items.length === 1 ? "pack" : "packs"}
       </h2>
       <div className="mt-7 grid grid-cols-2 gap-x-5 gap-y-9 lg:grid-cols-4">

@@ -9,7 +9,7 @@ export function BuyPanel({ product }: { product: Product }) {
   const primarySoftware = product.compatibility.slice(0, 2).join(" & ");
 
   return (
-    <div className="lg:sticky lg:top-24">
+    <div className="lg:sticky lg:top-32">
       <div className="flex items-center gap-2">
         <span className="text-muted text-[12px] font-semibold tracking-wider uppercase">
           {product.subcategory}
