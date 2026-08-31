@@ -406,7 +406,6 @@ p {
 .btn.btn-primary,
 button.add-to-cart-button,
 button.btn.btn-primary.add-to-cart-button,
-.btn.payhip-buy-button,
 .js-section-wrapper .button-wrapper .btn {
   display: inline-flex !important;
   align-items: center !important;
@@ -432,7 +431,6 @@ button.btn.btn-primary.add-to-cart-button,
 
 .btn.btn-primary:hover,
 button.add-to-cart-button:hover,
-.btn.payhip-buy-button:hover,
 .js-section-wrapper .button-wrapper .btn:hover {
   filter: brightness(1.09);
   transform: translateY(-1px);
@@ -440,8 +438,41 @@ button.add-to-cart-button:hover,
 
 .btn.btn-primary:active,
 button.add-to-cart-button:active,
-.btn.payhip-buy-button:active {
+.btn.btn-secondary:active {
   transform: none;
+}
+
+/* --- secondary ---
+   Payhip already marks "Buy Now" as .btn-secondary next to a primary
+   "Add to Cart", and the file was painting both with the same gradient
+   - two identical filled buttons stacked on top of each other, which
+   is no hierarchy at all. The secondary is an outline, so the eye is
+   told which one is the default. */
+.btn.btn-secondary,
+.btn.payhip-buy-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: "neue-haas-grotesk-text", rubik, sans-serif !important;
+  background: transparent !important;
+  color: var(--ss-text) !important;
+  border: 1px solid var(--ss-line-strong) !important;
+  border-radius: var(--ss-radius-pill) !important;
+  padding: 14px 26px !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+  transition:
+    border-color 0.18s var(--ss-ease),
+    background-color 0.18s var(--ss-ease),
+    transform 0.15s var(--ss-ease);
+}
+
+.btn.btn-secondary:hover,
+.btn.payhip-buy-button:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: var(--ss-accent) !important;
+  color: var(--ss-text) !important;
+  transform: translateY(-1px);
 }
 
 .btn.btn-primary[disabled],
@@ -1091,16 +1122,196 @@ button.add-to-cart-button[disabled] {
 
 /* ============================================================
    8. PRODUCT PAGE
+
+   The page where the money changes hands, and the least-touched
+   one until now. Three things were actually wrong, all found by
+   reading the computed styles on /b/JogCA:
+
+   1. The product name is an h1, so it inherited the page display
+      size and set at 96px inside a 614px column - "SketchSets
+      Vault" wrapped onto two lines and stood 184px tall. A product
+      name is a label, not a page title.
+   2. The description and the review text render in QUICKSAND. The
+      theme hard-sets .font-section-product-description and
+      .font-section-customer-reviews-reviewMessage to it, so a
+      third typeface was loading on the most important page.
+   3. The price sets in rubik at 27px in the theme's heading
+      colour, which makes the one number a buyer is looking for
+      the same weight as everything around it.
+
+   Payhip exposes a font-section-* class for every text slot on
+   this page, which is what makes all of it addressable.
    ============================================================ */
 
-/* The old rules for this referenced --prod-card-bg and three
-   siblings that were never defined, so none of it rendered. */
 .product-details-wrapper .row .col-md-12 {
   background: transparent !important;
   border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
   padding: 0 0 22px !important;
+}
+
+/* --- product name --- */
+.js-section-wrapper[data-section-key="product"] h1,
+.font-section-product-name {
+  font-size: clamp(1.75rem, 2.6vw, 2.5rem) !important;
+  line-height: 1.06 !important;
+  letter-spacing: -0.02em !important;
+  margin: 0 0 14px !important;
+}
+
+/* The name is the one heading on this page that should not take the
+   gradient: it sits inches from the price and the button, and three
+   coloured things in a stack is a fight. */
+.font-section-product-name {
+  background-image: none !important;
+  -webkit-text-fill-color: var(--ss-text) !important;
+  color: var(--ss-text) !important;
+}
+
+/* --- price ---
+   The number the buyer came for, so it is the accent and it is the
+   biggest thing after the name. */
+.product-price .value,
+.js-product-price-value {
+  font-family: "neue-haas-grotesk-text", rubik, sans-serif !important;
+  font-size: clamp(1.625rem, 2.2vw, 2rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  color: var(--ss-accent) !important;
+  -webkit-text-fill-color: var(--ss-accent) !important;
+}
+
+.product-price {
+  margin: 0 0 22px !important;
+}
+
+.product-price-before-discount-value {
+  font-family: "neue-haas-grotesk-text", rubik, sans-serif !important;
+  color: var(--ss-muted) !important;
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+}
+
+/* --- body copy: off Quicksand, onto the store's own face --- */
+.font-section-product-description,
+.font-section-customer-reviews-reviewMessage,
+.font-section-product-filesIncluded,
+.font-section-product-previewFileLink,
+.font-section-product-addedToCartMessage,
+.product-description {
+  font-family: "neue-haas-grotesk-text", rubik, sans-serif !important;
+}
+
+.product-description {
+  font-size: 1rem !important;
+  line-height: 1.75 !important;
+  color: var(--ss-dim) !important;
+}
+
+.product-description h1,
+.product-description h2,
+.product-description h3,
+.product-description h4 {
+  font-size: 1.125rem !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  color: var(--ss-text) !important;
+  margin: 28px 0 10px !important;
+  /* Inside body copy these are subheads, not display type. */
+  background-image: none !important;
+  -webkit-text-fill-color: var(--ss-text) !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+.product-description p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.product-description a {
+  color: var(--ss-accent) !important;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* --- buy button ---
+   It is btn-block, so it already spans the column; it was only 49px
+   tall, which is short for the single action on the page. */
+.js-section-wrapper[data-section-key="product"] .btn.btn-primary,
+button.add-to-cart-button {
+  padding: 18px 32px !important;
+  font-size: 1.0625rem !important;
+  box-shadow: 0 10px 26px rgba(255, 61, 158, 0.2) !important;
+}
+
+/* Same height as the primary it sits under, so the pair reads as a
+   set rather than two unrelated controls. */
+.js-section-wrapper[data-section-key="product"] .btn.btn-secondary,
+.js-section-wrapper[data-section-key="product"] .btn.payhip-buy-button {
+  padding: 18px 32px !important;
+  font-size: 1.0625rem !important;
+  margin-top: 10px !important;
+}
+
+.js-section-wrapper[data-section-key="product"] .btn.btn-primary:hover,
+button.add-to-cart-button:hover {
+  box-shadow: 0 14px 32px rgba(255, 61, 158, 0.28) !important;
+}
+
+/* --- gallery ---
+   The shots are 1500x843 rendering at 812px, so they are sharp; they
+   just sat as square-cornered slabs while every other image on the
+   store is rounded. */
+.js-section-wrapper[data-section-key="product"] .product-images img,
+.js-section-wrapper[data-section-key="product"] .product-image img,
+.js-section-wrapper[data-section-key="product"] .image-wrapper img {
+  border-radius: var(--ss-radius-media);
+  display: block;
+}
+
+/* --- what you get --- */
+.font-section-product-filesIncluded {
+  color: var(--ss-muted) !important;
+  font-size: 0.875rem !important;
+}
+
+.font-section-product-previewFileLink a,
+a.font-section-product-previewFileLink {
+  color: var(--ss-accent) !important;
+  font-weight: 600 !important;
+}
+
+/* ============================================================
+   8b. REVIEWS AND RELATED PRODUCTS
+
+   Both are their own sections on the product page. The related
+   grid is made of .product-card-wrapper, so section 7 already
+   styles it; only the review list needs anything.
+   ============================================================ */
+
+.js-section-wrapper[data-section-key="customer-reviews"] .heading-text,
+.js-section-wrapper[data-section-key="customer-reviews"] .heading-text-main,
+.js-section-wrapper[data-section-key="related-products"] .heading-text,
+.js-section-wrapper[data-section-key="related-products"] .heading-text-main {
+  font-size: clamp(1.375rem, 2vw, 1.875rem) !important;
+  margin-bottom: clamp(18px, 2vw, 28px) !important;
+}
+
+.font-section-customer-reviews-reviewMessage {
+  color: var(--ss-dim) !important;
+  line-height: 1.7 !important;
+}
+
+/* A rule between reviews, matching the accordion, rather than a card
+   around each one. */
+.js-section-wrapper[data-section-key="customer-reviews"] .review,
+.js-section-wrapper[data-section-key="customer-reviews"] [class*="review-item"] {
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--ss-line) !important;
+  border-radius: 0 !important;
+  padding: 18px 0 !important;
 }
 
 /* ============================================================
