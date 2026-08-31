@@ -228,16 +228,25 @@ export default function HomePage() {
           Make great things with our packs
         </h2>
 
-        <ul className="mt-10 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+        {/* Tall tiles carrying each category's identity colour, no icons. */}
+        <ul className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3">
           {categories.map((c) => (
             <li key={c.id}>
               <Link
                 href={`/${c.id}`}
-                className="font-display hover:text-accent text-[clamp(1.5rem,3vw,2.25rem)] leading-none transition-colors"
+                className="group bg-surface ring-line hover:ring-line-bright relative flex h-52 flex-col items-center justify-center overflow-hidden rounded-2xl px-4 ring-1 transition-all duration-300 hover:-translate-y-1.5 sm:h-64"
               >
-                {c.name}
-                <span className="text-muted ml-2 align-super text-[13px]">
-                  {byCategory(c.id).length}
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-0 top-0 h-1"
+                  style={{ background: c.accentVar }}
+                />
+                <span className="font-display text-center text-[clamp(1.25rem,2.4vw,1.75rem)] leading-tight">
+                  {c.name}
+                </span>
+                <span className="text-muted mt-2 text-[14px]">
+                  {byCategory(c.id).length}{" "}
+                  {byCategory(c.id).length === 1 ? "pack" : "packs"}
                 </span>
               </Link>
             </li>

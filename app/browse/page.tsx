@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { ProductBrowser } from "@/components/ProductBrowser";
-import { allSoftware, products } from "@/lib/products";
+import { ShopBrowser } from "@/components/ShopBrowser";
+import { products } from "@/lib/products";
 
 export const metadata: Metadata = {
-  title: "Browse",
+  title: "The Shop",
   description:
     "Every SketchSets pack. Overlays, textures, brushes, doodles and bundles for editors, thumbnail designers and creators.",
   alternates: { canonical: "/browse" },
@@ -11,18 +11,23 @@ export const metadata: Metadata = {
 
 export default function BrowsePage() {
   return (
-    <div className="shell pt-16 sm:pt-24">
-      <header>
-        <h1 className="font-display-tight text-[clamp(2.5rem,6vw,4.5rem)] leading-[0.95]">
-          Everything
-        </h1>
-        <p className="text-dim mt-4 max-w-lg text-[16px] leading-relaxed">
-          Ready to use, commercially licensed, delivered instantly. Curated
-          rather than endless, so every pack earns its place.
-        </p>
-      </header>
+    <>
+      <section className="relative py-14 text-center sm:py-20">
+        <div
+          aria-hidden="true"
+          className="hero-glow pointer-events-none absolute inset-0 z-0"
+        />
+        <div className="shell relative z-10">
+          <h1 className="font-display-tight text-[clamp(2.25rem,6vw,4.5rem)] leading-[0.95] uppercase">
+            The Shop
+          </h1>
+          <p className="text-dim mt-3 text-[17px]">Discover our products</p>
+        </div>
+      </section>
 
-      <ProductBrowser products={products} software={allSoftware()} />
-    </div>
+      <div className="shell pb-4">
+        <ShopBrowser products={products} />
+      </div>
+    </>
   );
 }

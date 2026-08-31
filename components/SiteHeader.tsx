@@ -14,6 +14,7 @@ const navLinks = [
   { href: "/creator-tools", label: "Creator Tools" },
   { href: "/free", label: "Free" },
   { href: "/products/sketchsets-vault", label: "The Vault" },
+  { href: "/support", label: "Support" },
 ];
 
 export function SiteHeader() {

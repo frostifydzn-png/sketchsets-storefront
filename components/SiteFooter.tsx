@@ -10,6 +10,7 @@ const shopLinks = [
 ];
 
 const supportLinks = [
+  { href: "/support", label: "Support" },
   { href: payhipPage("faq"), label: "FAQ" },
   { href: payhipPage("contact"), label: "Contact" },
   { href: PAYHIP_ACCOUNT, label: "Your downloads" },
