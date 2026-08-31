@@ -75,6 +75,87 @@
 }
 
 /* ============================================================
+   0. PAYHIP AND BOOTSTRAP THEME TOKENS
+   The theme ships its own variables, and they were all blue. Setting
+   them here is far cleaner than chasing each rule with !important,
+   and it catches components this file never names.
+
+   Found by reading the computed values on the live store:
+     --primary               #007bff  Bootstrap, drives stray links
+     --swiper-theme-color    #007aff  slider bullets and arrows
+     --color-shadow          14,27,77 navy, mixed into every card
+                                      shadow, which is what made the
+                                      panels read cold
+     lightPrimary bg         12,20,29 blue-grey section background
+     blackPrimary bg          9,16,25 blue-grey section background
+
+   Payhip stores colours as bare RGB triplets, not hex, because it
+   composes them with alpha elsewhere. They must stay triplets.
+   ============================================================ */
+
+:root {
+  --primary: #ff3d9e;
+  --blue: #ff3d9e;
+  --indigo: #a855f7;
+  --purple: #a855f7;
+  --pink: #ff3d9e;
+  --swiper-theme-color: #ff3d9e;
+  --color-shadow: 44, 8, 58;
+}
+
+[data-section-setting-color-scheme-id="lightPrimary"],
+[data-css-variables-color-scheme-id="lightPrimary"] {
+  --color-section-background: 18, 10, 30;
+  --color-variant-pills-block-text: 18, 10, 30;
+}
+
+[data-section-setting-color-scheme-id="blackPrimary"],
+[data-css-variables-color-scheme-id="blackPrimary"] {
+  --color-section-background: 10, 5, 18;
+  --color-variant-pills-block-text: 10, 5, 18;
+}
+
+[data-section-setting-color-scheme-id="darkPrimary"],
+[data-css-variables-color-scheme-id="darkPrimary"] {
+  --color-section-background: 10, 5, 18;
+}
+
+[data-switch-to-color-scheme-id="whitePrimary"],
+[data-css-variables-color-scheme-id="whitePrimary"] {
+  --color-section-background: 18, 10, 30;
+}
+
+/* Bootstrap's default anchor colour. Specificity 0-0-1, so every
+   rule the theme actually classes still wins over this. */
+a {
+  color: var(--ss-accent);
+}
+a:hover {
+  color: var(--ss-accent-hover);
+}
+
+/* The account and cart glyphs draw from currentColor, so the blue
+   link colour above was tinting them. */
+.header-login-icon-link,
+.header-cart-icon-button,
+.header-login-icon-link svg,
+.header-cart-icon-button svg {
+  color: #fff !important;
+}
+
+.spinner {
+  border-top-color: var(--ss-accent) !important;
+}
+
+.modal-content {
+  background: var(--ss-panel) !important;
+  color: var(--ss-dim) !important;
+}
+
+/* Payment brand marks in the footer keep their own colours: those
+   are trademarks, not theme accents. */
+
+/* ============================================================
    1. LAYOUT: HEADER CLEARANCE, PANELS, RHYTHM
    ============================================================ */
 
