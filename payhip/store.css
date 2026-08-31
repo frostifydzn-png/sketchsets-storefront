@@ -882,7 +882,7 @@ button.add-to-cart-button[disabled] {
 }
 
 .product-card-wrapper .card .card-information::after {
-  content: "92";
+  content: "→";
   color: var(--ss-accent);
   font-weight: 700;
   font-size: 15px;
