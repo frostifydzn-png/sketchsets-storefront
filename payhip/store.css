@@ -239,7 +239,7 @@ body {
 @media (min-width: 900px) {
   [data-section-key="featured-collection"] .section-contents {
     display: grid !important;
-    grid-template-columns: 13rem minmax(0, 1fr);
+    grid-template-columns: 15.5rem minmax(0, 1fr);
     grid-template-rows: auto 1fr;
     grid-template-areas:
       "title grid"
@@ -248,14 +248,18 @@ body {
     align-items: start;
   }
 
+  /* This is the shelf's title, not a caption, so it is set at
+     headline scale in the condensed face like every other heading.
+     It wraps to two lines in the 15.5rem column, which is intended. */
   [data-section-key="featured-collection"] .heading-text {
     grid-area: title;
     text-align: left !important;
-    font-size: 15px !important;
-    font-weight: 800 !important;
+    font-size: clamp(28px, 2.7vw, 44px) !important;
+    font-weight: 700 !important;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin: 0 0 14px !important;
+    letter-spacing: -0.02em;
+    line-height: 0.94;
+    margin: 0 0 20px !important;
   }
 
   [data-section-key="featured-collection"] .grid-block {
@@ -556,75 +560,171 @@ button.add-to-cart-button[disabled] {
 
 /* ============================================================
    5. DROPDOWN AND MEGA MENU
+
+   Two shapes share these rules. Shop is a mega panel, absolutely
+   positioned at left:0/right:0 against the header, so it always spans
+   the whole bar; the columns inside it are capped and centred rather
+   than stretched across 1,431px. Support is a small floating list
+   with no .dropdown-columns-wrapper at all.
    ============================================================ */
 
 .header-dropdown-wrapper {
   margin-top: 10px;
-  padding: 12px !important;
-  border-radius: var(--ss-radius-card) !important;
-  background: rgba(18, 10, 30, 0.95) !important;
-  backdrop-filter: blur(14px) saturate(120%);
-  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  padding: 14px !important;
+  border-radius: 16px !important;
+  background: rgba(15, 8, 26, 0.94) !important;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
   border: 1px solid var(--ss-line) !important;
   box-shadow: var(--ss-shadow-2) !important;
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .header-dropdown-wrapper {
-    background: rgba(18, 10, 30, 0.99) !important;
+    background: rgba(15, 8, 26, 0.99) !important;
   }
 }
 
+/* The small panel was 200px wide, which wrapped "Contact Us". */
+.header-dropdown-wrapper:not(:has(.dropdown-columns-wrapper)) {
+  min-width: 226px;
+}
+
+/* The mega panel runs to both edges of the header, so a radius and a
+   side border on it would be sliced off at the viewport edge. It gets
+   a rule along the top and a radius on the bottom corners only. */
+.header-dropdown-wrapper:has(.dropdown-columns-wrapper) {
+  margin-top: 0;
+  padding: 34px 0 40px !important;
+  border-radius: 0 0 20px 20px !important;
+  border-top: 1px solid var(--ss-line) !important;
+  border-right: 0 !important;
+  border-bottom: 1px solid var(--ss-line) !important;
+  border-left: 0 !important;
+}
+
+/* --- links, both shapes --- */
+
 .header-dropdown-wrapper a {
   display: block;
-  padding: 10px 14px;
+  padding: 9px 14px;
   margin: 1px 0;
-  border-radius: 10px !important;
+  border-radius: 9px !important;
   color: var(--ss-dim);
   font-weight: 600;
-  text-decoration: none;
+  text-decoration: none !important;
   transition:
     background-color 0.16s var(--ss-ease),
     color 0.16s var(--ss-ease);
 }
 
+/* Section 20 draws a pink rule under nav links on hover. The dropdown
+   is a DESCENDANT of .header-nav-item, so every link inside it matched
+   that rule too - that was the line under "For Designers" and
+   "Tutorials". Killing the pseudo-element here is enough; the rule in
+   section 20 is more specific, so this needs !important to win. */
+.header-dropdown-wrapper a::after {
+  content: none !important;
+}
+
 .header-dropdown-wrapper a:hover,
 .header-dropdown-wrapper a:focus-visible {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 61, 158, 0.1);
   color: var(--ss-text);
   outline: none;
 }
 
-/* Mega menu columns. The old version put a coloured dot before
-   every row; with the panel already legible it was decoration
-   for its own sake. */
+/* --- mega panel columns --- */
+
+/* The theme hangs a Bootstrap-style -27px gutter off both sides of
+   this element and pads it itself, so both need !important or the
+   column block sits off-centre no matter what max-width it is given. */
 .header-dropdown-wrapper .dropdown-columns-wrapper {
-  display: flex;
+  display: flex !important;
   flex-wrap: nowrap;
-  gap: clamp(24px, 4vw, 64px);
-  padding: 6px 4px;
+  gap: clamp(16px, 2.4vw, 44px);
+  max-width: min(1080px, calc(100% - (var(--ss-gutter) * 2)));
+  margin: 0 auto !important;
+  padding: 0 !important;
 }
 
 .header-dropdown-wrapper .dropdown-columns-wrapper .dropdown-column {
   flex: 1 1 0;
-  min-width: 180px;
+  min-width: 0;
 }
 
-/* Column headings: the level-1 item in each column. */
-.header-dropdown-wrapper .dropdown-columns-wrapper .dropdown-item-level1 a {
+/* Payhip reserves a first column for a promo image and leaves it in
+   the flow at 50px wide when none is set, which shoved the whole menu
+   sideways. It reappears on its own if an image is ever added. */
+.header-dropdown-wrapper .dropdown-image-column:not(:has(img)) {
+  display: none !important;
+}
+
+/* Column headings. A hairline under the label groups the links
+   beneath it without drawing a box around them.
+   (The trailing colons in "SHOP:" and "SHOP ESSENTIALS:" are builder
+   content, not CSS - edit those in the menu settings.) */
+.header-dropdown-wrapper .dropdown-column:has(.dropdown-item-level2) .dropdown-item-level1 a {
+  padding: 0 12px 10px 26px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--ss-line);
+  border-radius: 0 !important;
+  background: none !important;
   color: var(--ss-muted) !important;
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.09em;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  padding-left: 14px;
-  padding-bottom: 4px;
   pointer-events: none;
 }
 
-.header-dropdown-wrapper .dropdown-columns-wrapper .dropdown-item-level1 a:hover {
-  background: transparent;
-  color: var(--ss-muted) !important;
+.header-dropdown-wrapper .dropdown-item-level2 a {
+  position: relative;
+  padding: 9px 12px 9px 26px;
+  color: var(--ss-text) !important;
+  font-size: 15px !important;
+}
+
+/* An arrow rides in from the left on hover, matching the one on the
+   product cards, so a menu row reads as a destination. */
+.header-dropdown-wrapper .dropdown-item-level2 a::before {
+  content: "\2192";
+  position: absolute;
+  left: 9px;
+  color: var(--ss-accent);
+  opacity: 0;
+  transform: translateX(-5px);
+  transition:
+    opacity 0.2s var(--ss-ease),
+    transform 0.2s var(--ss-ease);
+}
+
+.header-dropdown-wrapper .dropdown-item-level2 a:hover::before {
+  opacity: 1;
+  transform: none;
+}
+
+/* A column holding a level-1 link and nothing under it is a
+   destination, not a heading - "Shop all products" is the one on the
+   Shop menu - so it stays clickable and reads as the panel's CTA. */
+.header-dropdown-wrapper .dropdown-column:not(:has(.dropdown-item-level2)) .dropdown-item-level1 a {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 1px solid rgba(255, 61, 158, 0.35);
+  border-radius: var(--ss-radius-pill) !important;
+  color: var(--ss-accent) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.header-dropdown-wrapper .dropdown-column:not(:has(.dropdown-item-level2)) .dropdown-item-level1 a:hover {
+  background: var(--ss-accent) !important;
+  border-color: transparent;
+  color: var(--ss-accent-ink) !important;
 }
 
 /* ============================================================
@@ -1363,63 +1463,127 @@ button.add-to-cart-button[disabled] {
 
 /* ============================================================
    13. FAQ / ACCORDION
+
+   Six of these sections stack on /faq - 52 questions across
+   Frequently Asked, Licensing, Seller, Technical, Shopping and
+   Disclaimers - so the column is centred and capped. The page was
+   running the full 1,560px with the entire right half empty, and a
+   line of body copy that wide is unreadable anyway.
+
+   Body copy inside a row stays left-aligned. Centring a paragraph
+   this long gives every line a different starting edge, which is
+   harder to read; the column it sits in is what gets centred.
    ============================================================ */
 
-.accordion-items-container {
-  display: flex !important;
-  flex-direction: column !important;
-  row-gap: 12px !important;
-  margin: 8px 0 0 !important;
-  padding: 0 !important;
-  max-width: 900px;
-  margin-inline: auto;
+.js-section-wrapper[data-section-key="faq-accordion"] .heading-text-main,
+.js-section-wrapper[data-section-key="faq-accordion"] .heading-text {
+  text-align: center !important;
+  max-width: 24ch;
+  margin-inline: auto !important;
 }
 
-/* Payhip injects hairline dividers between items. */
+.accordion-block,
+.accordion-items-container {
+  display: block !important;
+  max-width: 860px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+/* Payhip injects a hairline element between rows on top of the
+   border each row already carries. */
 .accordion-divider,
 .js-builder-accordion-divider {
   display: none !important;
 }
 
+/* A rule between rows, not a box around each one. */
 .accordion-item,
 .js-accordion-item {
-  margin: 0 !important;
   width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
   box-sizing: border-box;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--ss-line);
+  border-radius: 0;
   overflow: hidden;
-  background: var(--ss-panel);
-  border: 1px solid var(--ss-line);
-  border-radius: var(--ss-radius-media);
-  transition: border-color 0.18s var(--ss-ease);
 }
 
-.accordion-item:hover {
-  border-color: var(--ss-line-strong);
-}
-
+/* The h3 is only a wrapper; the button inside it is the actual row,
+   and the builder puts 30px of inline padding on that button. Both
+   were padding at once, which is how a 22px line of text ended up in
+   a 122px row. The h3 gives its padding up and the button keeps it. */
 .accordion-item-title-wrapper {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font: inherit !important;
+  color: inherit !important;
+}
+
+.accordion-item .accordion-item-click-target {
   display: flex !important;
   align-items: center !important;
-  padding: 16px 52px 16px 20px !important;
-  margin: 0 !important;
-  font-size: 17px !important;
-  font-weight: 700 !important;
-  line-height: 1.3 !important;
+  justify-content: space-between !important;
+  gap: 20px !important;
+  width: 100% !important;
+  padding: 21px 4px !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: var(--ss-text) !important;
   text-align: left !important;
   cursor: pointer;
+  transition: color 0.18s var(--ss-ease);
 }
 
-.accordion-item-title-wrapper h3 {
-  margin: 0 !important;
-  font: inherit !important;
+.accordion-item .accordion-item-click-target:hover,
+.accordion-item .accordion-item-click-target[aria-expanded="true"] {
+  color: var(--ss-accent) !important;
+}
+
+.accordion-item .accordion-item-title {
+  padding: 0 !important;
+  font-size: 16.5px !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  color: inherit !important;
   overflow-wrap: anywhere !important;
+}
+
+/* The theme's icon is two 1px white lines stacked into a plus, and it
+   hides the vertical one to make a minus once the row opens. Accent
+   and 2px so it reads at a glance, and the whole thing turns as it
+   opens rather than swapping silently. */
+.accordion-item .accordion-icon-container {
+  flex: 0 0 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  transition: transform 0.32s var(--ss-ease);
+}
+
+.accordion-item .accordion-item-click-target[aria-expanded="true"] .accordion-icon-container {
+  transform: rotate(180deg);
+}
+
+.accordion-item .plus-horizontal-line,
+.accordion-item .plus-vertical-line {
+  height: 2px !important;
+  background-color: var(--ss-accent) !important;
+}
+
+.accordion-item-dropdown {
+  border: 0 !important;
 }
 
 .accordion-item-description,
 .accordion-item .js-builder-text {
-  padding: 0 20px 18px 20px !important;
-  font-size: 15px !important;
-  line-height: 1.65 !important;
+  padding: 0 44px 26px 4px !important;
+  font-size: 15.5px !important;
+  line-height: 1.7 !important;
   color: var(--ss-dim) !important;
   text-align: left !important;
   overflow-wrap: anywhere !important;
@@ -1430,13 +1594,15 @@ button.add-to-cart-button[disabled] {
 }
 
 @media (max-width: 680px) {
-  .accordion-item-title-wrapper {
-    font-size: 16px !important;
-    padding: 14px 46px 14px 16px !important;
+  .accordion-item .accordion-item-click-target {
+    padding: 17px 2px !important;
+  }
+  .accordion-item .accordion-item-title {
+    font-size: 15.5px !important;
   }
   .accordion-item-description {
-    font-size: 14px !important;
-    padding: 0 16px 16px 16px !important;
+    padding: 0 6px 20px 2px !important;
+    font-size: 14.5px !important;
   }
 }
 
