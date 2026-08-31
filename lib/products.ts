@@ -238,7 +238,7 @@ export const products: Product[] = [
     license: "Commercial",
     fileSize: "ZIP · 172MB",
     tags: ["paper", "tears", "texture", "collage", "grunge", "psd"],
-    featured: false,
+    featured: true,
     isNew: false,
     payhipId: "pm6Iy",
     rating: { average: 5, count: 2 },

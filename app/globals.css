@@ -3,30 +3,26 @@
 /*
  * SketchSets design tokens.
  *
- * Shared DNA with Frostify: near-black base, #4a90ff accent, same typographic
- * sensibility. Divergence: SketchSets runs denser, flatter and more grid-led —
- * the product artwork carries the visual weight, so the chrome stays quiet.
+ * Near-monochrome on purpose: the product artwork is the only real colour on
+ * the page. Chrome stays quiet — no accent-blue buttons, no bordered boxes, no
+ * gradient washes. Contrast and type scale do the work instead.
  */
 @theme {
-  --color-ink: #07070a;
-  --color-ink-raised: #0d0d12;
-  --color-ink-high: #14141b;
-  --color-line: rgba(255, 255, 255, 0.09);
-  --color-line-strong: rgba(255, 255, 255, 0.16);
+  --color-ink: #0a0a0a;
+  --color-ink-raised: #131313;
+  --color-ink-high: #1a1a1a;
+  --color-line: rgba(255, 255, 255, 0.08);
+  --color-line-strong: rgba(255, 255, 255, 0.2);
 
-  --color-text: #f4f5f6;
-  --color-text-dim: #a3a9b2;
-  --color-text-faint: #6b727c;
+  --color-text: #fafaf9;
+  --color-text-dim: #a5a5a3;
+  --color-text-faint: #737371;
 
-  --color-accent: #4a90ff;
-  --color-accent-bright: #7db4ff;
-  --color-accent-deep: #2b6bff;
-  --color-accent-soft: rgba(74, 144, 255, 0.14);
+  /* Used sparingly — badges, free pricing, small emphasis. Never a button. */
+  --color-accent: #d8ff3e;
 
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-
-  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
@@ -41,16 +37,21 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-::selection {
-  background: var(--color-accent);
-  color: #fff;
+/* Display face runs tight and optically sized for big editorial headlines. */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
 }
 
-/* Visible, consistent focus ring for keyboard users only. */
+::selection {
+  background: var(--color-accent);
+  color: #0a0a0a;
+}
+
 :focus-visible {
-  outline: 2px solid var(--color-accent-bright);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -62,13 +63,4 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-}
-
-/* Utility: subtle grid texture behind the hero. */
-.grid-veil {
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
 }

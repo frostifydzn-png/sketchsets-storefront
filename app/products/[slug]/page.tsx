@@ -81,100 +81,99 @@ export default async function ProductPage({
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-5 pt-8 sm:px-8">
+    <div className="mx-auto max-w-[1400px] px-6 pt-8 sm:px-10">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <nav aria-label="Breadcrumb" className="text-text-faint text-xs">
-        <Link href="/browse" className="hover:text-text-dim transition-colors">
-          Browse
+      <nav aria-label="Breadcrumb" className="text-text-faint text-[13px]">
+        <Link href="/browse" className="hover:text-text transition-colors">
+          Shop
         </Link>
-        <span className="mx-1.5">/</span>
+        <span className="mx-2">/</span>
         {category && (
           <>
             <Link
               href={`/${category.id}`}
-              className="hover:text-text-dim transition-colors"
+              className="hover:text-text transition-colors"
             >
               {category.name}
             </Link>
-            <span className="mx-1.5">/</span>
+            <span className="mx-2">/</span>
           </>
         )}
         <span className="text-text-dim">{product.title}</span>
       </nav>
 
-      <div className="mt-6 grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-14">
+      <div className="mt-7 grid gap-10 lg:grid-cols-[1.55fr_1fr] lg:gap-16">
         <ProductGallery images={product.previewImages} title={product.title} />
 
-        <div>
-          <p className="text-accent-bright text-[11px] font-semibold tracking-wider uppercase">
+        <div className="lg:pt-2">
+          <p className="text-text-faint text-[11px] font-semibold tracking-[0.18em] uppercase">
             {product.subcategory}
           </p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+          <h1 className="font-display mt-3 text-[clamp(2.25rem,5vw,3.5rem)] leading-[0.98] font-extrabold">
             {product.title}
           </h1>
-          <p className="text-text-faint mt-2 text-sm">
+
+          <p className="text-text-faint mt-3 text-[14px]">
             by <span className="text-text-dim">{product.creator}</span>
             {product.rating && (
               <>
                 <span className="mx-2">·</span>
-                <span aria-label={`Rated ${product.rating.average} out of 5`}>
-                  ★ {product.rating.average.toFixed(1)}
-                </span>{" "}
-                <span>({product.rating.count})</span>
+                <span
+                  className="text-text-dim"
+                  aria-label={`Rated ${product.rating.average} out of 5 from ${product.rating.count} reviews`}
+                >
+                  ★ {product.rating.average.toFixed(1)} ({product.rating.count})
+                </span>
               </>
             )}
           </p>
 
-          <p className="text-text-dim mt-5 leading-relaxed">
+          <p className="text-text-dim mt-6 text-[17px] leading-relaxed">
             {product.shortDescription}
           </p>
 
-          <div className="border-line mt-7 border-t pt-6">
-            <div className="flex items-baseline gap-3">
-              <span className="text-3xl font-semibold tracking-tight">
-                {formatPrice(product.price)}
-              </span>
-              <span className="text-text-faint text-sm">
-                one-time · lifetime access
-              </span>
-            </div>
-
-            <a
-              href={buyHref}
-              className="bg-accent hover:bg-accent-deep mt-5 block rounded-lg px-5 py-3.5 text-center text-sm font-semibold text-white transition-colors"
-            >
-              {product.price === 0 ? "Download free" : "Buy now"}
-            </a>
-            <p className="text-text-faint mt-3 text-center text-xs">
-              Secure checkout and instant delivery via Payhip
-            </p>
+          <div className="mt-9 flex items-baseline gap-4">
+            <span className="font-display text-[clamp(2.25rem,5vw,3rem)] leading-none font-extrabold">
+              {formatPrice(product.price)}
+            </span>
+            <span className="text-text-faint text-[14px]">
+              one-time · lifetime access
+            </span>
           </div>
 
-          <dl className="border-line mt-7 border-t pt-6 text-sm">
+          <a
+            href={buyHref}
+            className="text-ink mt-6 block rounded-full bg-white px-6 py-4 text-center text-[15px] font-semibold transition-opacity hover:opacity-85"
+          >
+            {product.price === 0 ? "Download free" : "Buy now"}
+          </a>
+          <p className="text-text-faint mt-3 text-center text-[13px]">
+            Secure checkout and instant delivery via Payhip
+          </p>
+
+          <dl className="mt-10 text-[14px]">
             <Spec label="License">{product.license}</Spec>
             <Spec label="Download">{product.fileSize}</Spec>
-            <Spec label="Works with">
-              {product.compatibility.join(", ")}
-            </Spec>
+            <Spec label="Works with">{product.compatibility.join(", ")}</Spec>
           </dl>
         </div>
       </div>
 
       {/* Description + what's included */}
-      <div className="mt-16 grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-14">
+      <div className="mt-20 grid gap-12 lg:grid-cols-[1.55fr_1fr] lg:gap-16">
         <section>
-          <h2 className="text-xl font-semibold tracking-tight">
+          <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] leading-none font-extrabold">
             About this pack
           </h2>
-          <div className="mt-4 space-y-4">
+          <div className="mt-6 space-y-5">
             {product.description.map((paragraph) => (
               <p
                 key={paragraph.slice(0, 40)}
-                className="text-text-dim leading-relaxed"
+                className="text-text-dim text-[16px] leading-relaxed"
               >
                 {paragraph}
               </p>
@@ -182,12 +181,9 @@ export default async function ProductPage({
           </div>
 
           {product.tags.length > 0 && (
-            <div className="mt-7 flex flex-wrap gap-2">
+            <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2">
               {product.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="border-line text-text-faint rounded-md border px-2.5 py-1 text-xs"
-                >
+                <span key={tag} className="text-text-faint text-[13px]">
                   {tag}
                 </span>
               ))}
@@ -195,19 +191,16 @@ export default async function ProductPage({
           )}
         </section>
 
-        <section className="border-line bg-ink-raised h-fit rounded-xl border p-6">
-          <h2 className="text-sm font-semibold tracking-wider uppercase">
-            What&rsquo;s included
+        <section>
+          <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] leading-none font-extrabold">
+            What&rsquo;s inside
           </h2>
-          <ul className="mt-4 space-y-2.5">
+          <ul className="mt-6">
             {product.includedFiles.map((file) => (
               <li
                 key={file}
-                className="text-text-dim flex gap-2.5 text-sm leading-relaxed"
+                className="border-line text-text-dim border-t py-3.5 text-[15px] leading-relaxed last:border-b"
               >
-                <span className="text-accent mt-0.5 shrink-0" aria-hidden="true">
-                  ✓
-                </span>
                 {file}
               </li>
             ))}
@@ -216,11 +209,11 @@ export default async function ProductPage({
       </div>
 
       {related.length > 0 && (
-        <section className="mt-20">
-          <h2 className="mb-6 text-xl font-semibold tracking-tight">
-            You might also like
+        <section className="mt-24">
+          <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] leading-none font-extrabold">
+            More like this
           </h2>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((item) => (
               <ProductCard key={item.id} product={item} />
             ))}
@@ -239,7 +232,7 @@ function Spec({
   children: React.ReactNode;
 }) {
   return (
-    <div className="border-line flex gap-4 border-b py-2.5 last:border-b-0">
+    <div className="border-line flex gap-6 border-t py-3.5 last:border-b">
       <dt className="text-text-faint w-28 shrink-0">{label}</dt>
       <dd className="text-text-dim">{children}</dd>
     </div>

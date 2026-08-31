@@ -7,7 +7,7 @@ import { categories } from "@/lib/products";
 import { site } from "@/lib/site";
 
 const navLinks = [
-  { href: "/browse", label: "Browse" },
+  { href: "/browse", label: "Shop all" },
   ...categories.map((c) => ({ href: `/${c.id}`, label: c.name })),
 ];
 
@@ -17,21 +17,18 @@ export function SiteHeader() {
   const closeMenu = () => setOpen(false);
 
   return (
-    <header className="border-line bg-ink/80 sticky top-0 z-40 border-b backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-6xl items-center gap-8 px-5 sm:px-8">
-        <Link href="/" className="group flex items-baseline gap-2">
-          <span className="text-[17px] font-semibold tracking-tight">
+    <header className="bg-ink/85 sticky top-0 z-40 backdrop-blur-xl">
+      <div className="mx-auto flex h-[72px] max-w-[1400px] items-center gap-10 px-6 sm:px-10">
+        <Link href="/" className="group shrink-0">
+          <span className="font-display text-[19px] leading-none font-extrabold">
             SketchSets
           </span>
-          <span className="text-text-faint group-hover:text-text-dim hidden text-[11px] font-medium transition-colors sm:inline">
+          <span className="text-text-faint mt-0.5 block text-[10px] leading-none font-medium tracking-[0.14em] uppercase">
             by {site.parent}
           </span>
         </Link>
 
-        <nav
-          aria-label="Primary"
-          className="hidden items-center gap-1 md:flex"
-        >
+        <nav aria-label="Primary" className="hidden items-center gap-7 md:flex">
           {navLinks.map((link) => {
             const active = pathname === link.href;
             return (
@@ -39,10 +36,10 @@ export function SiteHeader() {
                 key={link.href}
                 href={link.href}
                 aria-current={active ? "page" : undefined}
-                className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                className={`text-[15px] transition-colors ${
                   active
-                    ? "text-text bg-white/[0.06]"
-                    : "text-text-dim hover:text-text hover:bg-white/[0.04]"
+                    ? "text-text"
+                    : "text-text-dim hover:text-text"
                 }`}
               >
                 {link.label}
@@ -51,20 +48,20 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-5">
           <a
             href={site.links.frostify}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-text-dim hover:text-text hidden rounded-lg px-3 py-2 text-sm font-medium transition-colors sm:block"
+            className="text-text-dim hover:text-text hidden text-[15px] transition-colors sm:block"
           >
-            Frostify ↗
+            Frostify
           </a>
           <Link
             href="/browse"
-            className="bg-accent hover:bg-accent-deep hidden rounded-lg px-4 py-2 text-sm font-semibold text-white transition-colors md:block"
+            className="text-ink hidden rounded-full bg-white px-5 py-2.5 text-[14px] font-semibold transition-opacity hover:opacity-85 md:block"
           >
-            Shop
+            Browse
           </Link>
 
           <button
@@ -73,21 +70,21 @@ export function SiteHeader() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="border-line text-text-dim hover:text-text rounded-lg border p-2 md:hidden"
+            className="text-text -mr-2 p-2 md:hidden"
           >
-            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
               {open ? (
                 <path
-                  d="M4 4l10 10M14 4L4 14"
+                  d="M5 5l10 10M15 5L5 15"
                   stroke="currentColor"
-                  strokeWidth="1.6"
+                  strokeWidth="1.7"
                   strokeLinecap="round"
                 />
               ) : (
                 <path
-                  d="M2.5 5h13M2.5 9h13M2.5 13h13"
+                  d="M3 6h14M3 14h14"
                   stroke="currentColor"
-                  strokeWidth="1.6"
+                  strokeWidth="1.7"
                   strokeLinecap="round"
                 />
               )}
@@ -100,15 +97,15 @@ export function SiteHeader() {
         <nav
           id="mobile-nav"
           aria-label="Mobile"
-          className="border-line bg-ink border-t md:hidden"
+          className="bg-ink md:hidden"
         >
-          <div className="mx-auto max-w-6xl px-5 py-3 sm:px-8">
+          <div className="mx-auto max-w-[1400px] px-6 pb-6 sm:px-10">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={closeMenu}
-                className="text-text-dim hover:text-text block rounded-lg px-2 py-3 text-[15px] font-medium"
+                className="font-display text-text block py-3 text-3xl font-bold"
               >
                 {link.label}
               </Link>
@@ -118,9 +115,9 @@ export function SiteHeader() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={closeMenu}
-              className="text-text-dim hover:text-text block rounded-lg px-2 py-3 text-[15px] font-medium"
+              className="font-display text-text-dim block py-3 text-3xl font-bold"
             >
-              Frostify ↗
+              Frostify
             </a>
           </div>
         </nav>

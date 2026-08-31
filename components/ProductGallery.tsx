@@ -15,7 +15,7 @@ export function ProductGallery({
 
   return (
     <div>
-      <div className="border-line bg-ink-high relative aspect-[4/3] overflow-hidden rounded-xl border">
+      <div className="bg-ink-raised relative aspect-[5/4] overflow-hidden rounded-2xl">
         <Image
           key={current}
           src={current}
@@ -31,7 +31,7 @@ export function ProductGallery({
         <div
           role="group"
           aria-label={`${title} previews`}
-          className="mt-3 grid grid-cols-5 gap-2"
+          className="mt-4 flex gap-3"
         >
           {images.map((src, i) => (
             <button
@@ -40,19 +40,13 @@ export function ProductGallery({
               onClick={() => setActive(i)}
               aria-label={`Show preview ${i + 1}`}
               aria-pressed={i === active}
-              className={`bg-ink-high relative aspect-[4/3] overflow-hidden rounded-lg border transition-colors ${
+              className={`bg-ink-high relative aspect-[5/4] w-20 shrink-0 overflow-hidden rounded-lg ring-inset transition-all sm:w-24 ${
                 i === active
-                  ? "border-accent"
-                  : "border-line hover:border-line-strong"
+                  ? "opacity-100 ring-2 ring-white"
+                  : "opacity-70 ring-1 ring-white/15 hover:opacity-100"
               }`}
             >
-              <Image
-                src={src}
-                alt=""
-                fill
-                sizes="15vw"
-                className="object-cover"
-              />
+              <Image src={src} alt="" fill sizes="96px" className="object-cover" />
             </button>
           ))}
         </div>
