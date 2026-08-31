@@ -31,8 +31,15 @@ export interface Product {
   compatibility: string[];
   license: string;
   licenseSummary: string;
+  /**
+   * Catalogue number. The shop is presented as a numbered archive, so every
+   * pack carries one: 000 is the complete library, samples take an S prefix.
+   */
+  setNumber: string;
   /** File types in the pack, for at-a-glance scanning. */
   formats: string[];
+  /** Hand-written selling points. Rendered only when a product has them. */
+  keyFeatures?: string[];
   fileSize: string;
   tags: string[];
   /** Surfaces the product as a Frostify Pick. */
@@ -120,6 +127,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    setNumber: "000",
     formats: ["PSD", "PNG", "SVG", "PAT"],
     fileSize: "ZIP · 487MB",
     tags: ["bundle", "vault", "collection", "psd", "svg", "value"],
@@ -163,6 +171,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    setNumber: "001",
     formats: ["SVG", "PNG", "PSD"],
     fileSize: "ZIP · 106MB",
     tags: ["doodles", "hand-drawn", "svg", "vector", "psd", "accents"],
@@ -209,6 +218,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    setNumber: "002",
     formats: ["PNG", "PSD"],
     fileSize: "ZIP · 99MB",
     tags: ["glows", "light leaks", "flares", "overlays", "1080p", "psd"],
@@ -245,6 +255,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    setNumber: "003",
     formats: ["PSD", "SVG", "PNG"],
     fileSize: "ZIP · 57MB",
     tags: ["brushes", "texture", "vector", "svg", "hand-drawn", "grunge"],
@@ -284,6 +295,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    setNumber: "004",
     formats: ["PNG", "PSD"],
     fileSize: "ZIP · 172MB",
     tags: ["paper", "tears", "texture", "collage", "grunge", "psd"],
@@ -322,6 +334,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    setNumber: "005",
     formats: ["PAT", "PSD"],
     fileSize: "ZIP · 40MB",
     tags: ["patterns", "pat", "texture", "backgrounds", "psd", "tiling"],
@@ -358,6 +371,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    setNumber: "006",
     formats: ["PSD", "PNG"],
     fileSize: "ZIP · 25MB",
     tags: ["speedlines", "free", "4k", "effects", "psd", "png"],
@@ -391,6 +405,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    setNumber: "007",
     formats: ["PSD"],
     fileSize: "ZIP · 16MB",
     tags: ["sparks", "particles", "free", "overlays", "fireworks", "psd"],
@@ -420,6 +435,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    setNumber: "S01",
     formats: ["PSD", "PNG", "SVG"],
     fileSize: "ZIP · 1MB",
     tags: ["doodles", "free", "sample", "hand-drawn"],
@@ -449,6 +465,7 @@ export const products: Product[] = [
     license: "Commercial",
     licenseSummary:
       "Use in client and monetised work. No reselling the assets.",
+    setNumber: "S02",
     formats: ["PAT", "PSD"],
     fileSize: "ZIP · 12MB",
     tags: ["patterns", "free", "sample", "pat"],
@@ -457,6 +474,64 @@ export const products: Product[] = [
     payhipId: "v912K",
   },
 ];
+
+/* ---------- licensing ---------- */
+
+export type LicenceTier = {
+  id: "personal" | "commercial" | "extended";
+  label: string;
+  blurb: string;
+  price: number;
+  recommended?: boolean;
+  /**
+   * Payhip listing for this tier. Payhip prices one product at one price, so
+   * each paid tier needs its own listing. Until these are filled in, every
+   * tier checks out against the product's base listing at its base price.
+   */
+  payhipId?: string;
+};
+
+/**
+ * PLACEHOLDER PRICING.
+ *
+ * Commercial matches the product's real listed price, because the licence
+ * shipping with every pack today already permits commercial use. Personal and
+ * Extended are derived from it purely so the interface can be built and seen;
+ * they are not prices anyone has agreed. Replace the two multipliers, and add
+ * a payhipId per tier, before this goes anywhere near a customer.
+ */
+const PERSONAL_MULTIPLIER = 0.6;
+const EXTENDED_MULTIPLIER = 3;
+
+const round99 = (n: number) => Math.max(1, Math.round(n) - 0.01);
+
+export const licenceTiers = (product: Product): LicenceTier[] => {
+  if (product.price === 0) return [];
+
+  return [
+    {
+      id: "personal",
+      label: "Personal",
+      blurb: "Personal projects and portfolio work. No client or paid use.",
+      price: round99(product.price * PERSONAL_MULTIPLIER),
+    },
+    {
+      id: "commercial",
+      label: "Commercial",
+      blurb:
+        "Client work, sponsored videos and monetised channels. No per-project limit.",
+      price: product.price,
+      recommended: true,
+    },
+    {
+      id: "extended",
+      label: "Extended",
+      blurb:
+        "Everything in Commercial, plus use across a team and in products you sell on.",
+      price: round99(product.price * EXTENDED_MULTIPLIER),
+    },
+  ];
+};
 
 /* ---------- lookups ---------- */
 

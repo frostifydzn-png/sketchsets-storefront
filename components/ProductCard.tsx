@@ -53,8 +53,13 @@ export function ProductCard({
           />
         )}
 
+        {/* Catalogue number, the way an archive labels a piece. */}
+        <span className="bg-ink/75 text-dim pointer-events-none absolute top-3 left-3 rounded px-2 py-1 font-mono text-[11px] tracking-widest backdrop-blur-md">
+          {product.setNumber}
+        </span>
+
         {product.isNew && (
-          <span className="bg-accent text-ink pointer-events-none absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-bold">
+          <span className="bg-accent text-ink pointer-events-none absolute top-3 right-3 rounded-full px-2.5 py-1 text-[11px] font-bold">
             New
           </span>
         )}

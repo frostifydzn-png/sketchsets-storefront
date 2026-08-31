@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BuyPanel } from "@/components/BuyPanel";
+import { LicencePicker } from "@/components/LicencePicker";
 import { MobileBuyBar } from "@/components/MobileBuyBar";
 import { ProductCard } from "@/components/ProductCard";
 import { ProductGallery } from "@/components/ProductGallery";
@@ -15,7 +15,7 @@ import {
   products,
   relatedTo,
 } from "@/lib/products";
-import { site } from "@/lib/site";
+import { payhipPage, site } from "@/lib/site";
 
 export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
@@ -93,7 +93,7 @@ export default async function ProductPage({
 
       <nav
         aria-label="Breadcrumb"
-        className="text-muted flex justify-center gap-2 text-[13px]"
+        className="text-muted flex gap-2 font-mono text-[12px] tracking-wide"
       >
         <Link href="/browse" className="hover:text-text transition-colors">
           Shop
@@ -113,21 +113,23 @@ export default async function ProductPage({
         <span className="text-dim">{product.title}</span>
       </nav>
 
-      {/* Name leads as a poster, so what the page is about is unmistakable. */}
-      <header className="relative pt-8 pb-10 text-center sm:pt-10 sm:pb-12">
+      {/* Catalogue number sits with the name, the way an archive labels a piece. */}
+      <header className="relative pt-8 pb-10 sm:pt-10 sm:pb-12">
         <div
           aria-hidden="true"
           className="hero-glow pointer-events-none absolute inset-0 z-0"
         />
-        <div className="relative z-10">
-          <h1 className="font-display-tight text-[clamp(2rem,5vw,3.75rem)] leading-[1.02]">
-            {product.title}
-          </h1>
-          <p className="text-dim mx-auto mt-5 max-w-xl text-[17px] leading-relaxed sm:text-[19px]">
-            {product.valueProp}
-          </p>
+        <div className="relative z-10 flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+          <div>
+            <p className="text-accent font-mono text-[13px] tracking-widest">
+              SET {product.setNumber}
+            </p>
+            <h1 className="font-display-tight mt-3 max-w-[18ch] text-[clamp(2rem,5vw,3.75rem)] leading-[1.02]">
+              {product.title}
+            </h1>
+          </div>
           {product.rating && (
-            <p className="text-muted mt-4 text-[14px]">
+            <p className="text-muted text-[14px]">
               <span className="text-accent">★</span>{" "}
               {product.rating.average.toFixed(1)} from {product.rating.count}{" "}
               {product.rating.count === 1 ? "review" : "reviews"}
@@ -152,53 +154,115 @@ export default async function ProductPage({
         </div>
 
         <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
-          <BuyPanel product={product} />
+          <div className="lg:sticky lg:top-24">
+            <LicencePicker product={product} />
+          </div>
         </div>
 
-        {/* Each block is labelled, so the page can be scanned rather than read. */}
         <div className="min-w-0 lg:col-start-1 lg:row-start-2">
-          <div className="section-gap-sm">
-            <Block title="Overview">
-              <div className="max-w-[62ch]">
-                <p className="text-text text-[19px] leading-relaxed sm:text-[21px]">
-                  {product.description[0]}
-                </p>
-                {product.description.slice(1).map((p) => (
-                  <p
-                    key={p.slice(0, 40)}
-                    className="text-dim mt-5 text-[17px] leading-relaxed"
-                  >
-                    {p}
-                  </p>
-                ))}
-              </div>
-            </Block>
+          <div className="section-gap-sm max-w-[68ch]">
+            {/* Lead runs bold and large; the rest is body copy. */}
+            <p className="text-text text-[19px] leading-snug font-semibold sm:text-[21px]">
+              {product.valueProp}
+            </p>
+            {product.description.map((p) => (
+              <p
+                key={p.slice(0, 40)}
+                className="text-dim mt-5 text-[16px] leading-relaxed"
+              >
+                {p}
+              </p>
+            ))}
 
-            <Block
-              title="What's included"
-              meta={`${product.includedFiles.length} items`}
-            >
-              <ul className="bg-surface overflow-hidden rounded-2xl">
-                {product.includedFiles.map((file, i) => {
+            <Block title="This is what you get">
+              <ul className="space-y-2.5">
+                {product.includedFiles.map((file) => {
                   const [name, detail] = file.split(": ");
                   return (
                     <li
                       key={file}
-                      className={`flex flex-wrap items-baseline gap-x-3 gap-y-1 px-5 py-4 sm:px-6 ${
-                        i > 0 ? "border-line border-t" : ""
-                      }`}
+                      className="text-dim flex gap-3 text-[16px] leading-relaxed"
                     >
-                      <span className="text-text text-[16px] font-semibold">
-                        {name}
+                      <span
+                        aria-hidden="true"
+                        className="text-accent mt-2 h-1 w-1 shrink-0 rounded-full"
+                      />
+                      <span>
+                        <span className="text-text">{name}</span>
+                        {detail && (
+                          <span className="text-muted">: {detail}</span>
+                        )}
                       </span>
-                      {detail && (
-                        <span className="text-muted text-[15px]">{detail}</span>
-                      )}
                     </li>
                   );
                 })}
               </ul>
             </Block>
+
+            {product.keyFeatures && product.keyFeatures.length > 0 && (
+              <Block title="Key features">
+                <ul className="space-y-2.5">
+                  {product.keyFeatures.map((f) => (
+                    <li
+                      key={f}
+                      className="text-dim flex gap-3 text-[16px] leading-relaxed"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="text-accent mt-2 h-1 w-1 shrink-0 rounded-full"
+                      />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </Block>
+            )}
+
+            {/* Spec sheet: label left, value right, hairline between. */}
+            <dl className="section-gap-sm">
+              <Spec label="Set number">{product.setNumber}</Spec>
+              <Spec label="File size">
+                {product.fileSize.replace("ZIP · ", "")}
+              </Spec>
+              <Spec label="File formats">{product.formats.join(", ")}</Spec>
+              <Spec label="Licence">{product.license}</Spec>
+            </dl>
+
+            <div className="mt-2">
+              <Fold title="Software compatibility">
+                <p className="text-dim text-[16px] leading-relaxed">
+                  Built for {product.compatibility.join(", ")}. The raster files
+                  open anywhere that reads PNG; layered and vector files need an
+                  app that supports {product.formats.join(", ")}.
+                </p>
+              </Fold>
+              <Fold title="Important information">
+                <p className="text-dim text-[16px] leading-relaxed">
+                  {product.licenseSummary} Delivered as a single ZIP,
+                  downloadable the moment payment clears.{" "}
+                  <a
+                    href={payhipPage("license")}
+                    className="text-accent hover:underline"
+                  >
+                    Read the full licence
+                  </a>
+                  .
+                </p>
+              </Fold>
+            </div>
+
+            {product.tags.length > 0 && (
+              <ul className="mt-10 flex flex-wrap gap-2">
+                {product.tags.map((tag) => (
+                  <li
+                    key={tag}
+                    className="border-line text-muted rounded-full border px-3 py-1.5 font-mono text-[12px] tracking-wide"
+                  >
+                    {tag}
+                  </li>
+                ))}
+              </ul>
+            )}
 
             {creator && (
               <Block title="About the creator">
@@ -249,6 +313,50 @@ export default async function ProductPage({
 
       <MobileBuyBar product={product} />
     </div>
+  );
+}
+
+/** Spec row: label left, value right, hairline under. Value set in mono. */
+function Spec({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="border-line flex items-baseline justify-between gap-6 border-b py-3.5">
+      <dt className="text-muted text-[12px] font-semibold tracking-wider uppercase">
+        {label}
+      </dt>
+      <dd className="text-text text-right font-mono text-[13.5px] tracking-wide">
+        {children}
+      </dd>
+    </div>
+  );
+}
+
+/** Collapsible detail row. Native, so it works without JavaScript. */
+function Fold({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <details className="border-line group border-b">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-3.5 text-[12px] font-semibold tracking-wider uppercase [&::-webkit-details-marker]:hidden">
+        {title}
+        <span
+          aria-hidden="true"
+          className="text-muted group-open:text-accent shrink-0 text-[16px] transition-transform group-open:rotate-45"
+        >
+          +
+        </span>
+      </summary>
+      <div className="pb-5">{children}</div>
+    </details>
   );
 }
 
