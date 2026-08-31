@@ -21,6 +21,10 @@ gt = body.count(">")
 if gt:
     problems.append(f"{gt} child combinator(s): Payhip escapes '>' to '&gt;' and the rule dies")
 
+amp = body.count("&")
+if amp:
+    problems.append(f"{amp} ampersand(s): Payhip escapes '&' to '&amp;', which corrupts URLs")
+
 used = set(re.findall(r"var\(\s*(--[\w-]+)", body))
 defined = set(re.findall(r"(--[\w-]+)\s*:", body))
 if used - defined:

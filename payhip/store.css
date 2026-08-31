@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400..700');
 
 /* ============================================================
    SKETCHSETS — Payhip store styles
@@ -7,11 +7,13 @@
 
    TWO HARD RULES FOR THIS FILE
    ---------------------------------------------------------
-   1. NEVER use the child combinator. Payhip HTML-escapes it,
-      so ">" arrives in the page as "&gt;" and the whole rule
-      is discarded by the browser. The previous file had 106
-      of them and every single one was dead. Use a descendant
-      selector, or a more specific class, instead.
+   1. NEVER use ">" or "&". Payhip HTML-escapes both. A child
+      combinator arrives as "&gt;" and the browser throws the
+      whole selector away; an earlier file had 106 of them and
+      every one was dead. An "&" in a URL arrives as "&amp;",
+      which is why the font import below carries a single
+      parameter and no "&display=swap". Use descendant
+      selectors, and one-parameter URLs.
 
    2. Every custom property must be defined in the :root block
       below. The previous file used 9 that were never defined
