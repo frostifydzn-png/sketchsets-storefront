@@ -39,6 +39,14 @@
   --ss-accent: #ff3d9e;
   --ss-accent-hover: #ff5cae;
   --ss-violet: #a855f7;
+
+  /* The one gradient. Every premium surface draws from these two so the
+     pink and the violet always run the same direction and the same
+     distance apart; mixing bespoke gradients per component is what makes
+     a palette look cheap. --ss-grad fills, --ss-grad-line rules. */
+  --ss-grad: linear-gradient(135deg, #ff3d9e 0%, #d926c5 48%, #a855f7 100%);
+  --ss-grad-line: linear-gradient(90deg, transparent, #ff3d9e 22%, #a855f7 78%, transparent);
+  --ss-grad-bar: linear-gradient(180deg, #ff3d9e, #a855f7);
   --ss-accent-ink: #ffffff; /* text on top of accent fills */
   --ss-gold: #f2c53d; /* Premium pill only */
   --ss-gold-ink: #12161b;
@@ -325,6 +333,26 @@ p {
   line-height: 1.65;
 }
 
+/* Display headings run white into pink into violet. Scoped to the four
+   places that hold a real display heading, because -webkit-text-fill-color
+   INHERITS: applied broadly it would turn any nested element transparent,
+   and the testimonial slider and the footer both put text inside a
+   .heading-text. Footer headings are 16px labels and stay white.
+
+   Guarded by @supports so a browser without background-clip:text keeps
+   the solid colour rather than rendering nothing. */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .js-section-wrapper[data-section-key="text-simple"] .heading-text,
+  .js-section-wrapper[data-section-key="image-and-text-advanced"] .heading-text,
+  .js-section-wrapper[data-section-key="featured-collection"] .heading-text,
+  .content-main-wrapper .js-section-wrapper[data-section-key] .heading-text-main {
+    background-image: linear-gradient(103deg, #ffffff 0%, #ffffff 30%, #ffb3dd 66%, #c9a3ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
 .js-section-wrapper .heading-text-main,
 .js-section-wrapper .heading-text {
   margin-bottom: clamp(20px, 3vw, 36px) !important;
@@ -343,8 +371,7 @@ button.btn.btn-primary.add-to-cart-button,
   align-items: center !important;
   justify-content: center !important;
   gap: 8px !important;
-  background: var(--ss-accent) !important;
-  background-image: none !important;
+  background: var(--ss-grad) !important;
   color: var(--ss-accent-ink) !important;
   border: 0 !important;
   border-radius: var(--ss-radius-pill) !important;
@@ -361,7 +388,7 @@ button.btn.btn-primary.add-to-cart-button,
 button.add-to-cart-button:hover,
 .btn.payhip-buy-button:hover,
 .js-section-wrapper .button-wrapper .btn:hover {
-  background: var(--ss-accent-hover) !important;
+  filter: brightness(1.09);
   transform: translateY(-1px);
 }
 
@@ -479,7 +506,7 @@ button.add-to-cart-button[disabled] {
   }
 
   .header-nav-wrapper nav.header-nav-list .header-nav-item:last-child a {
-    background: var(--ss-accent) !important;
+    background: var(--ss-grad) !important;
     color: var(--ss-accent-ink) !important;
     -webkit-text-fill-color: var(--ss-accent-ink) !important;
   }
@@ -545,23 +572,29 @@ button.add-to-cart-button[disabled] {
    the whole bar; the columns inside it are capped and centred rather
    than stretched across 1,431px. Support is a small floating list
    with no .dropdown-columns-wrapper at all.
+
+   THE PANEL IS OPAQUE, AND MUST STAY THAT WAY. It used to be 94%
+   with its own backdrop-filter, and the page behind showed straight
+   through it - product titles and prices legible across the menu.
+   The cause is nesting: #header already carries a backdrop-filter,
+   which makes it a backdrop root, so the panel inside it had nothing
+   real to sample and composited against the header instead of the
+   page. Do not put backdrop-filter back on this element, and do not
+   give the base colour an alpha channel.
    ============================================================ */
 
 .header-dropdown-wrapper {
   margin-top: 10px;
   padding: 14px !important;
   border-radius: 16px !important;
-  background: rgba(15, 8, 26, 0.94) !important;
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
   border: 1px solid var(--ss-line) !important;
   box-shadow: var(--ss-shadow-2) !important;
-}
-
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .header-dropdown-wrapper {
-    background: rgba(15, 8, 26, 0.99) !important;
-  }
+  /* Two soft corner washes over a solid base. The base is last, so it
+     is the bottom layer and the whole panel stays opaque. */
+  background:
+    radial-gradient(120% 130% at 14% 0%, rgba(255, 61, 158, 0.13), transparent 56%),
+    radial-gradient(120% 130% at 86% 0%, rgba(168, 85, 247, 0.13), transparent 56%),
+    #140b22 !important;
 }
 
 /* The small panel was 200px wide, which wrapped "Contact Us". */
@@ -571,30 +604,47 @@ button.add-to-cart-button[disabled] {
 
 /* The mega panel runs to both edges of the header, so a radius and a
    side border on it would be sliced off at the viewport edge. It gets
-   a rule along the top and a radius on the bottom corners only. */
+   a radius on the bottom corners only, and a gradient rule along its
+   foot in place of a border. */
 .header-dropdown-wrapper:has(.dropdown-columns-wrapper) {
   margin-top: 0;
   padding: 34px 0 40px !important;
   border-radius: 0 0 20px 20px !important;
   border-top: 1px solid var(--ss-line) !important;
   border-right: 0 !important;
-  border-bottom: 1px solid var(--ss-line) !important;
+  border-bottom: 0 !important;
   border-left: 0 !important;
+  background:
+    var(--ss-grad-line) bottom left / 100% 2px no-repeat,
+    radial-gradient(110% 130% at 14% 0%, rgba(255, 61, 158, 0.13), transparent 56%),
+    radial-gradient(110% 130% at 86% 0%, rgba(168, 85, 247, 0.13), transparent 56%),
+    #140b22 !important;
 }
 
-/* --- links, both shapes --- */
+/* --- links, both shapes ---
+   No hover pill. A filled box behind a menu row is the single most
+   generic thing a dropdown can do, and at column width it read as a
+   long grey slab. Instead each row carries a gradient bar at its left
+   edge that grows from nothing on hover - drawn with a background
+   layer rather than a pseudo-element, because ::after is spoken for
+   by the nav underline in section 20 and ::before by the arrow. */
 
 .header-dropdown-wrapper a {
   display: block;
   padding: 9px 14px;
   margin: 1px 0;
-  border-radius: 9px !important;
+  border-radius: 0 !important;
   color: var(--ss-dim);
   font-weight: 600;
   text-decoration: none !important;
+  background-color: transparent !important;
+  background-image: var(--ss-grad-bar) !important;
+  background-repeat: no-repeat !important;
+  background-position: left center !important;
+  background-size: 2px 0% !important;
   transition:
-    background-color 0.16s var(--ss-ease),
-    color 0.16s var(--ss-ease);
+    background-size 0.26s var(--ss-ease),
+    color 0.18s var(--ss-ease);
 }
 
 /* Section 20 draws a pink rule under nav links on hover. The dropdown
@@ -608,8 +658,9 @@ button.add-to-cart-button[disabled] {
 
 .header-dropdown-wrapper a:hover,
 .header-dropdown-wrapper a:focus-visible {
-  background: rgba(255, 61, 158, 0.1);
-  color: var(--ss-text);
+  background-color: transparent !important;
+  background-size: 2px 62% !important;
+  color: var(--ss-accent) !important;
   outline: none;
 }
 
@@ -637,6 +688,11 @@ button.add-to-cart-button[disabled] {
    sideways. It reappears on its own if an image is ever added. */
 .header-dropdown-wrapper .dropdown-image-column:not(:has(img)) {
   display: none !important;
+}
+
+/* Neither a column heading nor the CTA takes the hover bar. */
+.header-dropdown-wrapper .dropdown-item-level1 a {
+  background-image: none !important;
 }
 
 /* Column headings. A hairline under the label groups the links
@@ -698,12 +754,15 @@ button.add-to-cart-button[disabled] {
   font-weight: 800 !important;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  transition:
+    background 0.2s var(--ss-ease),
+    color 0.2s var(--ss-ease);
 }
 
 .header-dropdown-wrapper .dropdown-column:not(:has(.dropdown-item-level2)) .dropdown-item-level1 a:hover {
-  background: var(--ss-accent) !important;
-  border-color: transparent;
-  color: var(--ss-accent-ink) !important;
+  background: var(--ss-grad) !important;
+  border-color: transparent !important;
+  color: #fff !important;
 }
 
 /* ============================================================
@@ -1110,6 +1169,13 @@ button.add-to-cart-button[disabled] {
 
 /* ============================================================
    9. COLLECTION TABS
+
+   Six tabs, and every one used to be an outlined pill. Six boxes in a
+   row is a filter bar on an admin screen, and at that width they no
+   longer fit on one line - five sat on the first row and "For Editors"
+   was orphaned, centred, on a second. Stripping the borders makes the
+   set 760px instead of 1,100px, so it fits on one row, and leaves a
+   single gradient pill marking where you actually are.
    ============================================================ */
 
 .collection-tabs-wrapper {
@@ -1117,7 +1183,7 @@ button.add-to-cart-button[disabled] {
   border: 0 !important;
   box-shadow: none !important;
   padding: 4px 0 !important;
-  max-width: 1180px !important;
+  max-width: 1320px !important;
   margin-inline: auto !important;
 }
 
@@ -1131,7 +1197,7 @@ button.add-to-cart-button[disabled] {
   flex-wrap: wrap !important;
   justify-content: center !important;
   align-items: center !important;
-  gap: 10px 12px !important;
+  gap: 6px 4px !important;
   margin: 0 !important;
   padding: 0 !important;
   list-style: none !important;
@@ -1152,38 +1218,38 @@ button.add-to-cart-button[disabled] {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  min-height: 38px !important;
-  padding: 0 18px !important;
+  min-height: 42px !important;
+  padding: 0 17px !important;
+  border: 0 !important;
   border-radius: var(--ss-radius-pill) !important;
   background: transparent !important;
-  border: 1px solid var(--ss-line) !important;
-  color: var(--ss-dim) !important;
-  font-weight: 600 !important;
+  color: var(--ss-muted) !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
   line-height: 1 !important;
   white-space: nowrap !important;
   text-decoration: none !important;
   transition:
     background-color 0.18s var(--ss-ease),
-    border-color 0.18s var(--ss-ease),
     color 0.18s var(--ss-ease);
 }
 
 .collection-tabs-wrapper a:hover {
-  border-color: var(--ss-line-strong) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
   color: var(--ss-text) !important;
 }
 
-/* Active tab, covering every state Payhip might emit. */
+/* Active tab, covering every state Payhip might emit. The live markup
+   puts .active on the anchor. */
 .collection-tabs-wrapper li.active a,
 .collection-tabs-wrapper li.current a,
 .collection-tabs-wrapper a.active,
 .collection-tabs-wrapper a.current,
 .collection-tabs-wrapper a[aria-current="page"],
 .collection-tabs-wrapper a[aria-selected="true"] {
-  background: var(--ss-accent) !important;
-  border-color: transparent !important;
-  color: var(--ss-accent-ink) !important;
-  box-shadow: none !important;
+  background: var(--ss-grad) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 24px rgba(255, 61, 158, 0.26) !important;
 }
 
 @media (max-width: 979px) {
