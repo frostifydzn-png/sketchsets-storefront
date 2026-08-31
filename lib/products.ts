@@ -1,4 +1,4 @@
-export type CategoryId = "editing" | "thumbnails" | "creator";
+export type CategoryId = "editing" | "thumbnails" | "creator-tools";
 
 export interface Category {
   id: CategoryId;
@@ -63,11 +63,11 @@ export const categories: Category[] = [
     accentVar: "var(--color-cat-thumbnails)",
   },
   {
-    id: "creator",
-    name: "Creator",
+    id: "creator-tools",
+    name: "Creator Tools",
     intro: "Bundles and bigger kits for people who ship constantly.",
     blurb: "Bundles and toolkits",
-    accentVar: "var(--color-cat-creator)",
+    accentVar: "var(--color-cat-tools)",
   },
 ];
 
@@ -78,7 +78,7 @@ export const products: Product[] = [
     title: "SketchSets Vault",
     creatorSlug: "frostify",
     price: 29,
-    category: "creator",
+    category: "creator-tools",
     subcategory: "Bundle",
     valueProp: "The entire Collection V1 library in one download.",
     shortDescription:

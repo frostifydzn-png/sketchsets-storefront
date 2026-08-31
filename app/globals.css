@@ -20,14 +20,18 @@
   --color-dim: #a1a1aa;
   --color-muted: #71717a;
 
-  /* Signature accent — commerce only */
-  --color-accent: #c7ff3d;
-  --color-accent-dim: #a8dd28;
+  /*
+   * Signature accent — commerce only. Ember, not lime: lime reads as Envato,
+   * pink as Gumroad, and blue belongs to Frostify. Clears 7.3:1 as text on
+   * ink and 8:1 as a button with ink text.
+   */
+  --color-accent: #ff6b3d;
+  --color-accent-dim: #e85a2e;
 
   /* Category identity, used sparingly */
-  --color-cat-editing: #c7ff3d;
+  --color-cat-editing: #ff6b3d;
   --color-cat-thumbnails: #7c6cff;
-  --color-cat-creator: #45e0ff;
+  --color-cat-tools: #45e0ff;
 
   --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
@@ -157,19 +161,6 @@ body {
 .marquee:hover .marquee-track,
 .marquee:focus-within .marquee-track {
   animation-play-state: paused;
-}
-
-/* Lime sweep that traces a card edge on hover. */
-@keyframes sheen {
-  from {
-    transform: translateX(-120%);
-  }
-  to {
-    transform: translateX(220%);
-  }
-}
-.group:hover .card-sheen {
-  animation: sheen 0.9s var(--ease-out-soft);
 }
 
 /* Mega menu panel drop. */

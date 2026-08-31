@@ -41,12 +41,6 @@ export function ProductCard({
           />
         )}
 
-        {/* Light sweep on hover. */}
-        <span
-          aria-hidden="true"
-          className="card-sheen pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/12 to-transparent opacity-0 group-hover:opacity-100"
-        />
-
         <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-2.5">
           {product.featured ? (
             <span className="bg-ink/80 text-accent rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide backdrop-blur-md">
@@ -64,7 +58,7 @@ export function ProductCard({
 
         {/* Price is the loudest thing on the card and never hides. */}
         <span
-          className={`pointer-events-none absolute right-2.5 bottom-2.5 rounded-full px-3 py-1.5 text-[15px] font-extrabold backdrop-blur-md transition-colors ${
+          className={`pointer-events-none absolute right-2.5 bottom-2.5 rounded-full px-2.5 py-1 text-[13px] font-extrabold backdrop-blur-md transition-colors sm:px-3 sm:py-1.5 sm:text-[15px] ${
             free
               ? "bg-accent text-ink"
               : "bg-ink/85 text-text group-hover:bg-accent group-hover:text-ink"
