@@ -6,7 +6,7 @@ import { newDrops } from "@/lib/products";
 export const metadata: Metadata = {
   title: "New drops",
   description:
-    "The most recent additions to SketchSets — freshly released packs for editors, thumbnail designers and creators.",
+    "The most recent additions to SketchSets. Freshly released packs for editors, thumbnail designers and creators.",
   alternates: { canonical: "/new" },
 };
 

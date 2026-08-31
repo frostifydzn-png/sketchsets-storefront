@@ -110,103 +110,99 @@ export default async function ProductPage({
       </nav>
 
       {/*
-        Gallery and detail share the left column so the purchase panel stays
-        stuck alongside the whole read, rather than leaving dead space.
+        Explicit grid placement so the source order stays gallery, purchase
+        panel, detail. On mobile that puts the price and buy button directly
+        under the artwork; on desktop the panel spans both rows and stays
+        stuck beside the whole read.
       */}
-      <div className="mt-6 grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:items-start lg:gap-14">
-        <div className="min-w-0">
+      <div className="mt-6 grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:gap-14">
+        <div className="min-w-0 lg:col-start-1 lg:row-start-1">
           <ProductGallery
             images={product.previewImages}
             video={product.videoPreview}
             title={product.title}
           />
+        </div>
 
-          <div className="section-gap-sm">
-            <Block title="What it does">
-              <div className="space-y-4">
-                {product.description.map((p) => (
-                  <p
-                    key={p.slice(0, 40)}
-                    className="text-dim text-[16px] leading-relaxed"
-                  >
-                    {p}
-                  </p>
-                ))}
-              </div>
-            </Block>
+        <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
+          <BuyPanel product={product} />
+        </div>
 
-            <Block title="What's included">
-              <ul className="grid gap-x-8 sm:grid-cols-2">
-                {product.includedFiles.map((file) => (
-                  <li
-                    key={file}
-                    className="border-line text-dim border-b py-3 text-[15px]"
-                  >
-                    {file}
-                  </li>
-                ))}
-              </ul>
-            </Block>
-
-            <Block title="Compatibility">
-              <div className="flex flex-wrap gap-2">
-                {product.compatibility.map((app) => (
-                  <span
-                    key={app}
-                    className="bg-surface ring-line rounded-lg px-3 py-2 text-[14px] ring-1"
-                  >
-                    {app}
-                  </span>
-                ))}
-              </div>
-              <p className="text-muted mt-4 text-[14px]">
-                Delivered as {product.fileSize}.
-              </p>
-            </Block>
-
-            <Block title="License">
-              <p className="text-dim text-[16px] leading-relaxed">
-                {product.licenseSummary}
-              </p>
-              <a
-                href={payhipPage("license")}
-                className="text-accent mt-3 inline-block text-[14px] font-medium hover:underline"
+        {/* Reads as prose, not a spec sheet. */}
+        <div className="min-w-0 lg:col-start-1 lg:row-start-2">
+          <div className="section-gap-sm max-w-[62ch]">
+            <p className="text-text text-[20px] leading-relaxed sm:text-[22px]">
+              {product.description[0]}
+            </p>
+            {product.description.slice(1).map((p) => (
+              <p
+                key={p.slice(0, 40)}
+                className="text-dim mt-6 text-[17px] leading-relaxed"
               >
-                Read the full license
-              </a>
-            </Block>
+                {p}
+              </p>
+            ))}
+
+            <h2 className="font-display mt-16 text-[1.5rem] leading-none">
+              What&rsquo;s included
+            </h2>
+            <ul className="mt-6 space-y-4">
+              {product.includedFiles.map((file) => (
+                <li key={file} className="text-dim text-[16px] leading-relaxed">
+                  {file}
+                </li>
+              ))}
+            </ul>
+
+            <h2 className="font-display mt-16 text-[1.5rem] leading-none">
+              Good to know
+            </h2>
+            <div className="mt-6 space-y-5 text-[16px]">
+              <p className="text-dim leading-relaxed">
+                Works with {product.compatibility.join(", ")}. Delivered as{" "}
+                {product.fileSize.replace("ZIP · ", "a ")} ZIP.
+              </p>
+              <p className="text-dim leading-relaxed">
+                {product.licenseSummary}{" "}
+                <a
+                  href={payhipPage("license")}
+                  className="text-accent hover:underline"
+                >
+                  Read the full licence
+                </a>
+                .
+              </p>
+            </div>
 
             {creator && (
-              <Block title="Creator">
+              <div className="border-line mt-16 border-t pt-8">
                 <div className="flex items-start gap-4">
-                  <span className="bg-elevated ring-line flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-[15px] font-bold ring-1">
+                  <span className="bg-elevated text-dim flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[14px] font-semibold">
                     {monogram(creator.name)}
                   </span>
                   <div>
                     <Link
                       href={`/creators/${creator.slug}`}
-                      className="font-display hover:text-accent text-xl transition-colors"
+                      className="hover:text-accent text-[17px] font-semibold transition-colors"
                     >
                       {creator.name}
                     </Link>
-                    <p className="text-muted text-[13px]">{creator.role}</p>
-                    <p className="text-dim mt-3 text-[15px] leading-relaxed">
+                    <p className="text-muted text-[14px]">{creator.role}</p>
+                    <p className="text-dim mt-3 text-[16px] leading-relaxed">
                       {creator.bio}
                     </p>
                     <Link
                       href={`/creators/${creator.slug}`}
-                      className="text-dim hover:text-text mt-3 inline-block text-[14px] transition-colors"
+                      className="text-dim hover:text-text mt-4 inline-block text-[15px] transition-colors"
                     >
-                      All {byCreator(creator.slug).length} packs →
+                      All {byCreator(creator.slug).length} packs
                     </Link>
                   </div>
                 </div>
-              </Block>
+              </div>
             )}
           </div>
         </div>
-
-        <BuyPanel product={product} />
       </div>
 
       {related.length > 0 && (
@@ -242,9 +238,7 @@ function PairsWith({ slug }: { slug: string }) {
         className="bg-surface ring-line hover:ring-line-bright flex flex-col gap-4 rounded-2xl p-6 ring-1 transition-all sm:flex-row sm:items-center sm:justify-between sm:p-8"
       >
         <div>
-          <p className="text-accent text-[12px] font-semibold tracking-wider uppercase">
-            Pairs well with
-          </p>
+          <p className="text-muted text-[14px]">Pairs well with</p>
           <h2 className="font-display mt-2 text-2xl">{bundle.title}</h2>
           <p className="text-dim mt-1.5 text-[15px]">
             This pack plus {(bundle.bundleOf?.length ?? 1) - 1} more, bundled.
@@ -257,23 +251,6 @@ function PairsWith({ slug }: { slug: string }) {
           </p>
         </div>
       </Link>
-    </section>
-  );
-}
-
-function Block({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="border-line border-t py-9 first:border-t-0 first:pt-0">
-      <h2 className="font-display mb-5 text-[1.375rem] leading-none">
-        {title}
-      </h2>
-      {children}
     </section>
   );
 }

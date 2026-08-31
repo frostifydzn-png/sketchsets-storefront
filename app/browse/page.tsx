@@ -5,7 +5,7 @@ import { allSoftware, products } from "@/lib/products";
 export const metadata: Metadata = {
   title: "Browse",
   description:
-    "Every SketchSets pack — overlays, textures, brushes, doodles and bundles for editors, thumbnail designers and creators.",
+    "Every SketchSets pack. Overlays, textures, brushes, doodles and bundles for editors, thumbnail designers and creators.",
   alternates: { canonical: "/browse" },
 };
 
@@ -18,7 +18,7 @@ export default function BrowsePage() {
         </h1>
         <p className="text-dim mt-4 max-w-lg text-[16px] leading-relaxed">
           Ready to use, commercially licensed, delivered instantly. Curated
-          rather than endless — every pack earns its place.
+          rather than endless, so every pack earns its place.
         </p>
       </header>
 

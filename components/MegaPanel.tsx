@@ -62,7 +62,11 @@ export function MegaPanel({
                 {c.label}
               </MenuLink>
             ))}
-            <MenuLink href="/browse" onNavigate={onNavigate} meta={`${products.length}`}>
+            <MenuLink
+              href="/browse"
+              onNavigate={onNavigate}
+              meta={`${products.length}`}
+            >
               Everything
             </MenuLink>
           </Column>
@@ -124,9 +128,7 @@ function Panel({ children }: { children: React.ReactNode }) {
 
 function ColumnTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-muted mb-3 text-[11px] font-bold tracking-[0.16em] uppercase">
-      {children}
-    </h3>
+    <h3 className="text-muted mb-3 text-[13px] font-medium">{children}</h3>
   );
 }
 

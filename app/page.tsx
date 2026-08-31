@@ -19,21 +19,18 @@ import {
 } from "@/lib/products";
 import { site } from "@/lib/site";
 
-const steps = [
+const assurances = [
   {
-    n: "01",
-    title: "Find what you need",
-    body: "Search, or filter by category, software and price. Small catalogue, nothing padded.",
+    title: "Instant download",
+    body: "Files land the moment you pay. Nothing to wait for.",
   },
   {
-    n: "02",
-    title: "Buy in a few clicks",
-    body: "Secure checkout through Payhip. No account needed to buy a pack.",
+    title: "Commercial licence",
+    body: "Use everything in client work and monetised content.",
   },
   {
-    n: "03",
-    title: "Download instantly",
-    body: "Files land straight away, with a commercial licence included every time.",
+    title: "No account needed",
+    body: "Checkout runs through Payhip. Buy it and go.",
   },
 ];
 
@@ -49,7 +46,7 @@ export default function HomePage() {
 
   return (
     <>
-      {/* Hero — search is the primary action. */}
+      {/* Hero. Search is the primary action. */}
       <section className="shell pt-16 pb-16 sm:pt-24 sm:pb-20">
         <h1 className="font-display-tight line-rise max-w-[16ch] text-[clamp(2.75rem,7vw,5.5rem)] leading-[0.94]">
           <span>Resources for</span>
@@ -70,17 +67,13 @@ export default function HomePage() {
 
       <ArtworkMarquee products={products} />
 
-      {/* How it works */}
       <section className="shell section-gap">
-        <Reveal className="grid gap-8 sm:grid-cols-3">
-          {steps.map((step) => (
-            <div key={step.n} className="border-line border-t pt-5">
-              <span className="text-accent font-display text-[13px]">
-                {step.n}
-              </span>
-              <h2 className="mt-2 text-[17px] font-semibold">{step.title}</h2>
-              <p className="text-muted mt-2 text-[14px] leading-relaxed">
-                {step.body}
+        <Reveal className="grid gap-10 sm:grid-cols-3 sm:gap-14">
+          {assurances.map((item) => (
+            <div key={item.title}>
+              <h2 className="text-[17px] font-semibold">{item.title}</h2>
+              <p className="text-muted mt-2.5 text-[15px] leading-relaxed">
+                {item.body}
               </p>
             </div>
           ))}
@@ -90,9 +83,8 @@ export default function HomePage() {
       {/* Curated */}
       <section className="shell section-gap">
         <SectionHeader
-          eyebrow="Curated"
           title="Frostify Picks"
-          note="A handful of packs Frostify actually reaches for. Hand-picked, never algorithmic."
+          note="The packs Frostify actually reaches for."
           action={{ href: "/browse", label: "All packs" }}
         />
         <div className="grid grid-cols-2 gap-x-5 gap-y-9 lg:grid-cols-4">
@@ -107,9 +99,8 @@ export default function HomePage() {
       {/* Categories */}
       <section className="shell section-gap">
         <SectionHeader
-          eyebrow="Browse"
           title="Shop by what you make"
-          note="Three places to start, depending on whether you are cutting video, building thumbnails or kitting out a workflow."
+          note="Whether you are cutting video, building thumbnails, or kitting out a workflow."
         />
         <div className="grid gap-5 sm:grid-cols-3">
           {categories.map((category, i) => (
@@ -124,7 +115,6 @@ export default function HomePage() {
       {vault && vault.bundleValue && (
         <section className="shell section-gap">
           <SectionHeader
-            eyebrow="Best value"
             title="Buy the lot, pay less"
             note="The whole Collection V1 library in a single download."
           />
@@ -157,7 +147,7 @@ export default function HomePage() {
                         <span className="text-accent" aria-hidden="true">
                           +
                         </span>
-                        {f.split(" — ")[0]}
+                        {f.split(": ")[0]}
                       </li>
                     ))}
                   </ul>
@@ -184,9 +174,8 @@ export default function HomePage() {
       {cheap.length > 0 && (
         <section className="shell section-gap">
           <SectionHeader
-            eyebrow="Start small"
             title="Under $10"
-            note="A cheap way to find out whether the quality is real before committing to the bundle."
+            note="A low-risk way to try the quality before committing to the bundle."
             action={{ href: "/browse", label: "See all" }}
           />
           <div className="grid grid-cols-2 gap-x-5 gap-y-9 lg:grid-cols-4">
@@ -203,7 +192,6 @@ export default function HomePage() {
       {frostify && (
         <section className="shell section-gap">
           <SectionHeader
-            eyebrow="Who makes this"
             title="Meet the maker"
             action={{
               href: `/creators/${frostify.slug}`,
@@ -272,10 +260,7 @@ export default function HomePage() {
             />
             <div className="relative flex flex-col gap-7 p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-xl">
-                <p className="text-accent mb-3 text-[12px] font-bold tracking-[0.16em] uppercase">
-                  Community
-                </p>
-                <h2 className="font-display text-[clamp(1.75rem,3.4vw,2.5rem)] leading-[1.02]">
+                <h2 className="font-display text-[clamp(1.875rem,3.6vw,2.75rem)] leading-[1.02]">
                   Make stuff with people who care.
                 </h2>
                 <p className="text-dim mt-4 text-[16px] leading-relaxed">

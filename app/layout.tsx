@@ -24,7 +24,7 @@ const interTight = Inter_Tight({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — ${site.tagline}`,
+    default: `${site.name}. ${site.tagline}`,
     template: `%s · ${site.name}`,
   },
   description: site.description,
@@ -44,13 +44,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: site.name,
-    title: `${site.name} — ${site.tagline}`,
+    title: `${site.name}. ${site.tagline}`,
     description: site.description,
     url: site.url,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} — ${site.tagline}`,
+    title: `${site.name}. ${site.tagline}`,
     description: site.description,
   },
   robots: { index: true, follow: true },
@@ -74,7 +74,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <SiteFooter />
-        {/* Scoped to this Vercel project only — no shared analytics with Frostify. */}
+        {/* Scoped to this Vercel project only. No shared analytics with Frostify. */}
         <Analytics />
         <SpeedInsights />
       </body>

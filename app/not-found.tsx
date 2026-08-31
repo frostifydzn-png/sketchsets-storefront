@@ -3,9 +3,7 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <div className="shell py-28 sm:py-40">
-      <p className="text-muted text-[12px] font-semibold tracking-wider uppercase">
-        404
-      </p>
+      <p className="text-muted text-[14px]">404</p>
       <h1 className="font-display-tight mt-5 max-w-[14ch] text-[clamp(2.5rem,6vw,4.5rem)] leading-[0.95]">
         This page doesn&rsquo;t exist.
       </h1>

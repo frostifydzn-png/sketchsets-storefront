@@ -8,13 +8,14 @@ import { categories, type CategoryId, type Product } from "@/lib/products";
 type PriceBand = "all" | "free" | "under10" | "10to25" | "over25";
 type SortKey = "featured" | "price-asc" | "price-desc" | "new";
 
-const bands: { id: PriceBand; label: string; test: (p: number) => boolean }[] = [
-  { id: "all", label: "Any price", test: () => true },
-  { id: "free", label: "Free", test: (p) => p === 0 },
-  { id: "under10", label: "Under $10", test: (p) => p > 0 && p < 10 },
-  { id: "10to25", label: "$10 – $25", test: (p) => p >= 10 && p <= 25 },
-  { id: "over25", label: "$25 and up", test: (p) => p > 25 },
-];
+const bands: { id: PriceBand; label: string; test: (p: number) => boolean }[] =
+  [
+    { id: "all", label: "Any price", test: () => true },
+    { id: "free", label: "Free", test: (p) => p === 0 },
+    { id: "under10", label: "Under $10", test: (p) => p > 0 && p < 10 },
+    { id: "10to25", label: "$10 – $25", test: (p) => p >= 10 && p <= 25 },
+    { id: "over25", label: "$25 and up", test: (p) => p > 25 },
+  ];
 
 const sorts: { id: SortKey; label: string }[] = [
   { id: "featured", label: "Featured" },
@@ -72,9 +73,15 @@ export function ProductBrowser({
    * results that option would actually give you.
    */
   const counts = useMemo(() => {
-    const forCategory = products.filter((p) => matches.app(p) && matches.price(p));
-    const forApp = products.filter((p) => matches.category(p) && matches.price(p));
-    const forBand = products.filter((p) => matches.category(p) && matches.app(p));
+    const forCategory = products.filter(
+      (p) => matches.app(p) && matches.price(p),
+    );
+    const forApp = products.filter(
+      (p) => matches.category(p) && matches.price(p),
+    );
+    const forBand = products.filter(
+      (p) => matches.category(p) && matches.app(p),
+    );
 
     return {
       category: {
@@ -274,7 +281,11 @@ export function ProductBrowser({
 
       {/* Mobile filter sheet */}
       {sheetOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true">
+        <div
+          className="fixed inset-0 z-50 lg:hidden"
+          role="dialog"
+          aria-modal="true"
+        >
           <button
             type="button"
             aria-label="Close filters"
@@ -325,7 +336,7 @@ function FilterGroup({
 }) {
   return (
     <fieldset>
-      <legend className="text-muted mb-2.5 text-[11px] font-bold tracking-[0.14em] uppercase">
+      <legend className="text-muted mb-3 text-[13px] font-medium">
         {title}
       </legend>
       <div className="space-y-0.5">{children}</div>

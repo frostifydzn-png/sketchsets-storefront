@@ -41,20 +41,16 @@ export function ProductCard({
           />
         )}
 
-        <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-2.5">
-          {product.featured ? (
-            <span className="bg-ink/80 text-accent rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide backdrop-blur-md">
-              Frostify Pick
-            </span>
-          ) : (
-            <span />
-          )}
-          {product.isNew && (
-            <span className="bg-ink/80 text-text rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide backdrop-blur-md">
-              New
-            </span>
-          )}
-        </div>
+        {/*
+          Only genuine novelty gets a badge. A "Frostify Pick" mark sat on four
+          of five cards, which made it noise rather than signal; the Picks
+          section already carries that meaning.
+        */}
+        {product.isNew && (
+          <span className="bg-ink/80 text-text pointer-events-none absolute top-2.5 left-2.5 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur-md">
+            New
+          </span>
+        )}
 
         {/* Price is the loudest thing on the card and never hides. */}
         <span
@@ -65,10 +61,6 @@ export function ProductCard({
           }`}
         >
           {formatPrice(product.price)}
-        </span>
-
-        <span className="bg-ink/80 text-text pointer-events-none absolute bottom-2.5 left-2.5 flex h-8 w-8 translate-y-1.5 items-center justify-center rounded-full text-[14px] opacity-0 backdrop-blur-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-          →
         </span>
       </div>
 

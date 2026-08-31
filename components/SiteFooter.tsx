@@ -106,7 +106,7 @@ export function SiteFooter() {
 
         <div className="border-line text-muted mt-12 flex flex-col gap-2 border-t pt-7 text-[13px] sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {new Date().getFullYear()} SketchSets — a {site.parent} project.
+            © {new Date().getFullYear()} SketchSets. A {site.parent} project.
           </p>
           <p>Checkout and delivery handled by Payhip.</p>
         </div>
@@ -124,9 +124,7 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <h2 className="text-muted mb-2 text-[11px] font-semibold tracking-[0.16em] uppercase">
-        {title}
-      </h2>
+      <h2 className="text-muted mb-2.5 text-[13px] font-medium">{title}</h2>
       {children}
     </div>
   );

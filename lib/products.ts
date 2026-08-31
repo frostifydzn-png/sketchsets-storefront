@@ -19,7 +19,7 @@ export interface Product {
   price: number;
   category: CategoryId;
   subcategory: string;
-  /** One line for the purchase panel — what the buyer actually gets out of it. */
+  /** One line for the purchase panel, saying what the buyer gets out of it. */
   valueProp: string;
   shortDescription: string;
   description: string[];
@@ -40,7 +40,7 @@ export interface Product {
   bundleOf?: string[];
   /** Combined individual price of the bundle contents. */
   bundleValue?: number;
-  /** Payhip product id — the `<id>` in /b/<id>. Combined with CHECKOUT_BASE. */
+  /** Payhip product id, the `<id>` in /b/<id>. Combined with CHECKOUT_BASE. */
   payhipId: string;
   rating?: { average: number; count: number };
 }
@@ -85,7 +85,7 @@ export const products: Product[] = [
       "Every SketchSets Collection V1 pack in one download. Seven packs, one price.",
     description: [
       "The complete SketchSets Collection V1 library in a single download. Seven hand-crafted asset packs bundled for creators, designers and editors who want the full toolkit without buying each piece separately.",
-      "Every pack inside The Vault is built to the same standard — hand-drawn doodles, high-resolution vector brushes, cinematic glows, paper tears and real-fireworks particles. Social graphics, thumbnails, branding or edits, it is all covered.",
+      "Every pack inside The Vault is built to the same standard. Hand-drawn doodles, high-resolution vector brushes, cinematic glows, paper tears and real-fireworks particles. Social graphics, thumbnails, branding or edits, it is all covered.",
     ],
     thumbnail: "/products/vault-cover.png",
     previewImages: [
@@ -96,13 +96,13 @@ export const products: Product[] = [
       "/products/vault-g4.png",
     ],
     includedFiles: [
-      "Hand-Drawn Doodles — 110 doodles (SVG, PNG, PSD)",
-      "Vector Brush Assets — 20 brushes at 4000×4000 (PSD, SVG, PNG)",
-      "Leaks & Glows — 11 glows, 3 leaks, 6 flares at 1080p with PSD",
-      "Paper Tears — 8 HD/4K tears with PSD",
-      "Photoshop Patterns — 12 patterns (PAT and PSD)",
-      "Sparks & Particles — 19 real-fireworks particles in HD PSD",
-      "Speedlines — 5 4K speedlines (PSD and PNG)",
+      "Hand-Drawn Doodles: 110 doodles (SVG, PNG, PSD)",
+      "Vector Brush Assets: 20 brushes at 4000×4000 (PSD, SVG, PNG)",
+      "Leaks & Glows: 11 glows, 3 leaks, 6 flares at 1080p with PSD",
+      "Paper Tears: 8 HD/4K tears with PSD",
+      "Photoshop Patterns: 12 patterns (PAT and PSD)",
+      "Sparks & Particles: 19 real-fireworks particles in HD PSD",
+      "Speedlines: 5 4K speedlines (PSD and PNG)",
     ],
     compatibility: [
       "Photoshop",
@@ -138,7 +138,7 @@ export const products: Product[] = [
     shortDescription:
       "110 hand-crafted doodles in SVG, PNG and PSD. Arrows, stars, crowns and symbols.",
     description: [
-      "A playful, hand-drawn set built to add character to anything. 110 unique doodles covering arrows, stars, crowns and symbols — versatile enough for thumbnails, social graphics and branding alike.",
+      "A playful, hand-drawn set built to add character to anything. 110 unique doodles covering arrows, stars, crowns and symbols, versatile enough for thumbnails, social graphics and branding alike.",
       "Every doodle ships as both vector and high-quality raster, so you can scale and recolour without losing quality. Use the PNGs for quick placement, the SVGs for vector editing, or open the layered PSD to make each one your own.",
     ],
     thumbnail: "/products/doodles-cover.png",
@@ -214,7 +214,7 @@ export const products: Product[] = [
     shortDescription:
       "20 hand-drawn brush strokes at 4000×4000 in PSD, SVG and PNG.",
     description: [
-      "Twenty custom brush strokes for adding an organic, hand-made edge to otherwise clean design. Built large — 4000×4000 — so they hold up on posters and print as well as they do on a thumbnail.",
+      "Twenty custom brush strokes for adding an organic, hand-made edge to otherwise clean design. Built large at 4000×4000, so they hold up on posters and print as well as they do on a thumbnail.",
       "PSD, PNG and SVG are all included, so you can drop a stroke in as-is or take it into a vector app and reshape it.",
     ],
     thumbnail: "/products/vector-brushes-cover.png",
@@ -285,7 +285,7 @@ export const byCategory = (id: CategoryId) =>
 export const byCreator = (slug: string) =>
   products.filter((p) => p.creatorSlug === slug);
 
-/** Frostify Picks — hand-selected, never algorithmic. */
+/** Frostify Picks. Hand-selected, never algorithmic. */
 export const frostifyPicks = () => products.filter((p) => p.featured);
 
 /** Newest releases first. Flag-driven so it never fakes recency. */

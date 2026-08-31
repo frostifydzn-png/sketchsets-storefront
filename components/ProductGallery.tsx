@@ -34,7 +34,7 @@ export function ProductGallery({
           <Image
             key={current}
             src={current}
-            alt={`${title} — preview ${active + 1} of ${slides.length}`}
+            alt={`${title}, preview ${active + 1} of ${slides.length}`}
             fill
             sizes="(max-width: 1024px) 100vw, 62vw"
             priority

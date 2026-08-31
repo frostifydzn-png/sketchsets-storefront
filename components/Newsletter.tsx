@@ -16,7 +16,7 @@ export function Newsletter() {
               Good resources. No garbage.
             </h2>
             <p className="text-dim mt-3 text-[15px] leading-relaxed">
-              Occasional SketchSets drops — new packs, freebies and things worth
+              Occasional SketchSets drops. New packs, freebies and things worth
               stealing for your workflow.
             </p>
           </div>

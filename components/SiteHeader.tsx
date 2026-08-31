@@ -61,14 +61,11 @@ export function SiteHeader() {
       className="bg-ink border-line sticky top-0 z-40 border-b"
       onMouseLeave={scheduleClose}
     >
-      {/* Utility strip — states the offer before anyone has to ask. */}
+      {/* Utility strip. States the offer before anyone has to ask. */}
       <div className="border-line hidden border-b lg:block">
-        <div className="shell text-muted flex h-9 items-center gap-6 text-[12px]">
+        <div className="shell text-muted flex h-10 items-center gap-8 text-[12.5px]">
           {trustPoints.map((point) => (
-            <span key={point} className="flex items-center gap-1.5">
-              <span className="bg-accent h-1 w-1 rounded-full" aria-hidden="true" />
-              {point}
-            </span>
+            <span key={point}>{point}</span>
           ))}
           <a
             href={site.links.frostify}
@@ -91,7 +88,11 @@ export function SiteHeader() {
 
       {/* Main row */}
       <div className="shell flex h-[76px] items-center gap-10">
-        <Link href="/" onClick={closeAll} className="flex shrink-0 items-baseline gap-2">
+        <Link
+          href="/"
+          onClick={closeAll}
+          className="flex shrink-0 items-baseline gap-2"
+        >
           <span className="font-display-tight text-[21px] leading-none">
             SKETCHSETS
           </span>
@@ -128,7 +129,9 @@ export function SiteHeader() {
             onClick={closeAll}
             onMouseEnter={scheduleClose}
             className={`rounded-lg px-3.5 py-2 text-[15px] font-medium transition-colors ${
-              pathname === "/new" ? "text-text bg-elevated" : "text-dim hover:text-text"
+              pathname === "/new"
+                ? "text-text bg-elevated"
+                : "text-dim hover:text-text"
             }`}
           >
             New
@@ -220,10 +223,7 @@ export function SiteHeader() {
 
             <div className="text-muted mt-6 space-y-2 text-[13px]">
               {trustPoints.map((p) => (
-                <p key={p} className="flex items-center gap-2">
-                  <span className="bg-accent h-1 w-1 rounded-full" aria-hidden="true" />
-                  {p}
-                </p>
+                <p key={p}>{p}</p>
               ))}
             </div>
 
