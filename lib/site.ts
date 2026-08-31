@@ -32,5 +32,6 @@ export const site = {
  */
 export const CHECKOUT_BASE = "https://sketchsets.com";
 
-export const checkoutUrl = (payhipId: string) => `${CHECKOUT_BASE}/b/${payhipId}`;
+export const checkoutUrl = (payhipId: string) =>
+  `${CHECKOUT_BASE}/b/${payhipId}`;
 export const payhipPage = (path: string) => `${CHECKOUT_BASE}/${path}`;

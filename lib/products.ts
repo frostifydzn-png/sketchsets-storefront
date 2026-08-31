@@ -38,8 +38,6 @@ export interface Product {
   isNew: boolean;
   /** Product slugs contained in this bundle, if it is one. */
   bundleOf?: string[];
-  /** Combined individual price of the bundle contents. */
-  bundleValue?: number;
   /** Payhip product id, the `<id>` in /b/<id>. Combined with CHECKOUT_BASE. */
   payhipId: string;
   rating?: { average: number; count: number };
@@ -112,7 +110,8 @@ export const products: Product[] = [
       "Figma",
     ],
     license: "Commercial",
-    licenseSummary: "Use in client and monetised work. No reselling the assets.",
+    licenseSummary:
+      "Use in client and monetised work. No reselling the assets.",
     fileSize: "ZIP · 487MB",
     tags: ["bundle", "vault", "collection", "psd", "svg", "value"],
     featured: true,
@@ -122,8 +121,10 @@ export const products: Product[] = [
       "vector-brush-assets",
       "leaks-and-glows",
       "paper-tears",
+      "photoshop-patterns",
+      "sparks-and-particles",
+      "speedlines",
     ],
-    bundleValue: 45.94,
     payhipId: "JogCA",
   },
   {
@@ -151,7 +152,8 @@ export const products: Product[] = [
     ],
     compatibility: ["Photoshop", "Illustrator", "Figma", "After Effects"],
     license: "Commercial",
-    licenseSummary: "Use in client and monetised work. No reselling the assets.",
+    licenseSummary:
+      "Use in client and monetised work. No reselling the assets.",
     fileSize: "ZIP · 106MB",
     tags: ["doodles", "hand-drawn", "svg", "vector", "psd", "accents"],
     featured: true,
@@ -195,7 +197,8 @@ export const products: Product[] = [
       "DaVinci Resolve",
     ],
     license: "Commercial",
-    licenseSummary: "Use in client and monetised work. No reselling the assets.",
+    licenseSummary:
+      "Use in client and monetised work. No reselling the assets.",
     fileSize: "ZIP · 99MB",
     tags: ["glows", "light leaks", "flares", "overlays", "1080p", "psd"],
     featured: true,
@@ -229,7 +232,8 @@ export const products: Product[] = [
     ],
     compatibility: ["Photoshop", "Illustrator", "Figma", "Affinity"],
     license: "Commercial",
-    licenseSummary: "Use in client and monetised work. No reselling the assets.",
+    licenseSummary:
+      "Use in client and monetised work. No reselling the assets.",
     fileSize: "ZIP · 57MB",
     tags: ["brushes", "texture", "vector", "svg", "hand-drawn", "grunge"],
     featured: false,
@@ -266,7 +270,8 @@ export const products: Product[] = [
     ],
     compatibility: ["Photoshop", "Illustrator", "Figma", "After Effects"],
     license: "Commercial",
-    licenseSummary: "Use in client and monetised work. No reselling the assets.",
+    licenseSummary:
+      "Use in client and monetised work. No reselling the assets.",
     fileSize: "ZIP · 172MB",
     tags: ["paper", "tears", "texture", "collage", "grunge", "psd"],
     featured: true,
@@ -274,11 +279,171 @@ export const products: Product[] = [
     payhipId: "pm6Iy",
     rating: { average: 5, count: 2 },
   },
+  {
+    id: "photoshop-patterns-v1",
+    slug: "photoshop-patterns",
+    title: "Photoshop Patterns",
+    creatorSlug: "frostify",
+    price: 6.99,
+    category: "thumbnails",
+    subcategory: "Patterns",
+    valueProp: "12 tiling patterns you can recolour and rescale.",
+    shortDescription:
+      "12 crafted Photoshop patterns as a PAT file and an editable PSD.",
+    description: [
+      "Twelve patterns built to add depth and texture to a layout without taking it over. Useful as backgrounds, overlays or a base to build custom textures on.",
+      "The PAT file installs straight into Photoshop for one-click fills, and the editable PSD gives you full control over colour, scale and blending.",
+    ],
+    thumbnail: "/products/photoshop-patterns-cover.png",
+    previewImages: [
+      "/products/photoshop-patterns-cover.png",
+      "/products/photoshop-patterns-g1.png",
+      "/products/photoshop-patterns-g2.png",
+    ],
+    includedFiles: [
+      "PSD pack of 12 patterns",
+      "PAT file for one-click installation",
+      "License certificate",
+    ],
+    compatibility: ["Photoshop"],
+    license: "Commercial",
+    licenseSummary:
+      "Use in client and monetised work. No reselling the assets.",
+    fileSize: "ZIP · 40MB",
+    tags: ["patterns", "pat", "texture", "backgrounds", "psd", "tiling"],
+    featured: false,
+    isNew: false,
+    payhipId: "f7yk9",
+  },
+  {
+    id: "speedlines-v1",
+    slug: "speedlines",
+    title: "Speedlines",
+    creatorSlug: "frostify",
+    price: 0,
+    category: "editing",
+    subcategory: "Effects",
+    valueProp: "Five 4K speedlines for pulling focus fast.",
+    shortDescription:
+      "5 static 4K speedlines in PSD and transparent PNG. Free.",
+    description: [
+      "Five 4K speedlines for directing attention and adding a bold, dynamic edge to posters, social graphics and thumbnails.",
+      "Use the PSD when you want to customise, or drag the transparent PNGs straight in when you do not.",
+    ],
+    thumbnail: "/products/speedlines-cover.png",
+    previewImages: [
+      "/products/speedlines-cover.png",
+      "/products/speedlines-g1.png",
+    ],
+    includedFiles: [
+      "5 speedlines in PSD format",
+      "5 individual transparent PNGs",
+      "License certificate",
+    ],
+    compatibility: ["Photoshop", "After Effects", "Premiere Pro", "Figma"],
+    license: "Commercial",
+    licenseSummary:
+      "Use in client and monetised work. No reselling the assets.",
+    fileSize: "ZIP · 25MB",
+    tags: ["speedlines", "free", "4k", "effects", "psd", "png"],
+    featured: false,
+    isNew: false,
+    payhipId: "oPSQG",
+    rating: { average: 5, count: 2 },
+  },
+  {
+    id: "sparks-particles-v1",
+    slug: "sparks-and-particles",
+    title: "Sparks & Particles",
+    creatorSlug: "frostify",
+    price: 0,
+    category: "editing",
+    subcategory: "Overlays",
+    valueProp: "19 real-fireworks particles in one layered PSD.",
+    shortDescription:
+      "19 HD spark and particle overlays shot from real fireworks. Free.",
+    description: [
+      "Nineteen sparks and particles captured from real fireworks, for adding an explosive, celebratory feel to photos, graphics and scenes.",
+      "Every element is 1920×1080 and packaged in a single PSD, so sizes, colours and blending modes stay under your control.",
+    ],
+    thumbnail: "/products/sparks-cover.png",
+    previewImages: ["/products/sparks-cover.png", "/products/sparks-g1.png"],
+    includedFiles: [
+      "PSD file with 19 HD sparks and particles",
+      "License certificate",
+    ],
+    compatibility: ["Photoshop", "After Effects", "Premiere Pro"],
+    license: "Commercial",
+    licenseSummary:
+      "Use in client and monetised work. No reselling the assets.",
+    fileSize: "ZIP · 16MB",
+    tags: ["sparks", "particles", "free", "overlays", "fireworks", "psd"],
+    featured: false,
+    isNew: false,
+    payhipId: "9xFdn",
+  },
+  {
+    id: "doodles-sample-v1",
+    slug: "hand-drawn-doodles-sample",
+    title: "Hand-Drawn Doodles (Sample)",
+    creatorSlug: "frostify",
+    price: 0,
+    category: "thumbnails",
+    subcategory: "Sample",
+    valueProp: "A free taste of the Hand-Drawn Doodles pack.",
+    shortDescription:
+      "A free sample of the Hand-Drawn Doodles pack. Try before you buy.",
+    description: [
+      "A free slice of the Hand-Drawn Doodles pack, so you can drop the assets into a real layout before deciding on the full set.",
+      "The complete pack includes all 110 doodles in PSD, PNG and SVG, ready for scaling, recolouring and layering.",
+    ],
+    thumbnail: "/products/doodles-sample-cover.png",
+    previewImages: ["/products/doodles-sample-cover.png"],
+    includedFiles: ["Sample doodles", "License certificate"],
+    compatibility: ["Photoshop", "Illustrator", "Figma"],
+    license: "Commercial",
+    licenseSummary:
+      "Use in client and monetised work. No reselling the assets.",
+    fileSize: "ZIP · 1MB",
+    tags: ["doodles", "free", "sample", "hand-drawn"],
+    featured: false,
+    isNew: false,
+    payhipId: "I09f8",
+  },
+  {
+    id: "patterns-sample-v1",
+    slug: "photoshop-patterns-sample",
+    title: "Photoshop Patterns (Sample)",
+    creatorSlug: "frostify",
+    price: 0,
+    category: "thumbnails",
+    subcategory: "Sample",
+    valueProp: "A free taste of the Photoshop Patterns pack.",
+    shortDescription:
+      "A free sample of the Photoshop Patterns pack. Try before you buy.",
+    description: [
+      "A free slice of the Photoshop Patterns pack, so you can see how the patterns sit in a real layout before buying the full set.",
+      "The complete pack includes all 12 patterns in PSD and PAT, built for backgrounds, overlays and custom textures.",
+    ],
+    thumbnail: "/products/patterns-sample-cover.png",
+    previewImages: ["/products/patterns-sample-cover.png"],
+    includedFiles: ["Sample patterns", "License certificate"],
+    compatibility: ["Photoshop"],
+    license: "Commercial",
+    licenseSummary:
+      "Use in client and monetised work. No reselling the assets.",
+    fileSize: "ZIP · 12MB",
+    tags: ["patterns", "free", "sample", "pat"],
+    featured: false,
+    isNew: false,
+    payhipId: "v912K",
+  },
 ];
 
 /* ---------- lookups ---------- */
 
-export const getProduct = (slug: string) => products.find((p) => p.slug === slug);
+export const getProduct = (slug: string) =>
+  products.find((p) => p.slug === slug);
 export const getCategory = (id: string) => categories.find((c) => c.id === id);
 export const byCategory = (id: CategoryId) =>
   products.filter((p) => p.category === id);
@@ -295,6 +460,19 @@ export const under = (max: number) =>
   products.filter((p) => p.price > 0 && p.price < max);
 
 export const bundles = () => products.filter((p) => p.bundleOf?.length);
+
+/** Members of a bundle that exist as their own listings. */
+export const bundleContents = (product: Product) =>
+  (product.bundleOf ?? [])
+    .map(getProduct)
+    .filter((p): p is Product => Boolean(p));
+
+/**
+ * What the bundle's contents cost bought separately, summed from the real
+ * listings rather than stored, so the saving can never drift from the prices.
+ */
+export const bundleTotal = (product: Product) =>
+  bundleContents(product).reduce((sum, p) => sum + p.price, 0);
 
 export const relatedTo = (product: Product, limit = 3) =>
   products
@@ -340,7 +518,11 @@ export function searchProducts(query: string) {
         return total;
       }, 0);
 
-      return { product: p, score, matchedAll: terms.every((t) => haystack.includes(t)) };
+      return {
+        product: p,
+        score,
+        matchedAll: terms.every((t) => haystack.includes(t)),
+      };
     })
     .filter((r) => r.matchedAll && r.score > 0)
     .sort((a, b) => b.score - a.score)

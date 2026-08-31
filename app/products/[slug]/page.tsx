@@ -7,6 +7,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { ProductGallery } from "@/components/ProductGallery";
 import { getCreator, monogram } from "@/lib/creators";
 import {
+  bundleTotal,
   byCreator,
   formatPrice,
   getCategory,
@@ -14,7 +15,7 @@ import {
   products,
   relatedTo,
 } from "@/lib/products";
-import { payhipPage, site } from "@/lib/site";
+import { site } from "@/lib/site";
 
 export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
@@ -199,27 +200,6 @@ export default async function ProductPage({
               </ul>
             </Block>
 
-            <Block title="Good to know">
-              <dl className="max-w-[62ch] space-y-5">
-                <Fact label="Works with">
-                  {product.compatibility.join(", ")}
-                </Fact>
-                <Fact label="You get">{product.fileSize}</Fact>
-                <Fact label="Licence">
-                  {product.licenseSummary}{" "}
-                  <a
-                    href={payhipPage("license")}
-                    className="text-accent hover:underline"
-                  >
-                    Read the full licence
-                  </a>
-                </Fact>
-                <Fact label="Delivery">
-                  Instant download once payment clears
-                </Fact>
-              </dl>
-            </Block>
-
             {creator && (
               <Block title="About the creator">
                 <div className="flex items-start gap-4">
@@ -293,25 +273,10 @@ function Block({
   );
 }
 
-function Fact({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="flex flex-col gap-1 sm:flex-row sm:gap-6">
-      <dt className="text-muted w-28 shrink-0 text-[15px]">{label}</dt>
-      <dd className="text-dim text-[16px] leading-relaxed">{children}</dd>
-    </div>
-  );
-}
-
 /** Suggests the bundle that contains this product, when one exists. */
 function PairsWith({ slug }: { slug: string }) {
   const bundle = products.find((p) => p.bundleOf?.includes(slug));
-  if (!bundle || !bundle.bundleValue) return null;
+  if (!bundle) return null;
 
   return (
     <section className="section-gap-sm">
@@ -329,7 +294,7 @@ function PairsWith({ slug }: { slug: string }) {
         <div className="shrink-0 text-left sm:text-right">
           <p className="font-display text-3xl">{formatPrice(bundle.price)}</p>
           <p className="text-muted text-[13px]">
-            <s>${bundle.bundleValue.toFixed(2)}</s> separately
+            <s>${bundleTotal(bundle).toFixed(2)}</s> separately
           </p>
         </div>
       </Link>

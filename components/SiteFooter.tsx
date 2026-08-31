@@ -5,6 +5,7 @@ import { payhipPage, site } from "@/lib/site";
 const shopLinks = [
   { href: "/browse", label: "Browse" },
   ...categories.map((c) => ({ href: `/${c.id}`, label: c.name })),
+  { href: "/free", label: "Free packs" },
   { href: "/new", label: "New drops" },
 ];
 

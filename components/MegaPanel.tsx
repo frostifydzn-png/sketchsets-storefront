@@ -21,6 +21,12 @@ const collections = [
     count: () => newDrops().length,
   },
   {
+    href: "/free",
+    label: "Free packs",
+    blurb: "No cost, same licence",
+    count: () => products.filter((p) => p.price === 0).length,
+  },
+  {
     href: "/browse",
     label: "Under $10",
     blurb: "Low-risk starters",

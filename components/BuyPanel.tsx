@@ -1,5 +1,5 @@
-import { formatPrice, type Product } from "@/lib/products";
-import { checkoutUrl } from "@/lib/site";
+import { bundleTotal, formatPrice, type Product } from "@/lib/products";
+import { checkoutUrl, payhipPage } from "@/lib/site";
 
 /**
  * Purchase card. Everything needed to decide and buy, raised off the page so
@@ -18,13 +18,13 @@ export function BuyPanel({ product }: { product: Product }) {
               {formatPrice(product.price)}
             </p>
           </div>
-          {product.bundleValue && (
+          {product.bundleOf?.length ? (
             <p className="text-muted pb-1.5 text-right text-[14px]">
-              <s>${product.bundleValue.toFixed(2)}</s>
+              <s>${bundleTotal(product).toFixed(2)}</s>
               <br />
               separately
             </p>
-          )}
+          ) : null}
         </div>
 
         <a
@@ -42,7 +42,15 @@ export function BuyPanel({ product }: { product: Product }) {
         <dl className="border-line mt-6 space-y-4 border-t pt-6 text-[14.5px]">
           <Row label="You get">{product.fileSize}</Row>
           <Row label="Works with">{product.compatibility.join(", ")}</Row>
-          <Row label="Licence">{product.licenseSummary}</Row>
+          <Row label="Licence">
+            {product.licenseSummary}{" "}
+            <a
+              href={payhipPage("license")}
+              className="text-accent whitespace-nowrap hover:underline"
+            >
+              Full licence
+            </a>
+          </Row>
           <Row label="Delivery">Instant download after payment</Row>
         </dl>
       </div>

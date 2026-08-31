@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatPrice, getProduct } from "@/lib/products";
+import { bundleTotal, formatPrice, getProduct } from "@/lib/products";
 
 /**
  * Promo strip above the header. Driven by real bundle maths, so it never
@@ -7,9 +7,9 @@ import { formatPrice, getProduct } from "@/lib/products";
  */
 export function AnnouncementBar() {
   const vault = getProduct("sketchsets-vault");
-  if (!vault?.bundleValue) return null;
+  if (!vault?.bundleOf?.length) return null;
 
-  const saving = (vault.bundleValue - vault.price).toFixed(2);
+  const saving = (bundleTotal(vault) - vault.price).toFixed(2);
 
   return (
     <div className="bg-accent text-ink">
