@@ -107,6 +107,13 @@
   --pink: #ff3d9e;
   --swiper-theme-color: #ff3d9e;
   --color-shadow: 44, 8, 58;
+
+  /* The theme insets every product image 1rem inside its own frame,
+     which left the art floating with a gap on all four sides. */
+  --card-image-padding: 0rem;
+  --media-padding: 0px;
+  --media-radius: 0px;
+  --card-corner-radius: 0px;
 }
 
 [data-section-setting-color-scheme-id="lightPrimary"],
@@ -756,7 +763,6 @@ button.add-to-cart-button[disabled] {
   border-radius: var(--ss-radius-media) !important;
   overflow: hidden !important;
   background: var(--ss-panel-2) !important;
-  margin-bottom: 14px !important;
 }
 
 /* Descendant, not child. A child combinator would be escaped
@@ -795,28 +801,137 @@ button.add-to-cart-button[disabled] {
    Centred titles and prices are hard to scan in a grid: the eye has
    no consistent left edge to return to. Left aligned, with the title
    clamped to two lines so every card in a row is the same height. */
+/* --- the label block ---
+   Measured on the live card, the theme left ~45px of dead air between
+   the artwork and the title: .card__media carried margin 16px/14px
+   inside its own frame, .card__information added 17px of padding top
+   and bottom, and an empty .card-badge contributed a further 26px of
+   margin around nothing. All of it goes; the label now sits directly
+   under the art, ruled off from it. */
+.product-card-wrapper .card .card__media {
+  margin: 0 !important;
+  height: 100% !important;
+}
+
+.product-card-wrapper .card .media,
+.product-card-wrapper .card .media img {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.product-card-wrapper .card .ratio {
+  position: relative !important;
+  margin-bottom: 0 !important;
+}
+
+/* The theme renders the title twice: once in an overlay layer inside
+   the media frame, once below. Hide the overlay copy but keep its
+   sibling badge, which is where an on-sale flag lands. */
+.product-card-wrapper .card .ratio .card__content .card__information {
+  display: none !important;
+}
+
+.product-card-wrapper .card .card-badge:empty {
+  display: none !important;
+  margin: 0 !important;
+}
+
 .product-card-wrapper .card__content {
   padding: 0 !important;
 }
 
-.product-card-wrapper .card__information {
+.product-card-wrapper .card .card__content .card__information {
   text-align: left !important;
+  padding: 13px 0 0 !important;
+  border-top: 1px solid var(--ss-line);
+  transition: border-color 0.35s var(--ss-ease);
+}
+
+.product-card-wrapper .card:hover .card__content .card__information {
+  border-top-color: var(--ss-accent);
 }
 
 .product-card-wrapper .card__heading {
   text-align: left !important;
   font-family: rubik, sans-serif !important;
-  font-size: 14px !important;
+  font-size: 15px !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.02em !important;
-  line-height: 1.25 !important;
-  margin: 0 0 6px !important;
+  line-height: 1.3 !important;
+  margin: 0 0 5px !important;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: 2.5em;
+  min-height: 0 !important;
+  transition: color 0.25s var(--ss-ease);
+}
+
+.product-card-wrapper .card:hover .card__heading a {
+  color: var(--ss-accent) !important;
+}
+
+/* Price sits left, and an arrow slides in on the right to say the
+   whole tile is a link. */
+.product-card-wrapper .card .card-information {
+  display: flex !important;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.product-card-wrapper .card .card-information::after {
+  content: "92";
+  color: var(--ss-accent);
+  font-weight: 700;
+  font-size: 15px;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition:
+    opacity 0.3s var(--ss-ease),
+    transform 0.3s var(--ss-ease);
+}
+
+.product-card-wrapper .card:hover .card-information::after {
+  opacity: 1;
+  transform: none;
+}
+
+/* A scrim deepens the art, and an accent rule wipes across its foot. */
+.product-card-wrapper .card .ratio::before {
+  content: "" !important;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to top, rgba(10, 5, 18, 0.55), transparent 58%);
+  opacity: 0;
+  transition: opacity 0.4s var(--ss-ease);
+  pointer-events: none;
+}
+
+.product-card-wrapper .card:hover .ratio::before {
+  opacity: 1;
+}
+
+.product-card-wrapper .card .ratio::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--ss-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--ss-ease);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.product-card-wrapper .card:hover .ratio::after {
+  transform: scaleX(1);
 }
 
 /* --- the whole card is the click target ---
