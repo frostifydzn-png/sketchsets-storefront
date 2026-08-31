@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400..700&display=swap');
+
 /* ============================================================
    SKETCHSETS — Payhip store styles
    Paste into: Store settings → STORE PAGES CUSTOM CSS
@@ -52,11 +54,14 @@
   --ss-dim: #b6a6c9;
   --ss-muted: #877796;
 
-  /* ---- shape ---- */
-  --ss-radius-card: 18px;
-  --ss-radius-media: 14px;
+  /* ---- shape ----
+     Indieground runs 0px radius on every section and card; the
+     artwork supplies the shape. Buttons keep their pill, because a
+     square button on a dark page reads as a disabled block. */
+  --ss-radius-card: 0px;
+  --ss-radius-media: 0px;
   --ss-radius-pill: 9999px;
-  --ss-radius-input: 12px;
+  --ss-radius-input: 2px;
 
   /* ---- one shadow scale, used everywhere ---- */
   --ss-shadow-1: 0 8px 24px rgba(0, 0, 0, 0.28);
@@ -67,9 +72,10 @@
      adding to it, so the numbers are the real gap between
      sections. Tune --ss-section-y first; it is the single
      biggest lever on how considered the shop looks. */
-  --ss-section-y: clamp(44px, 4.4vw, 76px);
-  --ss-gutter: clamp(20px, 3vw, 48px);
-  --ss-grid-gap: clamp(16px, 1.6vw, 26px);
+  --ss-section-y: clamp(72px, 8vw, 148px);
+  --ss-gutter: clamp(22px, 3.4vw, 56px);
+  --ss-grid-gap: clamp(16px, 1.8vw, 30px);
+  --ss-max: 1560px;
 
   --ss-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -173,20 +179,23 @@ body {
   background: var(--ss-bg) !important;
 }
 
-/* Each section becomes a bordered panel on the page background,
-   which is the reference design's core move. The hero is excluded:
-   it is full-bleed artwork and must not be boxed. */
-.content-main-wrapper .js-section-wrapper[data-section-key]:not([data-section-key="headline"]) .section-contents-wrapper {
-  background: var(--ss-panel) !important;
-  border: 1px solid var(--ss-line) !important;
-  border-radius: 22px !important;
-  max-width: min(1500px, calc(100% - 40px)) !important;
-  padding: clamp(24px, 2.6vw, 40px) !important;
+/* Nothing is boxed. Sections sit directly on the page and are
+   separated by space alone — Indieground runs zero background, zero
+   border and zero radius on every section, and lets the type and the
+   artwork do the dividing. A page of bordered cards reads as an admin
+   panel no matter how good the colours are. */
+.content-main-wrapper .js-section-wrapper[data-section-key] .section-contents-wrapper {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  max-width: min(var(--ss-max), calc(100% - (var(--ss-gutter) * 2))) !important;
+  padding: 0 !important;
   margin-inline: auto !important;
 }
 
-/* Gap between panels. This is the only vertical rhythm control;
-   Payhip's own section padding is neutralised below. */
+/* With the boxes gone, space is the only thing separating sections,
+   so it has to be generous. */
 .content-main-wrapper .js-section-wrapper[data-section-key] {
   padding-top: var(--ss-section-y) !important;
   padding-bottom: 0 !important;
@@ -266,22 +275,40 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Headlines carry the whole design now that the boxes are gone.
+   Indieground sets its h1 at 120px condensed uppercase with -4px
+   tracking; this is the same idea on a fluid scale.
+
+   Archivo Narrow is imported at the top of this file. If it fails to
+   load for any reason the stack falls back to Rubik, which the store
+   already serves — the type stays heavy and tight, just not condensed,
+   so nothing breaks. */
 h1,
 h2,
-h3,
-h4 {
-  letter-spacing: -0.02em;
-  line-height: 1.12;
+.heading-text,
+.heading-text-main {
+  font-family: "Archivo Narrow", rubik, sans-serif !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.03em !important;
+  line-height: 0.94 !important;
 }
 
-/* The theme sets h1 to 4.5rem, which is enormous on a laptop
-   and overflows on a phone. One fluid ramp instead. */
-h1 {
-  font-size: clamp(2rem, 1.2rem + 3.2vw, 3.5rem) !important;
+h1,
+.js-section-wrapper[data-section-key="text-simple"] .heading-text {
+  font-size: clamp(2.75rem, 7.5vw, 7rem) !important;
 }
+
 h2 {
-  font-size: clamp(1.5rem, 1rem + 2vw, 2.35rem) !important;
+  font-size: clamp(2rem, 5vw, 4.5rem) !important;
 }
+
+h3,
+h4 {
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
 h3 {
   font-size: clamp(1.125rem, 1rem + 0.6vw, 1.375rem) !important;
 }
@@ -693,23 +720,22 @@ button.add-to-cart-button[disabled] {
    Artwork, title, price. No neon rim, no pulsing badge.
    ============================================================ */
 
+/* No frame around the product. The cover art is the card; a border
+   and a drop shadow around it only added chrome between the buyer and
+   the thing they came to look at. */
 .product-card-wrapper .card {
-  background: var(--ss-panel-2) !important;
-  border: 1px solid var(--ss-line) !important;
-  border-radius: var(--ss-radius-card) !important;
-  padding: 0 0 4px !important;
-  overflow: hidden !important;
-  box-shadow: var(--ss-shadow-1) !important;
-  transition:
-    transform 0.22s var(--ss-ease),
-    border-color 0.22s var(--ss-ease),
-    box-shadow 0.22s var(--ss-ease) !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  box-shadow: none !important;
 }
 
+/* The card frame stays put; only the artwork moves. */
 .product-card-wrapper .card:hover {
-  transform: translateY(-3px);
-  border-color: var(--ss-line-strong) !important;
-  box-shadow: var(--ss-shadow-2) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 /* The theme draws frames and overlays with pseudo elements. */
@@ -730,7 +756,7 @@ button.add-to-cart-button[disabled] {
   border-radius: var(--ss-radius-media) !important;
   overflow: hidden !important;
   background: var(--ss-panel-2) !important;
-  margin-bottom: 4px !important;
+  margin-bottom: 14px !important;
 }
 
 /* Descendant, not child. A child combinator would be escaped
@@ -770,7 +796,7 @@ button.add-to-cart-button[disabled] {
    no consistent left edge to return to. Left aligned, with the title
    clamped to two lines so every card in a row is the same height. */
 .product-card-wrapper .card__content {
-  padding: 2px 14px 12px !important;
+  padding: 0 !important;
 }
 
 .product-card-wrapper .card__information {
@@ -779,7 +805,11 @@ button.add-to-cart-button[disabled] {
 
 .product-card-wrapper .card__heading {
   text-align: left !important;
-  font-size: 16px !important;
+  font-family: rubik, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.02em !important;
   line-height: 1.25 !important;
   margin: 0 0 6px !important;
   display: -webkit-box;
@@ -1461,7 +1491,102 @@ button:focus-visible {
 }
 
 /* ============================================================
-   20. MOTION
+   20. SCROLL-DRIVEN MOTION
+   Real scroll animation with no JavaScript, using CSS scroll-driven
+   timelines. Elements are fully visible by default and the animation
+   only attaches where the browser supports it, so a browser without
+   support shows a finished page rather than a blank one.
+
+   Everything sits inside prefers-reduced-motion: no-preference, so
+   the whole system turns itself off for anyone who asked it to.
+   ============================================================ */
+
+@keyframes ss-rise {
+  from {
+    opacity: 0;
+    transform: translateY(34px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ss-wipe {
+  from {
+    opacity: 0;
+    transform: translateY(0.16em);
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 -10% 0);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Products and posts rise as they come into frame. */
+    .product-card-wrapper,
+    .js-blog-post-item,
+    .collection-tabs-wrapper,
+    [data-section-key="image-and-text-columns"] .content-container {
+      animation: ss-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 46%;
+    }
+
+    /* Headlines are the loudest thing on the page now, so they get
+       a wipe rather than a fade: the type arrives instead of
+       appearing. */
+    .content-main-wrapper .js-section-wrapper[data-section-key] .heading-text,
+    .content-main-wrapper .js-section-wrapper[data-section-key] .heading-text-main {
+      animation: ss-wipe linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 52%;
+    }
+  }
+}
+
+/* Artwork scales inside a fixed frame. This is the only hover the
+   cards have left, and it is enough. */
+.product-card-wrapper .card .ratio img {
+  transition: transform 0.55s var(--ss-ease) !important;
+}
+
+.product-card-wrapper .card:hover .ratio img {
+  transform: scale(1.07) translateZ(0) !important;
+}
+
+/* Nav links get a rule that draws in from the left. */
+.header-nav-wrapper nav.header-nav-list .header-nav-item a {
+  position: relative;
+}
+
+.header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(-n + 2) a::after {
+  content: none;
+}
+
+.header-nav-wrapper nav.header-nav-list .header-nav-item a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: var(--ss-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.28s var(--ss-ease);
+}
+
+.header-nav-wrapper nav.header-nav-list .header-nav-item a:hover::after {
+  transform: scaleX(1);
+}
+
+/* ============================================================
+   21. MOTION PREFERENCES
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
