@@ -25,8 +25,9 @@
    Sections are not boxed. They sit on the page and are
    separated by space; the type and the artwork do the
    dividing. Product artwork is rounded; the page is not.
-   Headlines are large, condensed and uppercase. Motion is
-   scroll-driven and costs no JavaScript.
+   Headlines are large, uppercase and tightly tracked in Neue
+   Haas Grotesk Display. Motion is scroll-driven and costs no
+   JavaScript.
    ============================================================ */
 
 :root {
@@ -251,7 +252,7 @@ body {
   }
 
   /* This is the shelf's title, not a caption, so it is set at
-     headline scale in the condensed face like every other heading.
+     headline scale in the display face like every other heading.
      It wraps to two lines in the 15.5rem column, which is intended. */
   [data-section-key="featured-collection"] .heading-text {
     grid-area: title;
