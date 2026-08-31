@@ -895,6 +895,19 @@ button.add-to-cart-button[disabled] {
   color: var(--ss-accent) !important;
 }
 
+/* The card wrapper carries the theme's `underline-links-hover` class,
+   which underlines the title on hover. The colour change already says
+   the card is live, so the underline is only noise. */
+.product-card-wrapper.underline-links-hover .card__heading a,
+.product-card-wrapper .card__heading a,
+.product-card-wrapper .card__heading a:hover,
+.product-card-wrapper .card__heading a:focus,
+.product-card-wrapper .card__heading a:active {
+  text-decoration: none !important;
+  text-underline-offset: 0 !important;
+  background-image: none !important;
+}
+
 /* Price sits left, and an arrow slides in on the right to say the
    whole tile is a link. */
 .product-card-wrapper .card .card-information {
@@ -921,7 +934,7 @@ button.add-to-cart-button[disabled] {
   transform: none;
 }
 
-/* A scrim deepens the art, and an accent rule wipes across its foot. */
+/* A scrim deepens the art on hover. */
 .product-card-wrapper .card .ratio::before {
   content: "" !important;
   position: absolute;
@@ -935,26 +948,6 @@ button.add-to-cart-button[disabled] {
 
 .product-card-wrapper .card:hover .ratio::before {
   opacity: 1;
-}
-
-.product-card-wrapper .card .ratio::after {
-  content: "" !important;
-  display: block !important;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 3px;
-  background: var(--ss-accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.45s var(--ss-ease);
-  z-index: 2;
-  pointer-events: none;
-}
-
-.product-card-wrapper .card:hover .ratio::after {
-  transform: scaleX(1);
 }
 
 /* --- the whole card is the click target ---
