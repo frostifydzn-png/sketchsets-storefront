@@ -1,3 +1,10 @@
+/**
+ * Newsletter provider endpoint (Beehiiv / ConvertKit / Resend form action).
+ * The signup block renders only when this is set — better no block at all
+ * than a form that silently drops addresses.
+ */
+export const NEWSLETTER_ENDPOINT = "";
+
 export const site = {
   name: "SketchSets",
   parent: "Frostify",

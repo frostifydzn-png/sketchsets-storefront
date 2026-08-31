@@ -2,33 +2,56 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { categories } from "@/lib/products";
 import { site } from "@/lib/site";
+import { SearchDialog } from "@/components/SearchDialog";
 
 const navLinks = [
-  { href: "/browse", label: "Shop all" },
+  { href: "/browse", label: "Browse" },
   ...categories.map((c) => ({ href: `/${c.id}`, label: c.name })),
+  { href: "/new", label: "New" },
 ];
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const closeMenu = () => setOpen(false);
 
+  // Header compresses and gains a hairline once the page moves.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="bg-ink/85 sticky top-0 z-40 backdrop-blur-xl">
-      <div className="mx-auto flex h-[72px] max-w-[1400px] items-center gap-10 px-6 sm:px-10">
-        <Link href="/" className="group shrink-0">
-          <span className="font-display text-[19px] leading-none font-extrabold">
-            SketchSets
+    <header
+      className={`bg-ink/85 sticky top-0 z-40 backdrop-blur-xl transition-all duration-300 ${
+        scrolled ? "border-line border-b" : "border-b border-transparent"
+      }`}
+    >
+      <div
+        className={`mx-auto flex max-w-[1440px] items-center gap-8 px-5 transition-all duration-300 sm:px-8 ${
+          scrolled ? "h-14" : "h-[72px]"
+        }`}
+      >
+        <Link href="/" className="flex shrink-0 items-baseline gap-2">
+          <span className="font-display-tight text-[19px] leading-none">
+            SKETCHSETS
           </span>
-          <span className="text-text-faint mt-0.5 block text-[10px] leading-none font-medium tracking-[0.14em] uppercase">
-            by {site.parent}
+          {/* Reads as a quality seal, so it stays visible at every width. */}
+          <span className="text-muted text-[10px] leading-none font-medium sm:text-[11px]">
+            · by {site.parent}
           </span>
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-7 md:flex">
+        <nav
+          aria-label="Primary"
+          className="mx-auto hidden items-center gap-7 md:flex"
+        >
           {navLinks.map((link) => {
             const active = pathname === link.href;
             return (
@@ -36,10 +59,8 @@ export function SiteHeader() {
                 key={link.href}
                 href={link.href}
                 aria-current={active ? "page" : undefined}
-                className={`text-[15px] transition-colors ${
-                  active
-                    ? "text-text"
-                    : "text-text-dim hover:text-text"
+                className={`text-[14px] transition-colors ${
+                  active ? "text-text" : "text-dim hover:text-text"
                 }`}
               >
                 {link.label}
@@ -48,22 +69,8 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <div className="ml-auto flex items-center gap-5">
-          <a
-            href={site.links.frostify}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-text-dim hover:text-text hidden text-[15px] transition-colors sm:block"
-          >
-            Frostify
-          </a>
-          <Link
-            href="/browse"
-            className="text-ink hidden rounded-full bg-white px-5 py-2.5 text-[14px] font-semibold transition-opacity hover:opacity-85 md:block"
-          >
-            Browse
-          </Link>
-
+        <div className="ml-auto flex items-center gap-3 md:ml-0">
+          <SearchDialog />
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -97,15 +104,15 @@ export function SiteHeader() {
         <nav
           id="mobile-nav"
           aria-label="Mobile"
-          className="bg-ink md:hidden"
+          className="border-line bg-ink border-t md:hidden"
         >
-          <div className="mx-auto max-w-[1400px] px-6 pb-6 sm:px-10">
+          <div className="mx-auto max-w-[1440px] px-5 py-4 sm:px-8">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={closeMenu}
-                className="font-display text-text block py-3 text-3xl font-bold"
+                className="font-display text-text block py-2.5 text-2xl"
               >
                 {link.label}
               </Link>
@@ -115,9 +122,9 @@ export function SiteHeader() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={closeMenu}
-              className="font-display text-text-dim block py-3 text-3xl font-bold"
+              className="font-display text-dim block py-2.5 text-2xl"
             >
-              Frostify
+              Frostify ↗
             </a>
           </div>
         </nav>

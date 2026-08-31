@@ -3,8 +3,9 @@ import { categories } from "@/lib/products";
 import { payhipPage, site } from "@/lib/site";
 
 const shopLinks = [
-  { href: "/browse", label: "Shop all" },
+  { href: "/browse", label: "Browse" },
   ...categories.map((c) => ({ href: `/${c.id}`, label: c.name })),
+  { href: "/new", label: "New drops" },
 ];
 
 const supportLinks = [
@@ -12,27 +13,25 @@ const supportLinks = [
   { href: payhipPage("faq"), label: "FAQ" },
   { href: payhipPage("customer/login"), label: "Your downloads" },
   { href: payhipPage("license"), label: "Licensing" },
-];
-
-const legalLinks = [
   { href: payhipPage("terms-and-conditions"), label: "Terms" },
   { href: payhipPage("privacy-policy"), label: "Privacy" },
 ];
 
 export function SiteFooter() {
   return (
-    <footer className="mt-32">
-      <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
-        {/* Oversized wordmark as the sign-off. */}
-        <Link href="/" className="group block">
-          <span className="font-display block text-[clamp(3rem,13vw,11rem)] leading-[0.85] font-extrabold">
-            SketchSets
-          </span>
-        </Link>
-
-        <div className="border-line mt-14 grid gap-10 border-t pt-10 sm:grid-cols-2 lg:grid-cols-4">
+    <footer className="border-line mt-28 border-t">
+      <div className="mx-auto max-w-[1440px] px-5 py-14 sm:px-8">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <p className="text-text-dim max-w-xs text-[15px] leading-relaxed">
+            <div className="flex items-baseline gap-2">
+              <span className="font-display-tight text-[19px] leading-none">
+                SKETCHSETS
+              </span>
+              <span className="text-muted text-[11px] font-medium">
+                · by {site.parent}
+              </span>
+            </div>
+            <p className="text-dim mt-4 max-w-xs text-[14px] leading-relaxed">
               Curated resources for people who make internet content. If it is
               on SketchSets, it is worth using.
             </p>
@@ -47,7 +46,7 @@ export function SiteFooter() {
                   href={l.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-text-faint hover:text-text text-[14px] transition-colors"
+                  className="text-muted hover:text-text text-[13px] transition-colors"
                 >
                   {l.label}
                 </a>
@@ -60,7 +59,7 @@ export function SiteFooter() {
               <Link
                 key={l.href}
                 href={l.href}
-                className="text-text-dim hover:text-text block py-1.5 text-[14px] transition-colors"
+                className="text-dim hover:text-text block py-1.5 text-[14px] transition-colors"
               >
                 {l.label}
               </Link>
@@ -72,7 +71,7 @@ export function SiteFooter() {
               <a
                 key={l.href}
                 href={l.href}
-                className="text-text-dim hover:text-text block py-1.5 text-[14px] transition-colors"
+                className="text-dim hover:text-text block py-1.5 text-[14px] transition-colors"
               >
                 {l.label}
               </a>
@@ -84,7 +83,7 @@ export function SiteFooter() {
               href={site.links.frostify}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-text-dim hover:text-text block py-1.5 text-[14px] transition-colors"
+              className="text-dim hover:text-text block py-1.5 text-[14px] transition-colors"
             >
               Frostify
             </a>
@@ -92,23 +91,20 @@ export function SiteFooter() {
               href={site.links.frostoria}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-text-dim hover:text-text block py-1.5 text-[14px] transition-colors"
+              className="text-dim hover:text-text block py-1.5 text-[14px] transition-colors"
             >
               Frostoria
             </a>
-            {legalLinks.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="text-text-dim hover:text-text block py-1.5 text-[14px] transition-colors"
-              >
-                {l.label}
-              </a>
-            ))}
+            <Link
+              href="/creators/frostify"
+              className="text-dim hover:text-text block py-1.5 text-[14px] transition-colors"
+            >
+              Creators
+            </Link>
           </FooterColumn>
         </div>
 
-        <div className="text-text-faint flex flex-col gap-2 py-10 text-[13px] sm:flex-row sm:items-center sm:justify-between">
+        <div className="border-line text-muted mt-12 flex flex-col gap-2 border-t pt-7 text-[13px] sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {new Date().getFullYear()} SketchSets — a {site.parent} project.
           </p>
@@ -128,7 +124,7 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <h2 className="text-text-faint mb-2 text-[11px] font-semibold tracking-[0.16em] uppercase">
+      <h2 className="text-muted mb-2 text-[11px] font-semibold tracking-[0.16em] uppercase">
         {title}
       </h2>
       {children}

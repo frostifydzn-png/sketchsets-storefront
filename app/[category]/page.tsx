@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ProductCard } from "@/components/ProductCard";
+import { ProductBrowser } from "@/components/ProductBrowser";
 import {
   byCategory,
   categories,
@@ -13,7 +12,6 @@ export function generateStaticParams() {
   return categories.map((c) => ({ category: c.id }));
 }
 
-// Only the three known category slugs are valid at this segment.
 export const dynamicParams = false;
 
 export async function generateMetadata({
@@ -24,7 +22,7 @@ export async function generateMetadata({
   if (!found) return {};
   return {
     title: found.name,
-    description: found.description,
+    description: found.intro,
     alternates: { canonical: `/${found.id}` },
   };
 }
@@ -37,58 +35,30 @@ export default async function CategoryPage({
   if (!found) notFound();
 
   const items = byCategory(found.id as CategoryId);
+  const software = [...new Set(items.flatMap((p) => p.compatibility))].sort();
 
   return (
-    <div className="mx-auto max-w-[1400px] px-6 pt-14 sm:px-10 sm:pt-20">
-      <header className="max-w-3xl">
-        <h1 className="font-display text-[clamp(2.5rem,7vw,5rem)] leading-[0.95] font-extrabold">
+    <div className="mx-auto max-w-[1440px] px-5 pt-12 sm:px-8 sm:pt-16">
+      <header>
+        {/* Each category carries its own identity colour, one hairline only. */}
+        <span
+          aria-hidden="true"
+          className="block h-1 w-16 rounded-full"
+          style={{ background: found.accentVar }}
+        />
+        <h1 className="font-display-tight mt-5 text-[clamp(2.5rem,6vw,4.5rem)] leading-[0.95]">
           {found.name}
         </h1>
-        <p className="text-text-dim mt-5 max-w-lg text-[17px] leading-relaxed">
-          {found.description}
+        <p className="text-dim mt-4 max-w-lg text-[16px] leading-relaxed">
+          {found.intro}
         </p>
       </header>
 
-      <nav
-        aria-label="Categories"
-        className="border-line mt-10 flex flex-wrap items-center gap-x-7 gap-y-3 border-b pb-5"
-      >
-        <Link
-          href="/browse"
-          className="text-text-faint hover:text-text text-[15px] transition-colors"
-        >
-          All
-        </Link>
-        {categories.map((c) => (
-          <Link
-            key={c.id}
-            href={`/${c.id}`}
-            aria-current={c.id === found.id ? "page" : undefined}
-            className={`text-[15px] transition-colors ${
-              c.id === found.id
-                ? "text-text font-medium"
-                : "text-text-faint hover:text-text"
-            }`}
-          >
-            {c.name}
-          </Link>
-        ))}
-        <span className="text-text-faint ml-auto text-[13px]">
-          {items.length} {items.length === 1 ? "pack" : "packs"}
-        </span>
-      </nav>
-
-      {items.length > 0 ? (
-        <div className="mt-10 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((product, i) => (
-            <ProductCard key={product.id} product={product} priority={i < 3} />
-          ))}
-        </div>
-      ) : (
-        <p className="text-text-faint mt-16 text-[17px]">
-          Nothing here yet — new packs land in this category soon.
-        </p>
-      )}
+      <ProductBrowser
+        products={items}
+        software={software}
+        lockedCategory={found.id}
+      />
     </div>
   );
 }

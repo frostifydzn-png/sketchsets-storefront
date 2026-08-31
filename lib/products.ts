@@ -3,30 +3,43 @@ export type CategoryId = "editing" | "thumbnails" | "creator";
 export interface Category {
   id: CategoryId;
   name: string;
+  /** One line, shown under the category heading. No SEO wall. */
+  intro: string;
   blurb: string;
-  description: string;
+  /** CSS custom property carrying this category's identity colour. */
+  accentVar: string;
 }
 
 export interface Product {
   id: string;
   slug: string;
   title: string;
-  creator: string;
+  /** Slug into lib/creators.ts. */
+  creatorSlug: string;
   price: number;
   category: CategoryId;
   subcategory: string;
+  /** One line for the purchase panel — what the buyer actually gets out of it. */
+  valueProp: string;
   shortDescription: string;
   description: string[];
   thumbnail: string;
   previewImages: string[];
+  /** Muted, autoplaying preview for motion products. None yet. */
   videoPreview?: string;
   includedFiles: string[];
   compatibility: string[];
   license: string;
+  licenseSummary: string;
   fileSize: string;
   tags: string[];
+  /** Surfaces the product as a Frostify Pick. */
   featured: boolean;
   isNew: boolean;
+  /** Product slugs contained in this bundle, if it is one. */
+  bundleOf?: string[];
+  /** Combined individual price of the bundle contents. */
+  bundleValue?: number;
   /** Payhip product id — the `<id>` in /b/<id>. Combined with CHECKOUT_BASE. */
   payhipId: string;
   rating?: { average: number; count: number };
@@ -36,23 +49,25 @@ export const categories: Category[] = [
   {
     id: "editing",
     name: "Editing",
-    blurb: "Overlays, glows, particles and motion",
-    description:
-      "Drop-in elements for video work — light leaks, glows, flares and particles that composite cleanly over footage.",
+    intro:
+      "Overlays, glows and light effects built to make your timeline better.",
+    blurb: "Overlays, glows and motion",
+    accentVar: "var(--color-cat-editing)",
   },
   {
     id: "thumbnails",
     name: "Thumbnails",
-    blurb: "PSDs, textures, brushes and effects",
-    description:
-      "Layered assets built for click-through — hand-drawn accents, torn paper, brush textures and patterns that survive being scaled down to a grid.",
+    intro:
+      "Textures, brushes and hand-drawn assets that still read at grid size.",
+    blurb: "PSDs, textures and brushes",
+    accentVar: "var(--color-cat-thumbnails)",
   },
   {
     id: "creator",
     name: "Creator",
-    blurb: "Bundles, templates and workflow tools",
-    description:
-      "Bigger kits for people who ship constantly — full collections that cover a whole workflow rather than a single effect.",
+    intro: "Bundles and bigger kits for people who ship constantly.",
+    blurb: "Bundles and toolkits",
+    accentVar: "var(--color-cat-creator)",
   },
 ];
 
@@ -61,16 +76,16 @@ export const products: Product[] = [
     id: "vault-v1",
     slug: "sketchsets-vault",
     title: "SketchSets Vault",
-    creator: "Frostify",
+    creatorSlug: "frostify",
     price: 29,
     category: "creator",
     subcategory: "Bundle",
+    valueProp: "The entire Collection V1 library in one download.",
     shortDescription:
       "Every SketchSets Collection V1 pack in one download. Seven packs, one price.",
     description: [
-      "The complete SketchSets Collection V1 library in a single download. Seven hand-crafted asset packs bundled for creators, designers and editors who want the full toolkit without paying for each piece separately.",
-      "Every pack inside The Vault is built to the same standard — hand-drawn doodles, high-resolution vector brushes, cinematic glows, paper tears and real-fireworks particles. Whether you are working on social graphics, thumbnails, branding or edits, it is all here.",
-      "$45.94 of paid packs plus two free packs, for $29.",
+      "The complete SketchSets Collection V1 library in a single download. Seven hand-crafted asset packs bundled for creators, designers and editors who want the full toolkit without buying each piece separately.",
+      "Every pack inside The Vault is built to the same standard — hand-drawn doodles, high-resolution vector brushes, cinematic glows, paper tears and real-fireworks particles. Social graphics, thumbnails, branding or edits, it is all covered.",
     ],
     thumbnail: "/products/vault-cover.png",
     previewImages: [
@@ -94,23 +109,32 @@ export const products: Product[] = [
       "Illustrator",
       "After Effects",
       "Premiere Pro",
-      "Any app that reads PNG/SVG",
+      "Figma",
     ],
     license: "Commercial",
+    licenseSummary: "Use in client and monetised work. No reselling the assets.",
     fileSize: "ZIP · 487MB",
-    tags: ["bundle", "vault", "collection", "value", "psd", "svg"],
+    tags: ["bundle", "vault", "collection", "psd", "svg", "value"],
     featured: true,
-    isNew: false,
+    isNew: true,
+    bundleOf: [
+      "hand-drawn-doodles",
+      "vector-brush-assets",
+      "leaks-and-glows",
+      "paper-tears",
+    ],
+    bundleValue: 45.94,
     payhipId: "JogCA",
   },
   {
     id: "doodles-v1",
     slug: "hand-drawn-doodles",
     title: "Hand-Drawn Doodles",
-    creator: "Frostify",
+    creatorSlug: "frostify",
     price: 12.99,
     category: "thumbnails",
     subcategory: "Assets",
+    valueProp: "110 doodles that add character without adding clutter.",
     shortDescription:
       "110 hand-crafted doodles in SVG, PNG and PSD. Arrows, stars, crowns and symbols.",
     description: [
@@ -127,6 +151,7 @@ export const products: Product[] = [
     ],
     compatibility: ["Photoshop", "Illustrator", "Figma", "After Effects"],
     license: "Commercial",
+    licenseSummary: "Use in client and monetised work. No reselling the assets.",
     fileSize: "ZIP · 106MB",
     tags: ["doodles", "hand-drawn", "svg", "vector", "psd", "accents"],
     featured: true,
@@ -138,10 +163,11 @@ export const products: Product[] = [
     id: "leaks-glows-v1",
     slug: "leaks-and-glows",
     title: "Leaks & Glows",
-    creator: "Frostify",
+    creatorSlug: "frostify",
     price: 8.99,
     category: "editing",
     subcategory: "Overlays",
+    valueProp: "Instant atmosphere for footage and thumbnails.",
     shortDescription:
       "11 glows, 3 light leaks and 6 lens flares at 1920×1080, with an editable PSD.",
     description: [
@@ -169,6 +195,7 @@ export const products: Product[] = [
       "DaVinci Resolve",
     ],
     license: "Commercial",
+    licenseSummary: "Use in client and monetised work. No reselling the assets.",
     fileSize: "ZIP · 99MB",
     tags: ["glows", "light leaks", "flares", "overlays", "1080p", "psd"],
     featured: true,
@@ -179,10 +206,11 @@ export const products: Product[] = [
     id: "vector-brushes-v1",
     slug: "vector-brush-assets",
     title: "Vector Brush Assets",
-    creator: "Frostify",
+    creatorSlug: "frostify",
     price: 8.99,
     category: "thumbnails",
     subcategory: "Textures",
+    valueProp: "Hand-made brush strokes that scale to any size.",
     shortDescription:
       "20 hand-drawn brush strokes at 4000×4000 in PSD, SVG and PNG.",
     description: [
@@ -201,6 +229,7 @@ export const products: Product[] = [
     ],
     compatibility: ["Photoshop", "Illustrator", "Figma", "Affinity"],
     license: "Commercial",
+    licenseSummary: "Use in client and monetised work. No reselling the assets.",
     fileSize: "ZIP · 57MB",
     tags: ["brushes", "texture", "vector", "svg", "hand-drawn", "grunge"],
     featured: false,
@@ -212,10 +241,11 @@ export const products: Product[] = [
     id: "paper-tears-v1",
     slug: "paper-tears",
     title: "Paper Tears",
-    creator: "Frostify",
+    creatorSlug: "frostify",
     price: 7.99,
     category: "thumbnails",
     subcategory: "Textures",
+    valueProp: "Real torn edges for collage and thumbnail work.",
     shortDescription:
       "8 HD/4K torn paper edges with transparent PNGs and a layered PSD.",
     description: [
@@ -236,6 +266,7 @@ export const products: Product[] = [
     ],
     compatibility: ["Photoshop", "Illustrator", "Figma", "After Effects"],
     license: "Commercial",
+    licenseSummary: "Use in client and monetised work. No reselling the assets.",
     fileSize: "ZIP · 172MB",
     tags: ["paper", "tears", "texture", "collage", "grunge", "psd"],
     featured: true,
@@ -245,11 +276,25 @@ export const products: Product[] = [
   },
 ];
 
+/* ---------- lookups ---------- */
+
 export const getProduct = (slug: string) => products.find((p) => p.slug === slug);
+export const getCategory = (id: string) => categories.find((c) => c.id === id);
 export const byCategory = (id: CategoryId) =>
   products.filter((p) => p.category === id);
-export const getCategory = (id: string) => categories.find((c) => c.id === id);
-export const featuredProducts = () => products.filter((p) => p.featured);
+export const byCreator = (slug: string) =>
+  products.filter((p) => p.creatorSlug === slug);
+
+/** Frostify Picks — hand-selected, never algorithmic. */
+export const frostifyPicks = () => products.filter((p) => p.featured);
+
+/** Newest releases first. Flag-driven so it never fakes recency. */
+export const newDrops = () => products.filter((p) => p.isNew);
+
+export const under = (max: number) =>
+  products.filter((p) => p.price > 0 && p.price < max);
+
+export const bundles = () => products.filter((p) => p.bundleOf?.length);
 
 export const relatedTo = (product: Product, limit = 3) =>
   products
@@ -261,6 +306,46 @@ export const relatedTo = (product: Product, limit = 3) =>
       return score(b) - score(a);
     })
     .slice(0, limit);
+
+/** Every distinct software name across the catalogue, for filters. */
+export const allSoftware = () =>
+  [...new Set(products.flatMap((p) => p.compatibility))].sort();
+
+/** Matches title, tags, category, subcategory and description text. */
+export function searchProducts(query: string) {
+  const q = query.trim().toLowerCase();
+  if (!q) return [];
+  const terms = q.split(/\s+/);
+
+  return products
+    .map((p) => {
+      const haystack = [
+        p.title,
+        p.subcategory,
+        p.category,
+        p.shortDescription,
+        p.valueProp,
+        ...p.tags,
+        ...p.compatibility,
+        ...p.description,
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      // Title hits are worth more than body hits.
+      const score = terms.reduce((total, term) => {
+        if (p.title.toLowerCase().includes(term)) return total + 3;
+        if (p.tags.some((t) => t.includes(term))) return total + 2;
+        if (haystack.includes(term)) return total + 1;
+        return total;
+      }, 0);
+
+      return { product: p, score, matchedAll: terms.every((t) => haystack.includes(t)) };
+    })
+    .filter((r) => r.matchedAll && r.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .map((r) => r.product);
+}
 
 export const formatPrice = (price: number) =>
   price === 0 ? "Free" : price % 1 === 0 ? `$${price}` : `$${price.toFixed(2)}`;

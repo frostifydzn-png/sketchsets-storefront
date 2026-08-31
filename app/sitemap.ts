@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { creators } from "@/lib/creators";
 import { categories, products } from "@/lib/products";
 import { site } from "@/lib/site";
 
@@ -13,6 +14,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    {
+      url: `${site.url}/new`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
     ...categories.map((c) => ({
       url: `${site.url}/${c.id}`,
       lastModified: now,
@@ -24,6 +31,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 0.7,
+    })),
+    ...creators.map((c) => ({
+      url: `${site.url}/creators/${c.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
     })),
   ];
 }
