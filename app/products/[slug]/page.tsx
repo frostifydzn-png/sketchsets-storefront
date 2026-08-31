@@ -154,59 +154,79 @@ export default async function ProductPage({
           <BuyPanel product={product} />
         </div>
 
-        {/* Reads as prose, not a spec sheet. */}
+        {/* Each block is labelled, so the page can be scanned rather than read. */}
         <div className="min-w-0 lg:col-start-1 lg:row-start-2">
-          <div className="section-gap-sm max-w-[62ch]">
-            <p className="text-text text-[20px] leading-relaxed sm:text-[22px]">
-              {product.description[0]}
-            </p>
-            {product.description.slice(1).map((p) => (
-              <p
-                key={p.slice(0, 40)}
-                className="text-dim mt-6 text-[17px] leading-relaxed"
-              >
-                {p}
-              </p>
-            ))}
+          <div className="section-gap-sm">
+            <Block title="Overview">
+              <div className="max-w-[62ch]">
+                <p className="text-text text-[19px] leading-relaxed sm:text-[21px]">
+                  {product.description[0]}
+                </p>
+                {product.description.slice(1).map((p) => (
+                  <p
+                    key={p.slice(0, 40)}
+                    className="text-dim mt-5 text-[17px] leading-relaxed"
+                  >
+                    {p}
+                  </p>
+                ))}
+              </div>
+            </Block>
 
-            <h2 className="font-display mt-16 text-[1.5rem] leading-none">
-              What&rsquo;s included
-            </h2>
-            <ul className="mt-6 space-y-4">
-              {product.includedFiles.map((file) => (
-                <li key={file} className="text-dim text-[16px] leading-relaxed">
-                  {file}
-                </li>
-              ))}
-            </ul>
+            <Block
+              title="What's included"
+              meta={`${product.includedFiles.length} items`}
+            >
+              <ul className="bg-surface overflow-hidden rounded-2xl">
+                {product.includedFiles.map((file, i) => {
+                  const [name, detail] = file.split(": ");
+                  return (
+                    <li
+                      key={file}
+                      className={`flex flex-wrap items-baseline gap-x-3 gap-y-1 px-5 py-4 sm:px-6 ${
+                        i > 0 ? "border-line border-t" : ""
+                      }`}
+                    >
+                      <span className="text-text text-[16px] font-semibold">
+                        {name}
+                      </span>
+                      {detail && (
+                        <span className="text-muted text-[15px]">{detail}</span>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </Block>
 
-            <h2 className="font-display mt-16 text-[1.5rem] leading-none">
-              Good to know
-            </h2>
-            <div className="mt-6 space-y-5 text-[16px]">
-              <p className="text-dim leading-relaxed">
-                Works with {product.compatibility.join(", ")}. Delivered as{" "}
-                {product.fileSize.replace("ZIP · ", "a ")} ZIP.
-              </p>
-              <p className="text-dim leading-relaxed">
-                {product.licenseSummary}{" "}
-                <a
-                  href={payhipPage("license")}
-                  className="text-accent hover:underline"
-                >
-                  Read the full licence
-                </a>
-                .
-              </p>
-            </div>
+            <Block title="Good to know">
+              <dl className="max-w-[62ch] space-y-5">
+                <Fact label="Works with">
+                  {product.compatibility.join(", ")}
+                </Fact>
+                <Fact label="You get">{product.fileSize}</Fact>
+                <Fact label="Licence">
+                  {product.licenseSummary}{" "}
+                  <a
+                    href={payhipPage("license")}
+                    className="text-accent hover:underline"
+                  >
+                    Read the full licence
+                  </a>
+                </Fact>
+                <Fact label="Delivery">
+                  Instant download once payment clears
+                </Fact>
+              </dl>
+            </Block>
 
             {creator && (
-              <div className="border-line mt-16 border-t pt-8">
+              <Block title="About the creator">
                 <div className="flex items-start gap-4">
                   <span className="bg-elevated text-dim flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[14px] font-semibold">
                     {monogram(creator.name)}
                   </span>
-                  <div>
+                  <div className="max-w-[56ch]">
                     <Link
                       href={`/creators/${creator.slug}`}
                       className="hover:text-accent text-[17px] font-semibold transition-colors"
@@ -225,7 +245,7 @@ export default async function ProductPage({
                     </Link>
                   </div>
                 </div>
-              </div>
+              </Block>
             )}
           </div>
         </div>
@@ -248,6 +268,42 @@ export default async function ProductPage({
       {product.bundleOf === undefined && <PairsWith slug={product.slug} />}
 
       <MobileBuyBar product={product} />
+    </div>
+  );
+}
+
+/** Labelled section with a rule above it, so blocks are obvious at a glance. */
+function Block({
+  title,
+  meta,
+  children,
+}: {
+  title: string;
+  meta?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="border-line border-t pt-7 pb-12 first:border-t-0 first:pt-0 last:pb-0">
+      <div className="mb-6 flex items-baseline justify-between gap-4">
+        <h2 className="font-display text-[1.5rem] leading-none">{title}</h2>
+        {meta && <span className="text-muted text-[14px]">{meta}</span>}
+      </div>
+      {children}
+    </section>
+  );
+}
+
+function Fact({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-1 sm:flex-row sm:gap-6">
+      <dt className="text-muted w-28 shrink-0 text-[15px]">{label}</dt>
+      <dd className="text-dim text-[16px] leading-relaxed">{children}</dd>
     </div>
   );
 }

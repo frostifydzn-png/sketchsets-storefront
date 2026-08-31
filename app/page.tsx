@@ -19,18 +19,19 @@ import {
 } from "@/lib/products";
 import { site } from "@/lib/site";
 
+/* Framed as the questions people actually arrive with. */
 const howItWorks = [
   {
-    title: "Curated, not endless",
-    body: "Every pack is made or vetted by Frostify before it goes up. The catalogue stays small on purpose, so browsing it is quick and nothing in here is filler.",
+    q: "What am I actually buying?",
+    a: "A pack of files you download and keep. Every one is made or vetted by Frostify before it goes up, and the catalogue stays deliberately small, so there is nothing here to dig through.",
   },
   {
-    title: "Yours to use commercially",
-    body: "A commercial licence comes with every pack. Client work, sponsored videos, monetised channels: all covered, with no extra fee and no per-project limit.",
+    q: "Can I use it in paid work?",
+    a: "Yes. A commercial licence comes with every pack: client projects, sponsored videos and monetised channels are all covered, with no extra fee and no per-project limit.",
   },
   {
-    title: "Buy it and go",
-    body: "Checkout runs through Payhip, so there is no account to create and nothing to subscribe to. Pay once and the files download straight away.",
+    q: "How do I get the files?",
+    a: "Checkout runs through Payhip. There is no account to create and nothing to subscribe to. Pay once and the download starts straight away.",
   },
 ];
 
@@ -40,6 +41,10 @@ export default function HomePage() {
   const cheap = under(10);
   const frostify = getCreator("frostify");
   const frostifyPacks = frostify ? byCreator(frostify.slug).slice(0, 4) : [];
+  // Bundle members that exist as their own listings, for the contents strip.
+  const vaultContents = (vault?.bundleOf ?? [])
+    .map(getProduct)
+    .filter((p): p is NonNullable<typeof p> => Boolean(p));
   const lowest = Math.min(
     ...products.filter((p) => p.price > 0).map((p) => p.price),
   );
@@ -129,43 +134,63 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Bundle, as a full-bleed poster rather than another card in a grid. */}
+      {/*
+        Bundle. Shows what is actually inside rather than ghosting the pack
+        artwork behind the type, which made the words read twice.
+      */}
       {vault && vault.bundleValue && (
-        <section className="section-gap">
+        <section className="shell section-gap">
           <Reveal>
-            <div className="relative overflow-hidden">
-              <div className="absolute inset-0">
-                <Image
-                  src={vault.thumbnail}
-                  alt=""
-                  fill
-                  sizes="100vw"
-                  className="scale-105 object-cover opacity-25 blur-[2px]"
-                />
-                <div
-                  aria-hidden="true"
-                  className="from-ink via-ink/85 to-ink absolute inset-0 bg-gradient-to-b"
-                />
-              </div>
-
-              <div className="shell relative py-20 text-center sm:py-28">
+            <div className="bg-surface relative overflow-hidden rounded-3xl">
+              <div
+                aria-hidden="true"
+                className="hero-glow pointer-events-none absolute inset-0"
+              />
+              <div className="relative px-6 py-14 text-center sm:px-12 sm:py-20">
                 <p className="text-muted text-[12px] font-semibold uppercase">
                   The whole library
                 </p>
-                <h2 className="font-display-tight mt-4 text-[clamp(2.5rem,7vw,5.5rem)] leading-[0.92] uppercase">
+                <h2 className="font-display-tight mt-4 text-[clamp(2.25rem,5.5vw,4.5rem)] leading-[0.92] uppercase">
                   {vault.title}
                 </h2>
                 <p className="text-dim mx-auto mt-5 max-w-lg text-[17px] leading-relaxed">
-                  {vault.includedFiles.length} packs in one download. Everything
-                  in Collection V1, bought once.
+                  Every pack in Collection V1, in one download, bought once.
                 </p>
 
-                <div className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
-                  <span className="font-display text-accent text-[3.5rem] leading-none">
+                {/* The contents, as artwork, so the value is visible not stated. */}
+                <ul className="mx-auto mt-10 flex max-w-2xl flex-wrap items-center justify-center gap-3">
+                  {vaultContents.map((p) => (
+                    <li key={p.id}>
+                      <Link
+                        href={`/products/${p.slug}`}
+                        title={p.title}
+                        className="group/thumb block"
+                      >
+                        <span className="bg-elevated ring-line group-hover/thumb:ring-accent relative block h-16 w-24 overflow-hidden rounded-lg ring-1 transition-all sm:h-20 sm:w-28">
+                          <Image
+                            src={p.thumbnail}
+                            alt={p.title}
+                            fill
+                            sizes="112px"
+                            className="object-cover"
+                          />
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                  {vault.includedFiles.length > vaultContents.length && (
+                    <li className="border-line text-muted flex h-16 w-24 items-center justify-center rounded-lg border border-dashed text-[13px] font-semibold sm:h-20 sm:w-28">
+                      +{vault.includedFiles.length - vaultContents.length} more
+                    </li>
+                  )}
+                </ul>
+
+                <div className="mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
+                  <span className="font-display text-accent text-[3.25rem] leading-none">
                     {formatPrice(vault.price)}
                   </span>
                   <span className="text-muted text-[16px]">
-                    <s>${vault.bundleValue.toFixed(2)}</s> separately
+                    <s>${vault.bundleValue.toFixed(2)}</s> if bought separately
                   </span>
                   <span className="bg-accent/15 text-accent rounded-full px-3.5 py-1.5 text-[14px] font-bold">
                     Save ${(vault.bundleValue - vault.price).toFixed(2)}
@@ -174,7 +199,7 @@ export default function HomePage() {
 
                 <Link
                   href={`/products/${vault.slug}`}
-                  className="bg-accent text-ink mt-9 inline-block rounded-xl px-8 py-4 text-[16px] font-bold transition-transform hover:scale-[1.02]"
+                  className="bg-accent text-ink mt-8 inline-block rounded-xl px-8 py-4 text-[16px] font-bold transition-transform hover:scale-[1.02]"
                 >
                   Get the Vault
                 </Link>
@@ -184,26 +209,46 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* How the shop works, once there is a reason to care. */}
+      {/* How the shop works, as answers rather than three equal grey boxes. */}
       <section className="shell section-gap">
-        <SectionHeader
-          eyebrow="The short version"
-          title="How SketchSets works"
-          note="A small, hand-picked shop rather than a marketplace you have to dig through."
-        />
-        {/* gap-px over a line-coloured base draws the dividers between panels. */}
-        <Reveal className="bg-line grid gap-px overflow-hidden rounded-2xl sm:grid-cols-3">
-          {howItWorks.map((item) => (
-            <div key={item.title} className="bg-surface p-7 sm:p-8">
-              <h3 className="font-display text-[1.375rem] leading-tight">
-                {item.title}
-              </h3>
-              <p className="text-dim mt-3 text-[15px] leading-relaxed">
-                {item.body}
-              </p>
-            </div>
-          ))}
-        </Reveal>
+        <div className="grid gap-10 lg:grid-cols-[1fr_1.5fr] lg:gap-20">
+          <div className="lg:sticky lg:top-24 lg:self-start">
+            <p className="text-muted mb-2 text-[12px] font-semibold uppercase">
+              The short version
+            </p>
+            <h2 className="font-display text-[clamp(1.875rem,3.6vw,3rem)] leading-[1.02]">
+              How SketchSets works
+            </h2>
+            <p className="text-dim mt-4 text-[16px] leading-relaxed">
+              A small, hand-picked shop rather than a marketplace you have to
+              dig through.
+            </p>
+            <Link
+              href="/browse"
+              className="border-line hover:border-line-bright hover:bg-elevated mt-7 inline-block rounded-full border px-5 py-2.5 text-[14px] font-semibold transition-colors"
+            >
+              Browse the shop
+            </Link>
+          </div>
+
+          <Reveal>
+            <dl>
+              {howItWorks.map((item) => (
+                <div
+                  key={item.q}
+                  className="border-line border-t py-7 last:border-b"
+                >
+                  <dt className="font-display text-[clamp(1.25rem,2.2vw,1.625rem)] leading-tight">
+                    {item.q}
+                  </dt>
+                  <dd className="text-dim mt-3 max-w-[62ch] text-[16px] leading-relaxed">
+                    {item.a}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
+        </div>
       </section>
 
       {/* Maker */}
