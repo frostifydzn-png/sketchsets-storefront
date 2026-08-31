@@ -212,6 +212,19 @@ body {
   padding-top: 0 !important;
 }
 
+/* A text-simple section is a page title, and whatever comes after it
+   belongs to it. Payhip puts "Shop the Full Catalog" and the collection
+   tabs in two separate sections, so the rule above was dropping a full
+   128px section gap between a heading and the grid it introduces - they
+   read as unrelated blocks rather than one. Sections that lead into
+   something get a much smaller gap under them.
+
+   ("+" is safe here where ">" is not: Payhip escapes "&" and ">"
+   because they are HTML special characters, and "+" is not.) */
+.content-main-wrapper .js-section-wrapper[data-section-key="text-simple"] + .js-section-wrapper[data-section-key] {
+  padding-top: clamp(24px, 2.6vw, 42px) !important;
+}
+
 /* Payhip pads .section-contents-wrapper by 52.8px and caps it at
    1260px. Stacking more padding inside gave ~330px gaps, and the cap
    left content at 1132px on any screen. The rule above owns both now,
@@ -1254,6 +1267,15 @@ button.add-to-cart-button[disabled] {
   margin: 0 0 18px !important;
 }
 
+/* Hold the copy to a readable measure. The text column is 832px, so
+   the body ran to 692px - about 90 characters, well past the 45-75
+   that reads comfortably - and the pack list broke with "Speedlines"
+   orphaned on a line of its own. The heading is left uncapped so it
+   still sets on one line. */
+.js-section-wrapper[data-section-key="image-and-text-advanced"] .richtext {
+  max-width: 34rem;
+}
+
 .js-section-wrapper[data-section-key="image-and-text-advanced"] .richtext h3 {
   font-family: "neue-haas-grotesk-text", rubik, sans-serif !important;
   font-size: clamp(1rem, 1.2vw, 1.1875rem) !important;
@@ -1285,11 +1307,11 @@ button.add-to-cart-button[disabled] {
 .js-section-wrapper[data-section-key="image-and-text-advanced"] .button-wrapper .btn {
   padding: 18px 40px !important;
   font-size: 1.0625rem !important;
-  box-shadow: 0 14px 38px rgba(255, 61, 158, 0.28) !important;
+  box-shadow: 0 10px 26px rgba(255, 61, 158, 0.2) !important;
 }
 
 .js-section-wrapper[data-section-key="image-and-text-advanced"] .button-wrapper .btn:hover {
-  box-shadow: 0 18px 46px rgba(255, 61, 158, 0.36) !important;
+  box-shadow: 0 14px 32px rgba(255, 61, 158, 0.28) !important;
 }
 
 @media (max-width: 900px) {
