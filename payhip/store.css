@@ -58,8 +58,8 @@
      Indieground runs 0px radius on every section and card; the
      artwork supplies the shape. Buttons keep their pill, because a
      square button on a dark page reads as a disabled block. */
-  --ss-radius-card: 0px;
-  --ss-radius-media: 0px;
+  --ss-radius-card: 14px;
+  --ss-radius-media: 14px;
   --ss-radius-pill: 9999px;
   --ss-radius-input: 2px;
 
@@ -112,8 +112,8 @@
      which left the art floating with a gap on all four sides. */
   --card-image-padding: 0rem;
   --media-padding: 0px;
-  --media-radius: 0px;
-  --card-corner-radius: 0px;
+  --media-radius: 14px;
+  --card-corner-radius: 14px;
 }
 
 [data-section-setting-color-scheme-id="lightPrimary"],
@@ -757,12 +757,52 @@ button.add-to-cart-button[disabled] {
    media box applied a 4:3 aspect ratio to the whole card and
    squashed it. The real media box is div.card__inner.ratio.
    The previous stylesheet had this same mistake. */
-.product-card-wrapper .card .ratio,
-.product-card-wrapper .card .card__media {
+/* Only the frame carries the aspect ratio.
+   Putting aspect-ratio on .card__media as well as on .ratio, together
+   with height:100%, resolved the media to 286px inside a 224px frame.
+   It spilled out and painted straight over the title and price below,
+   which read as the label having disappeared. The media is absolutely
+   positioned inside the frame now, so it can never push past it. */
+.product-card-wrapper .card .ratio {
+  display: block !important;
+  position: relative !important;
   aspect-ratio: 4 / 3 !important;
   border-radius: var(--ss-radius-media) !important;
   overflow: hidden !important;
   background: var(--ss-panel-2) !important;
+  margin-bottom: 0 !important;
+}
+
+.product-card-wrapper .card .card__media,
+.product-card-wrapper .card .media {
+  position: absolute !important;
+  inset: 0 !important;
+  aspect-ratio: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  border-radius: inherit !important;
+}
+
+.product-card-wrapper .card .media img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  aspect-ratio: auto !important;
+}
+
+/* The overlay layer must not stretch the frame either. Badges inside
+   it stay clickable; nothing else in there should intercept a click. */
+.product-card-wrapper .card .ratio .card__content {
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none;
+}
+
+.product-card-wrapper .card .ratio .card__content .card-badge {
+  pointer-events: auto;
 }
 
 /* Descendant, not child. A child combinator would be escaped
@@ -808,22 +848,6 @@ button.add-to-cart-button[disabled] {
    and bottom, and an empty .card-badge contributed a further 26px of
    margin around nothing. All of it goes; the label now sits directly
    under the art, ruled off from it. */
-.product-card-wrapper .card .card__media {
-  margin: 0 !important;
-  height: 100% !important;
-}
-
-.product-card-wrapper .card .media,
-.product-card-wrapper .card .media img {
-  width: 100% !important;
-  height: 100% !important;
-}
-
-.product-card-wrapper .card .ratio {
-  position: relative !important;
-  margin-bottom: 0 !important;
-}
-
 /* The theme renders the title twice: once in an overlay layer inside
    the media frame, once below. Hide the overlay copy but keep its
    sibling badge, which is where an on-sale flag lands. */
@@ -840,15 +864,11 @@ button.add-to-cart-button[disabled] {
   padding: 0 !important;
 }
 
+/* A hairline here fought the rounded corners of the artwork above,
+   so the label is separated by space instead. */
 .product-card-wrapper .card .card__content .card__information {
   text-align: left !important;
-  padding: 13px 0 0 !important;
-  border-top: 1px solid var(--ss-line);
-  transition: border-color 0.35s var(--ss-ease);
-}
-
-.product-card-wrapper .card:hover .card__content .card__information {
-  border-top-color: var(--ss-accent);
+  padding: 15px 2px 0 !important;
 }
 
 .product-card-wrapper .card__heading {
