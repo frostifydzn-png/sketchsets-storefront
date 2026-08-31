@@ -120,7 +120,7 @@ export default async function ProductPage({
           className="hero-glow pointer-events-none absolute inset-0 z-0"
         />
         <div className="relative z-10">
-          <h1 className="font-display-tight text-[clamp(2.25rem,6vw,4.75rem)] leading-[0.92] uppercase">
+          <h1 className="font-display-tight text-[clamp(2rem,5vw,3.75rem)] leading-[1.02]">
             {product.title}
           </h1>
           <p className="text-dim mx-auto mt-5 max-w-xl text-[17px] leading-relaxed sm:text-[19px]">

@@ -2,140 +2,75 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { MegaPanel, type MenuId } from "@/components/MegaPanel";
+import { useState } from "react";
 import { SearchDialog } from "@/components/SearchDialog";
-import { byCategory, categories } from "@/lib/products";
 import { site } from "@/lib/site";
 
-const trustPoints = [
-  "Instant download",
-  "Commercial licence included",
-  "Secure checkout via Payhip",
-];
-
-/** Nav items that open a panel, in order. */
-const menuItems: { id: MenuId; href: string; label: string }[] = [
-  { id: "browse", href: "/browse", label: "Browse" },
-  ...categories.map((c) => ({
-    id: c.id as MenuId,
-    href: `/${c.id}`,
-    label: c.name,
-  })),
+/*
+ * Three destinations, no dropdowns. The catalogue is small enough that the
+ * homepage is the shop, so a mega menu was navigating a structure that does
+ * not need navigating.
+ */
+const navLinks = [
+  { href: "/browse", label: "Shop" },
+  { href: "/free", label: "Free" },
+  { href: "/products/sketchsets-vault", label: "The Vault" },
 ];
 
 export function SiteHeader() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [menu, setMenu] = useState<MenuId | null>(null);
+  const [open, setOpen] = useState(false);
   const pathname = usePathname();
-
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const openMenu = (id: MenuId) => {
-    if (closeTimer.current) clearTimeout(closeTimer.current);
-    setMenu(id);
-  };
-
-  // Small grace period so moving the cursor into the panel doesn't close it.
-  const scheduleClose = () => {
-    if (closeTimer.current) clearTimeout(closeTimer.current);
-    closeTimer.current = setTimeout(() => setMenu(null), 130);
-  };
-
-  const closeAll = () => {
-    if (closeTimer.current) clearTimeout(closeTimer.current);
-    setMenu(null);
-    setMobileOpen(false);
-  };
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMenu(null);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  const close = () => setOpen(false);
 
   return (
-    <header
-      className="bg-ink border-line sticky top-0 z-40 border-b"
-      onMouseLeave={scheduleClose}
-    >
-      {/* Main row */}
-      <div className="shell flex h-[76px] items-center gap-10">
+    <header className="bg-ink/85 border-line sticky top-0 z-40 border-b backdrop-blur-xl">
+      <div className="shell flex h-[68px] items-center gap-8">
         <Link
           href="/"
-          onClick={closeAll}
+          onClick={close}
           className="flex shrink-0 items-baseline gap-2"
         >
-          <span className="font-display-tight text-[21px] leading-none">
-            SKETCHSETS
+          <span className="font-display-tight text-[20px] leading-none">
+            SketchSets
           </span>
-          <span className="text-muted text-[10px] leading-none font-medium sm:text-[11px]">
-            · by {site.parent}
+          <span className="text-muted hidden text-[11px] leading-none sm:inline">
+            by {site.parent}
           </span>
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-1 md:flex">
-          {menuItems.map((item) => {
-            const active = pathname === item.href;
-            const open = menu === item.id;
+        <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
+          {navLinks.map((link) => {
+            const active =
+              pathname === link.href ||
+              (link.href === "/browse" && pathname.startsWith("/products/"));
             return (
               <Link
-                key={item.id}
-                href={item.href}
-                onClick={closeAll}
-                onMouseEnter={() => openMenu(item.id)}
-                onFocus={() => openMenu(item.id)}
+                key={link.href}
+                href={link.href}
+                onClick={close}
                 aria-current={active ? "page" : undefined}
-                aria-expanded={open}
-                className={`rounded-lg px-3.5 py-2 text-[15px] font-medium transition-colors ${
-                  active || open
-                    ? "text-text bg-elevated"
-                    : "text-dim hover:text-text"
+                className={`text-[15px] transition-colors ${
+                  active ? "text-text" : "text-dim hover:text-text"
                 }`}
               >
-                {item.label}
+                {link.label}
               </Link>
             );
           })}
-          <Link
-            href="/new"
-            onClick={closeAll}
-            onMouseEnter={scheduleClose}
-            className={`rounded-lg px-3.5 py-2 text-[15px] font-medium transition-colors ${
-              pathname === "/new"
-                ? "text-text bg-elevated"
-                : "text-dim hover:text-text"
-            }`}
-          >
-            New
-          </Link>
         </nav>
 
         <div className="ml-auto flex items-center gap-3">
-          <div onMouseEnter={scheduleClose}>
-            <SearchDialog />
-          </div>
-          <Link
-            href="/browse"
-            onClick={closeAll}
-            onMouseEnter={scheduleClose}
-            className="bg-accent text-ink hidden rounded-xl px-5 py-2.5 text-[14px] font-bold transition-transform hover:scale-[1.03] lg:block"
-          >
-            Browse all
-          </Link>
-
+          <SearchDialog />
           <button
             type="button"
-            onClick={() => setMobileOpen((v) => !v)}
-            aria-expanded={mobileOpen}
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
             aria-controls="mobile-nav"
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-label={open ? "Close menu" : "Open menu"}
             className="text-text -mr-2 p-2 md:hidden"
           >
             <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
-              {mobileOpen ? (
+              {open ? (
                 <path
                   d="M6 6l10 10M16 6L6 16"
                   stroke="currentColor"
@@ -155,71 +90,32 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* Mega panel */}
-      {menu && (
-        <div
-          className="absolute inset-x-0 top-full hidden md:block"
-          onMouseEnter={() => openMenu(menu)}
-        >
-          <MegaPanel menu={menu} onNavigate={closeAll} />
-        </div>
-      )}
-
-      {/* Mobile nav */}
-      {mobileOpen && (
+      {open && (
         <nav
           id="mobile-nav"
           aria-label="Mobile"
-          className="border-line bg-ink max-h-[80vh] overflow-y-auto border-t md:hidden"
+          className="border-line bg-ink border-t md:hidden"
         >
-          <div className="shell py-5">
-            {menuItems.map((item) => (
+          <div className="shell py-4">
+            {navLinks.map((link) => (
               <Link
-                key={item.id}
-                href={item.href}
-                onClick={closeAll}
-                className="border-line flex items-baseline justify-between border-b py-3.5"
+                key={link.href}
+                href={link.href}
+                onClick={close}
+                className="font-display text-text block py-3 text-2xl"
               >
-                <span className="font-display text-2xl">{item.label}</span>
-                {item.id !== "browse" && (
-                  <span className="text-muted text-[13px]">
-                    {byCategory(item.id as "editing").length}
-                  </span>
-                )}
+                {link.label}
               </Link>
             ))}
-            <Link
-              href="/new"
-              onClick={closeAll}
-              className="border-line block border-b py-3.5"
+            <a
+              href={site.links.frostify}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={close}
+              className="font-display text-dim block py-3 text-2xl"
             >
-              <span className="font-display text-2xl">New drops</span>
-            </Link>
-
-            <div className="text-muted mt-6 space-y-2 text-[13px]">
-              {trustPoints.map((p) => (
-                <p key={p}>{p}</p>
-              ))}
-            </div>
-
-            <div className="mt-6 flex gap-5">
-              <a
-                href={site.links.frostify}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-dim text-[14px]"
-              >
-                {site.parent} ↗
-              </a>
-              <a
-                href={site.links.frostoria}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-dim text-[14px]"
-              >
-                Frostoria ↗
-              </a>
-            </div>
+              Frostify ↗
+            </a>
           </div>
         </nav>
       )}

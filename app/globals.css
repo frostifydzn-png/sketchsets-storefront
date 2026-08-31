@@ -91,18 +91,23 @@ body {
   padding-top: clamp(4rem, 7vw, 8rem);
 }
 
+/*
+ * Display face. Set close to normal width in mixed case rather than the
+ * condensed all-caps poster treatment it used to carry: the caps read loud and
+ * dated, and at small sizes they were harder to scan.
+ */
 .font-display {
   font-family: var(--font-display);
-  font-variation-settings: "wdth" 88;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-variation-settings: "wdth" 96;
+  font-weight: 700;
+  letter-spacing: -0.022em;
 }
 
 .font-display-tight {
   font-family: var(--font-display);
-  font-variation-settings: "wdth" 82;
+  font-variation-settings: "wdth" 94;
   font-weight: 800;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.035em;
 }
 
 ::selection {

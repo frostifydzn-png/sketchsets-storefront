@@ -368,14 +368,16 @@ function Tab({
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`relative py-1 text-[15px] transition-colors ${
+      /* Underline on the button's own baseline, so a wrapped row keeps it
+         attached to its label instead of the line beneath. */
+      className={`relative pt-1 pb-2 text-[15px] transition-colors ${
         active ? "text-text font-semibold" : "text-dim hover:text-text"
       }`}
     >
       {children}
       <span
         aria-hidden="true"
-        className={`bg-accent absolute -bottom-[17px] left-0 h-[2px] transition-all duration-300 ease-[var(--ease-glide)] ${
+        className={`bg-accent absolute bottom-0 left-0 h-[2px] transition-all duration-300 ease-[var(--ease-glide)] ${
           active ? "w-full" : "w-0"
         }`}
       />
