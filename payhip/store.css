@@ -333,8 +333,8 @@ h2 {
 }
 
 /* The footer builds its column labels out of .heading-text divs at
-   16px. They are labels, not headlines: 900-weight display caps at
-   that size is shouting, so they take the Text cut. */
+   16px. They are labels, not headlines, and tracked-in display caps
+   at that size read as shouting, so they take the Text cut. */
 .js-section-wrapper[data-section-key="footer"] .heading-text,
 .js-section-wrapper[data-section-key="footer"] .heading-text-main {
   font-family: "neue-haas-grotesk-text", rubik, sans-serif !important;
