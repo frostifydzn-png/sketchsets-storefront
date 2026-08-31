@@ -24,12 +24,11 @@
 
    DESIGN DIRECTION
    ---------------------------------------------------------
-   Calm. The old file leaned on pulsing glows, conic-gradient
-   neon rims, shine sweeps and breathing orbs. Most of them
-   were broken anyway, and the ones that worked are the exact
-   thing that makes a shop read as software. The artwork is
-   the product; this stylesheet gets out of its way and spends
-   its effort on spacing, type and one accent colour.
+   Sections are not boxed. They sit on the page and are
+   separated by space; the type and the artwork do the
+   dividing. Product artwork is rounded; the page is not.
+   Headlines are large, condensed and uppercase. Motion is
+   scroll-driven and costs no JavaScript.
    ============================================================ */
 
 :root {
@@ -57,9 +56,8 @@
   --ss-muted: #877796;
 
   /* ---- shape ----
-     Indieground runs 0px radius on every section and card; the
-     artwork supplies the shape. Buttons keep their pill, because a
-     square button on a dark page reads as a disabled block. */
+     Artwork and cards are rounded; sections are not boxed at all, so
+     there is nothing else for a radius to apply to. */
   --ss-radius-card: 14px;
   --ss-radius-media: 14px;
   --ss-radius-pill: 9999px;
@@ -70,10 +68,10 @@
   --ss-shadow-2: 0 16px 44px rgba(0, 0, 0, 0.38);
 
   /* ---- rhythm ----
-     These now replace Payhip's section padding rather than
-     adding to it, so the numbers are the real gap between
-     sections. Tune --ss-section-y first; it is the single
-     biggest lever on how considered the shop looks. */
+     These replace Payhip's section padding rather than adding to it,
+     so the numbers are the real gap between sections. Tune
+     --ss-section-y first; it is the single biggest lever on how
+     considered the shop looks. */
   --ss-section-y: clamp(72px, 8vw, 148px);
   --ss-gutter: clamp(22px, 3.4vw, 56px);
   --ss-grid-gap: clamp(16px, 1.8vw, 30px);
@@ -171,15 +169,13 @@ a:hover {
    are trademarks, not theme accents. */
 
 /* ============================================================
-   1. LAYOUT: HEADER CLEARANCE, PANELS, RHYTHM
+   1. LAYOUT: HEADER CLEARANCE, RHYTHM
    ============================================================ */
 
 /* The header is fixed (see section 4). It used to be absolutely
    positioned over the hero, so making it fixed hid the top 96px of
    every page that does not open with a hero — the product page lost
-   the top of its gallery. Content clears it everywhere instead; the
-   reference design also puts the header on flat dark rather than
-   over artwork. */
+   the top of its gallery. Content clears it everywhere instead. */
 .content-main-wrapper {
   padding-top: 96px !important;
 }
@@ -216,8 +212,8 @@ body {
 
 /* Payhip pads .section-contents-wrapper by 52.8px and caps it at
    1260px. Stacking more padding inside gave ~330px gaps, and the cap
-   left content at 1132px on any screen. The panel rule above owns
-   both now, so the inner element must not add its own. */
+   left content at 1132px on any screen. The rule above owns both now,
+   so the inner element must not add its own. */
 .js-section-wrapper .section-contents {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
@@ -232,7 +228,7 @@ body {
   display: none !important;
 }
 
-/* --- the reference design's signature: label left, content right ---
+/* --- label left, content right ---
    Payhip's featured-collection section has exactly three children of
    .section-contents (heading, grid, button), which is what makes this
    possible without touching the markup. */
@@ -273,8 +269,6 @@ body {
   }
 }
 
-/* Product grids sat 12px apart inside the old narrow cap: cramped
-   across, cavernous down. */
 .grid-list.js-grid-list {
   gap: var(--ss-grid-gap) !important;
 }
@@ -331,7 +325,6 @@ p {
   line-height: 1.65;
 }
 
-/* Section headings sit left with room to breathe. */
 .js-section-wrapper .heading-text-main,
 .js-section-wrapper .heading-text {
   margin-bottom: clamp(20px, 3vw, 36px) !important;
@@ -339,9 +332,6 @@ p {
 
 /* ============================================================
    3. BUTTONS
-   Flat accent, no gradient, no bloom. A glowing gradient pill
-   is the most recognisable piece of software marketing there
-   is, and this is a shop counter.
    ============================================================ */
 
 .btn.btn-primary,
@@ -388,7 +378,6 @@ button.add-to-cart-button[disabled] {
   transform: none !important;
 }
 
-/* Nothing should paint an overlay on top of a button. */
 .btn.btn-primary::before,
 .btn.btn-primary::after {
   content: none !important;
@@ -401,7 +390,7 @@ button.add-to-cart-button[disabled] {
 /* The theme positions the header absolutely over the hero, so it
    scrolls away and never comes back. On a 4,300px page that leaves
    no way to navigate without scrolling to the top. Fixed keeps it
-   overlaying the hero exactly as before while staying reachable. */
+   reachable; section 1 gives the content clearance beneath it. */
 #header {
   position: fixed !important;
   top: 0;
@@ -420,7 +409,6 @@ button.add-to-cart-button[disabled] {
   }
 }
 
-/* Anchor targets must clear the fixed header. */
 .js-section-wrapper[data-section-key],
 .accordion-item {
   scroll-margin-top: 110px;
@@ -438,7 +426,6 @@ button.add-to-cart-button[disabled] {
   transition: color 0.18s var(--ss-ease);
 }
 
-/* --- the two action pills: Premium and Sell on SketchSets --- */
 @media (min-width: 1026px) {
   .header-nav-wrapper nav.header-nav-list {
     display: flex !important;
@@ -452,12 +439,10 @@ button.add-to-cart-button[disabled] {
     flex: 0 0 auto !important;
   }
 
-  /* Push the pair to the right. */
   .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(2) {
     margin-left: auto !important;
   }
 
-  /* Shared pill shape. Colour is set per-pill below. */
   .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(-n + 2) a {
     display: inline-flex !important;
     align-items: center !important;
@@ -474,16 +459,14 @@ button.add-to-cart-button[disabled] {
     transition: filter 0.18s var(--ss-ease), transform 0.15s var(--ss-ease);
   }
 
-  /* Premium — gold. Kept flat; it earns attention by colour alone. */
   .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(2) a {
     background: var(--ss-gold) !important;
     color: var(--ss-gold-ink) !important;
     -webkit-text-fill-color: var(--ss-gold-ink) !important;
   }
 
-  /* Crown, drawn inline so there is no extra request.
-     The fill is URL-encoded because a literal "#" would end
-     the data URI. */
+  /* Crown, drawn inline so there is no extra request. The fill is
+     URL-encoded because a literal "#" would end the data URI. */
   .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(2) a::before {
     content: "";
     width: 16px;
@@ -495,17 +478,16 @@ button.add-to-cart-button[disabled] {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2312161b' d='M4 19h16v2H4v-2Zm16-3H4L2 7l5 3 5-6 5 6 5-3-2 9Z'/%3E%3C/svg%3E");
   }
 
-  /* Sell on SketchSets — accent. */
   .header-nav-wrapper nav.header-nav-list .header-nav-item:last-child a {
     background: var(--ss-accent) !important;
     color: var(--ss-accent-ink) !important;
     -webkit-text-fill-color: var(--ss-accent-ink) !important;
   }
 
-  /* One hover behaviour for both, and the colour never changes.
-     The old file had a dozen rules fighting to stop the label
-     going dark on :active; keeping the fill constant removes
-     the problem instead of patching it. */
+  /* One hover behaviour for both, and the colour never changes. The
+     old file had a dozen rules fighting to stop the label going dark
+     on :active; keeping the fill constant removes the problem
+     instead of patching it. */
   .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(-n + 2) a:hover {
     filter: brightness(1.08);
     transform: translateY(-1px);
@@ -515,8 +497,6 @@ button.add-to-cart-button[disabled] {
   }
 }
 
-/* Below the desktop breakpoint the pills become plain links,
-   so they never crowd the search and cart icons. */
 @media (max-width: 1025px) {
   .header-nav-wrapper nav.header-nav-list {
     gap: 16px !important;
@@ -538,7 +518,6 @@ button.add-to-cart-button[disabled] {
   }
 }
 
-/* --- header icons: put them on one baseline --- */
 .header-actions-action-login .header-login-icon-link,
 .header-actions-action-cart .header-cart-icon-button {
   display: inline-flex !important;
@@ -753,8 +732,6 @@ button.add-to-cart-button[disabled] {
     z-index: 9999 !important;
   }
 
-  /* Labels and icons stay white regardless of the theme's
-     colour scheme attribute. */
   .nav-mobile-block .menu a,
   .nav-mobile-block .submenu a,
   .js-nav-mobile-block .menu a,
@@ -789,7 +766,6 @@ button.add-to-cart-button[disabled] {
     border-color: var(--ss-line) !important;
   }
 
-  /* Login reads as the drawer's one action. */
   .nav-mobile-block a[href*="/users/login"],
   .js-nav-mobile-block a[href*="/users/login"] {
     display: inline-flex !important;
@@ -810,7 +786,7 @@ button.add-to-cart-button[disabled] {
     position: fixed !important;
     inset: 0 !important;
     height: 100dvh !important;
-    background: rgba(4, 8, 12, 0.6) !important;
+    background: rgba(4, 2, 8, 0.65) !important;
   }
 }
 
@@ -826,7 +802,6 @@ button.add-to-cart-button[disabled] {
 
 /* ============================================================
    7. PRODUCT CARDS
-   Artwork, title, price. No neon rim, no pulsing badge.
    ============================================================ */
 
 /* No frame around the product. The cover art is the card; a border
@@ -839,6 +814,7 @@ button.add-to-cart-button[disabled] {
   padding: 0 !important;
   overflow: visible !important;
   box-shadow: none !important;
+  position: relative !important;
 }
 
 /* The card frame stays put; only the artwork moves. */
@@ -847,24 +823,24 @@ button.add-to-cart-button[disabled] {
   box-shadow: none !important;
 }
 
-/* The theme draws frames and overlays with pseudo elements. */
 .product-card-wrapper .card::before,
 .product-card-wrapper .card::after {
   content: none !important;
 }
 
-/* Media wrapper.
-   NOT `.card--media`: that class sits on the card element itself
-   (div.card.card--standard.card--media), so styling it as the
-   media box applied a 4:3 aspect ratio to the whole card and
-   squashed it. The real media box is div.card__inner.ratio.
-   The previous stylesheet had this same mistake. */
 /* Only the frame carries the aspect ratio.
    Putting aspect-ratio on .card__media as well as on .ratio, together
    with height:100%, resolved the media to 286px inside a 224px frame.
    It spilled out and painted straight over the title and price below,
    which read as the label having disappeared. The media is absolutely
-   positioned inside the frame now, so it can never push past it. */
+   positioned inside the frame now, so it can never push past it.
+
+   Both class names are given because .ratio IS .card__inner; naming
+   both outranks anything later that touches .card__inner.
+
+   NOT `.card--media`: that class sits on the card element itself
+   (div.card.card--standard.card--media), so styling it as the media
+   box applies its ratio to the whole card. */
 .product-card-wrapper .card .card__inner.ratio,
 .product-card-wrapper .card .ratio {
   display: block !important;
@@ -908,21 +884,6 @@ button.add-to-cart-button[disabled] {
   pointer-events: auto;
 }
 
-/* Descendant, not child. A child combinator would be escaped
-   to &gt; and this rule would never apply. */
-.product-card-wrapper .card img {
-  display: block !important;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  border: 0 !important;
-  border-radius: inherit !important;
-  /* Stops a hairline seam appearing at the rounded corners. */
-  transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-}
-
-/* Inner wrappers must not paint over the card. */
 .product-card-wrapper .card .card__inner,
 .product-card-wrapper .card .card__content,
 .product-card-wrapper .card .card__information {
@@ -931,26 +892,13 @@ button.add-to-cart-button[disabled] {
   box-shadow: none !important;
 }
 
-/* The artwork lifts slightly on hover. The card frame stays still,
-   so only the image moves. */
-.product-card-wrapper .card .ratio img {
-  transition: transform 0.5s var(--ss-ease) !important;
-}
-.product-card-wrapper .card:hover .ratio img {
-  transform: scale(1.05) translateZ(0) !important;
-}
-
-/* --- card label block ---
-   Centred titles and prices are hard to scan in a grid: the eye has
-   no consistent left edge to return to. Left aligned, with the title
-   clamped to two lines so every card in a row is the same height. */
 /* --- the label block ---
    Measured on the live card, the theme left ~45px of dead air between
    the artwork and the title: .card__media carried margin 16px/14px
    inside its own frame, .card__information added 17px of padding top
    and bottom, and an empty .card-badge contributed a further 26px of
-   margin around nothing. All of it goes; the label now sits directly
-   under the art, ruled off from it. */
+   margin around nothing. All of it goes. */
+
 /* The theme renders the title twice: once in an overlay layer inside
    the media frame, once below. Hide the overlay copy but keep its
    sibling badge, which is where an on-sale flag lands. */
@@ -1054,21 +1002,18 @@ button.add-to-cart-button[disabled] {
    Only the title text was a link: 88x16px out of a 363x396px card,
    about 1% of it. Clicking the artwork did nothing. This stretches
    the existing link over the card rather than adding a second one,
-   so there is still one link per product for screen readers. */
-.product-card-wrapper .card {
-  position: relative !important;
-}
+   so there is still one link per product for screen readers.
 
-/* NOT .card__inner: that is the same element as .ratio, which must stay
-   positioned so the media can be absolutely contained inside it. Forcing
-   it static made the media anchor to .card instead and fill the entire
-   card, painting over the title and price. Equal specificity to the
-   .ratio rule meant whichever came last in the file won, which is a
-   coin-flip this comment exists to prevent.
+   NOT .card__inner: that is the same element as .ratio, which must
+   stay positioned so the media can be absolutely contained inside it.
+   Forcing it static made the media anchor to .card instead and fill
+   the entire card, painting over the title and price. Equal
+   specificity to the .ratio rule meant whichever came last in the
+   file won, which is a coin-flip this comment exists to prevent.
 
-   The stretched link lives in the second .card__content, a direct child
-   of .card, so .card__inner is not on its ancestor path and does not
-   need resetting for the link to cover the whole card. */
+   The stretched link lives in the second .card__content, a direct
+   child of .card, so .card__inner is not on its ancestor path and
+   does not need resetting for the link to cover the whole card. */
 .product-card-wrapper .card .card__content,
 .product-card-wrapper .card .card__information,
 .product-card-wrapper .card .card__heading {
@@ -1102,8 +1047,8 @@ button.add-to-cart-button[disabled] {
   margin-top: 0 !important;
 }
 
-/* Current price. Plain accent text reads as a price; a filled
-   pill reads as a button and invites a click that does nothing. */
+/* Plain accent text reads as a price; a filled pill reads as a
+   button and invites a click that does nothing. */
 .product-card-wrapper .price__sale .price-item--sale.price-item--last,
 .product-card-wrapper .price:not(.price--on-sale) .price__regular .price-item--regular {
   color: var(--ss-accent) !important;
@@ -1115,7 +1060,6 @@ button.add-to-cart-button[disabled] {
   box-shadow: none !important;
 }
 
-/* Was-price, when something is genuinely on sale. */
 .product-card-wrapper .price__sale .price-item--regular {
   color: var(--ss-muted) !important;
   font-weight: 500 !important;
@@ -1127,7 +1071,6 @@ button.add-to-cart-button[disabled] {
   text-decoration-thickness: 1.5px;
 }
 
-/* --- sale badge --- */
 .product-card-wrapper .badge-product-on-sale,
 #page-section-product span.badge-general.badge-product-on-sale {
   display: inline-flex !important;
@@ -1146,7 +1089,6 @@ button.add-to-cart-button[disabled] {
   animation: none !important;
 }
 
-/* The theme adds rivets and dots around badges. */
 .product-card-wrapper .card [class*="badge"]::before,
 .product-card-wrapper .card [class*="badge"]::after {
   content: none !important;
@@ -1156,22 +1098,14 @@ button.add-to-cart-button[disabled] {
    8. PRODUCT PAGE
    ============================================================ */
 
-/* The details column becomes one calm panel. The old rules for
-   this referenced --prod-card-bg and three siblings that were
-   never defined, so none of it rendered. */
+/* The old rules for this referenced --prod-card-bg and three
+   siblings that were never defined, so none of it rendered. */
 .product-details-wrapper .row .col-md-12 {
-  background: var(--ss-panel) !important;
-  border: 1px solid var(--ss-line) !important;
-  border-radius: var(--ss-radius-card) !important;
-  box-shadow: var(--ss-shadow-1) !important;
-  padding: 26px 24px 22px !important;
-}
-
-@media (max-width: 680px) {
-  .product-details-wrapper .row .col-md-12 {
-    padding: 18px 16px 16px !important;
-    border-radius: var(--ss-radius-media) !important;
-  }
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 0 22px !important;
 }
 
 /* ============================================================
@@ -1271,7 +1205,7 @@ button.add-to-cart-button[disabled] {
 }
 
 /* ============================================================
-   11. BLOG GRID (home page feature)
+   11. BLOG GRID
    ============================================================ */
 
 .js-section-wrapper[data-section-key="featured-blog-post-list"] .js-builder-blog-post-list-block[data-layout="grid"] {
@@ -1296,20 +1230,11 @@ button.add-to-cart-button[disabled] {
   position: relative;
   display: flex;
   flex-direction: column;
-  background: var(--ss-panel);
-  border: 1px solid var(--ss-line);
-  border-radius: var(--ss-radius-card);
-  padding: 14px 16px 18px;
-  overflow: hidden;
-  transition:
-    transform 0.22s var(--ss-ease),
-    border-color 0.22s var(--ss-ease);
-}
-
-.js-section-wrapper[data-section-key="featured-blog-post-list"] .js-blog-post-item:hover,
-.js-section-wrapper[data-section-key="featured-blog-post-list"] .js-blog-post-item:focus-within {
-  transform: translateY(-3px);
-  border-color: var(--ss-line-strong);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  overflow: visible;
 }
 
 .js-section-wrapper[data-section-key="featured-blog-post-list"] .js-blog-post-item figure,
@@ -1332,11 +1257,11 @@ button.add-to-cart-button[disabled] {
   width: 100% !important;
   height: 100% !important;
   object-fit: cover;
-  transition: transform 0.5s var(--ss-ease);
+  transition: transform 0.55s var(--ss-ease);
 }
 
 .js-section-wrapper[data-section-key="featured-blog-post-list"] .js-blog-post-item:hover img {
-  transform: scale(1.04);
+  transform: scale(1.06);
 }
 
 .js-section-wrapper[data-section-key="featured-blog-post-list"] time,
@@ -1361,7 +1286,6 @@ button.add-to-cart-button[disabled] {
   overflow: hidden;
 }
 
-/* Payhip sometimes emits an empty excerpt paragraph. */
 .js-section-wrapper[data-section-key="featured-blog-post-list"] [class*="excerpt"]:empty {
   display: none !important;
 }
@@ -1374,28 +1298,20 @@ button.add-to-cart-button[disabled] {
   position: relative;
   display: flex;
   align-items: stretch;
-  background: var(--ss-panel);
-  border: 1px solid var(--ss-line);
-  border-radius: var(--ss-radius-card);
-  padding: 22px;
+  background: transparent;
+  border: 0;
+  border-left: 2px solid var(--ss-accent);
+  border-radius: 0;
+  padding: 4px 22px 4px 22px;
   overflow: hidden;
   width: 380px !important;
-  margin-right: 20px !important;
+  margin-right: 28px !important;
   height: auto;
-  transition:
-    transform 0.22s var(--ss-ease),
-    border-color 0.22s var(--ss-ease);
 }
 
-/* The gradient rim and the giant quote watermark are gone. */
 .js-section-wrapper[data-section-key="slider-list"] .slider-list .js-slider-list-item::before,
 .js-section-wrapper[data-section-key="slider-list"] .slider-list .js-slider-list-item::after {
   content: none !important;
-}
-
-.js-section-wrapper[data-section-key="slider-list"] .slider-list .js-slider-list-item:hover {
-  transform: translateY(-3px);
-  border-color: var(--ss-line-strong);
 }
 
 .js-section-wrapper[data-section-key="slider-list"] .slider-list .content-container {
@@ -1408,7 +1324,6 @@ button.add-to-cart-button[disabled] {
   color: var(--ss-text) !important;
 }
 
-/* Stars line. */
 .js-section-wrapper[data-section-key="slider-list"] .slider-list .richtext p:first-child {
   margin: 0 0 12px !important;
   color: var(--ss-accent) !important;
@@ -1436,13 +1351,13 @@ button.add-to-cart-button[disabled] {
 @media (max-width: 1024px) {
   .js-section-wrapper[data-section-key="slider-list"] .slider-list .js-slider-list-item {
     width: 60% !important;
-    margin-right: 16px !important;
+    margin-right: 20px !important;
   }
 }
 @media (max-width: 680px) {
   .js-section-wrapper[data-section-key="slider-list"] .slider-list .js-slider-list-item {
     width: 86% !important;
-    margin-right: 14px !important;
+    margin-right: 16px !important;
   }
 }
 
@@ -1629,9 +1544,10 @@ button.add-to-cart-button[disabled] {
 .js-section-wrapper form input[type="number"],
 .js-section-wrapper form textarea {
   width: 100%;
-  background: var(--ss-panel) !important;
+  background: var(--ss-panel-2) !important;
   color: var(--ss-text) !important;
-  border: 1px solid var(--ss-line) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--ss-line-strong) !important;
   border-radius: var(--ss-radius-input) !important;
   padding: 13px 16px !important;
   outline: none !important;
@@ -1649,7 +1565,7 @@ button.add-to-cart-button[disabled] {
 
 .js-section-wrapper form input:focus,
 .js-section-wrapper form textarea:focus {
-  border-color: var(--ss-accent) !important;
+  border-bottom-color: var(--ss-accent) !important;
 }
 
 .js-section-wrapper form .form-error {
@@ -1691,11 +1607,11 @@ button.add-to-cart-button[disabled] {
 
 .js-builder-section-wrapper[data-section-key="video-and-text-rows"] .embed-code-wrapper {
   position: relative !important;
-  border-radius: var(--ss-radius-card);
+  border-radius: var(--ss-radius-media);
   overflow: hidden;
   background: var(--ss-panel-2);
-  border: 1px solid var(--ss-line);
-  box-shadow: var(--ss-shadow-1);
+  border: 0;
+  box-shadow: none;
 }
 
 .js-builder-section-wrapper[data-section-key="video-and-text-rows"] .embed-code-wrapper::before {
@@ -1734,25 +1650,19 @@ button.add-to-cart-button[disabled] {
   flex: none !important;
 }
 
+/* A rule down the left rather than a box around it. */
 .js-section-wrapper[data-section-key="image-and-text-columns"] .content-container {
   position: relative;
-  background: var(--ss-panel);
-  border: 1px solid var(--ss-line);
-  border-radius: var(--ss-radius-card);
-  padding: 22px 20px;
-  overflow: hidden;
-  transition:
-    transform 0.22s var(--ss-ease),
-    border-color 0.22s var(--ss-ease);
+  background: transparent;
+  border: 0;
+  border-left: 2px solid var(--ss-accent);
+  border-radius: 0;
+  padding: 4px 0 4px 22px;
+  overflow: visible;
 }
 
 .js-section-wrapper[data-section-key="image-and-text-columns"] .content-container::before {
   content: none !important;
-}
-
-.js-section-wrapper[data-section-key="image-and-text-columns"] .content-container:hover {
-  transform: translateY(-3px);
-  border-color: var(--ss-line-strong);
 }
 
 .js-section-wrapper[data-section-key="image-and-text-columns"] .image-row-contents img {
@@ -1772,8 +1682,8 @@ button.add-to-cart-button[disabled] {
 @media (max-width: 640px) {
   .product-grid,
   .collection-products {
-    row-gap: 20px !important;
-    gap: 20px !important;
+    row-gap: 28px !important;
+    gap: 28px !important;
   }
 }
 
@@ -1793,7 +1703,6 @@ button.add-to-cart-button[disabled] {
 button:focus-visible {
   outline: 2px solid var(--ss-accent) !important;
   outline-offset: 3px !important;
-  border-radius: 6px;
 }
 
 /* ============================================================
@@ -1855,8 +1764,7 @@ button:focus-visible {
   }
 }
 
-/* Artwork scales inside a fixed frame. This is the only hover the
-   cards have left, and it is enough. */
+/* Artwork scales inside a fixed frame. */
 .product-card-wrapper .card .ratio img {
   transition: transform 0.55s var(--ss-ease) !important;
 }
