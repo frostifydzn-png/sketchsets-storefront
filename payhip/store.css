@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400..700');
-
 /* ============================================================
    SKETCHSETS — Payhip store styles
    Paste into: Store settings → STORE PAGES CUSTOM CSS
@@ -11,8 +9,8 @@
       combinator arrives as "&gt;" and the browser throws the
       whole selector away; an earlier file had 106 of them and
       every one was dead. An "&" in a URL arrives as "&amp;",
-      which is why the font import below carries a single
-      parameter and no "&display=swap". Use descendant
+      which is why this file no longer carries a webfont
+      @import at all - see the type section. Use descendant
       selectors, and one-parameter URLs.
 
    2. Every custom property must be defined in the :root block
@@ -286,36 +284,63 @@ body {
    ============================================================ */
 
 body {
+  font-family: "neue-haas-grotesk-text", rubik, sans-serif !important;
   color: var(--ss-text);
   -webkit-font-smoothing: antialiased;
 }
 
-/* Headlines carry the whole design now that the boxes are gone.
-   Indieground sets its h1 at 120px condensed uppercase with -4px
-   tracking; this is the same idea on a fluid scale.
+/* THE TYPE IS PAYHIP'S OWN, NOT A WEBFONT IMPORT.
+   The store loads eight Adobe Fonts (Typekit) kits already, and among
+   them are Neue Haas Grotesk in both of its optical cuts. That is
+   Christian Schwartz's redrawing of the original Helvetica, and it is
+   the single most premium face on the account - so the file now uses
+   it and imports nothing. No Google Fonts request, no second network
+   dependency, and no @import URL to get mangled by the "&" escaping
+   described at the top of this file.
 
-   Archivo Narrow is imported at the top of this file. If it fails to
-   load for any reason the stack falls back to Rubik, which the store
-   already serves — the type stays heavy and tight, just not condensed,
-   so nothing breaks. */
+   Display for headlines, Text for everything else. That split is the
+   whole point of the family: Display is drawn tight for large sizes,
+   Text is drawn open for small ones. Using one for both is what makes
+   most sites look almost right.
+
+   Rubik stays as the fallback because the store already serves it, so
+   the page never drops to a system font.
+
+   Measured on the live store at 100px, "SHOP THE FULL CATALOG" sets at
+   1,240px in Display 900 against 1,065px in the old condensed Archivo
+   Narrow - 16% wider - so the display sizes below came down to match.
+   The longest heading now measures 1,107px inside a 1,476px column. */
 h1,
 h2,
-.heading-text,
-.heading-text-main {
-  font-family: "Archivo Narrow", rubik, sans-serif !important;
+.heading-text-main,
+.js-section-wrapper[data-section-key="text-simple"] .heading-text,
+.js-section-wrapper[data-section-key="image-and-text-advanced"] .heading-text,
+.js-section-wrapper[data-section-key="featured-collection"] .heading-text {
+  font-family: "neue-haas-grotesk-display", rubik, sans-serif !important;
   text-transform: uppercase !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.03em !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.035em !important;
   line-height: 0.94 !important;
 }
 
 h1,
 .js-section-wrapper[data-section-key="text-simple"] .heading-text {
-  font-size: clamp(2.75rem, 7.5vw, 7rem) !important;
+  font-size: clamp(2.5rem, 6.6vw, 6rem) !important;
 }
 
 h2 {
-  font-size: clamp(2rem, 5vw, 4.5rem) !important;
+  font-size: clamp(1.875rem, 4.4vw, 3.875rem) !important;
+}
+
+/* The footer builds its column labels out of .heading-text divs at
+   16px. They are labels, not headlines: 900-weight display caps at
+   that size is shouting, so they take the Text cut. */
+.js-section-wrapper[data-section-key="footer"] .heading-text,
+.js-section-wrapper[data-section-key="footer"] .heading-text-main {
+  font-family: "neue-haas-grotesk-text", rubik, sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
 }
 
 h3,
@@ -985,7 +1010,9 @@ button.add-to-cart-button[disabled] {
 
 .product-card-wrapper .card__heading {
   text-align: left !important;
-  font-family: rubik, sans-serif !important;
+  /* The Text cut, not Display: at 15px the display drawing sets too
+     tight to read as a product name. */
+  font-family: "neue-haas-grotesk-text", rubik, sans-serif !important;
   font-size: 15px !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
