@@ -43,12 +43,9 @@
      pink and the violet always run the same direction and the same
      distance apart; mixing bespoke gradients per component is what makes
      a palette look cheap. --ss-grad fills, --ss-grad-line rules. */
-  --ss-grad: linear-gradient(135deg, #ff3d9e 0%, #d926c5 48%, #a855f7 100%);
-  --ss-grad-line: linear-gradient(90deg, transparent, #ff3d9e 22%, #a855f7 78%, transparent);
-  --ss-grad-bar: linear-gradient(180deg, #ff3d9e, #a855f7);
+  --ss-grad: linear-gradient(135deg, var(--ss-accent) 0%, #d926c5 48%, var(--ss-violet) 100%);
+  --ss-grad-line: linear-gradient(90deg, transparent, var(--ss-accent) 22%, var(--ss-violet) 78%, transparent);
   --ss-accent-ink: #ffffff; /* text on top of accent fills */
-  --ss-gold: #f2c53d; /* Premium pill only */
-  --ss-gold-ink: #12161b;
 
   /* ---- surfaces ---- Every one carries a violet cast. */
   --ss-bg: #0a0512;
@@ -65,13 +62,11 @@
   /* ---- shape ----
      Artwork and cards are rounded; sections are not boxed at all, so
      there is nothing else for a radius to apply to. */
-  --ss-radius-card: 14px;
   --ss-radius-media: 14px;
   --ss-radius-pill: 9999px;
   --ss-radius-input: 2px;
 
-  /* ---- one shadow scale, used everywhere ---- */
-  --ss-shadow-1: 0 8px 24px rgba(0, 0, 0, 0.28);
+  /* ---- the one shadow, used by the dropdown panel ---- */
   --ss-shadow-2: 0 16px 44px rgba(0, 0, 0, 0.38);
 
   /* ---- rhythm ----
@@ -319,9 +314,13 @@ h2,
 .js-section-wrapper[data-section-key="featured-collection"] .heading-text {
   font-family: "neue-haas-grotesk-display", rubik, sans-serif !important;
   text-transform: uppercase !important;
-  font-weight: 900 !important;
-  letter-spacing: -0.035em !important;
-  line-height: 0.94 !important;
+  /* 600, not 900. The heaviest cut turned every headline into a wall;
+     Neue Haas at 600 is what the face is actually admired for, and it
+     reads as expensive rather than loud. Tracking eases off with it,
+     because -0.035em was compensating for the weight. */
+  font-weight: 600 !important;
+  letter-spacing: -0.028em !important;
+  line-height: 0.96 !important;
 }
 
 h1,
@@ -397,6 +396,9 @@ button.btn.btn-primary.add-to-cart-button,
   align-items: center !important;
   justify-content: center !important;
   gap: 8px !important;
+  /* The theme hard-sets .btn to rubik, so the button is the one place
+     the new face has to be named again. */
+  font-family: "neue-haas-grotesk-text", rubik, sans-serif !important;
   background: var(--ss-grad) !important;
   color: var(--ss-accent-ink) !important;
   border: 0 !important;
@@ -481,74 +483,27 @@ button.add-to-cart-button[disabled] {
   transition: color 0.18s var(--ss-ease);
 }
 
+/* Every nav item is a plain link. "Premium" and "Sell on SketchSets"
+   used to be a gold pill and a gradient pill pushed to the right, and
+   two loud buttons sitting in a row of quiet links made the bar look
+   like a pricing page. They are ordinary links now and pick up the
+   same hover rule as the rest.
+
+   This only changes how they look. To take them out of the header
+   altogether, delete those two menu items in the Payhip builder -
+   CSS can hide them, but a hidden link is still in the markup and
+   still read aloud by a screen reader. */
 @media (min-width: 1026px) {
   .header-nav-wrapper nav.header-nav-list {
     display: flex !important;
     align-items: center !important;
     flex-wrap: nowrap !important;
-    gap: 22px !important;
+    gap: 26px !important;
     padding-right: 12px !important;
   }
 
   .header-nav-wrapper nav.header-nav-list .header-nav-item {
     flex: 0 0 auto !important;
-  }
-
-  .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(2) {
-    margin-left: auto !important;
-  }
-
-  .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(-n + 2) a {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 7px !important;
-    min-height: 40px !important;
-    padding: 0 18px !important;
-    border-radius: var(--ss-radius-pill) !important;
-    font-weight: 700 !important;
-    font-size: 15px !important;
-    line-height: 1 !important;
-    text-decoration: none !important;
-    box-shadow: none !important;
-    transition: filter 0.18s var(--ss-ease), transform 0.15s var(--ss-ease);
-  }
-
-  .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(2) a {
-    background: var(--ss-gold) !important;
-    color: var(--ss-gold-ink) !important;
-    -webkit-text-fill-color: var(--ss-gold-ink) !important;
-  }
-
-  /* Crown, drawn inline so there is no extra request. The fill is
-     URL-encoded because a literal "#" would end the data URI. */
-  .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(2) a::before {
-    content: "";
-    width: 16px;
-    height: 16px;
-    flex: 0 0 16px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2312161b' d='M4 19h16v2H4v-2Zm16-3H4L2 7l5 3 5-6 5 6 5-3-2 9Z'/%3E%3C/svg%3E");
-  }
-
-  .header-nav-wrapper nav.header-nav-list .header-nav-item:last-child a {
-    background: var(--ss-grad) !important;
-    color: var(--ss-accent-ink) !important;
-    -webkit-text-fill-color: var(--ss-accent-ink) !important;
-  }
-
-  /* One hover behaviour for both, and the colour never changes. The
-     old file had a dozen rules fighting to stop the label going dark
-     on :active; keeping the fill constant removes the problem
-     instead of patching it. */
-  .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(-n + 2) a:hover {
-    filter: brightness(1.08);
-    transform: translateY(-1px);
-  }
-  .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(-n + 2) a:active {
-    transform: none;
   }
 }
 
@@ -556,20 +511,6 @@ button.add-to-cart-button[disabled] {
   .header-nav-wrapper nav.header-nav-list {
     gap: 16px !important;
     padding-right: 56px !important;
-  }
-  .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(-n + 2) a {
-    background: none !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    padding: 0 !important;
-    min-height: auto !important;
-    color: inherit !important;
-    -webkit-text-fill-color: inherit !important;
-    font: inherit !important;
-    box-shadow: none !important;
-  }
-  .header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(2) a::before {
-    content: none !important;
   }
 }
 
@@ -650,29 +591,22 @@ button.add-to-cart-button[disabled] {
 }
 
 /* --- links, both shapes ---
-   No hover pill. A filled box behind a menu row is the single most
-   generic thing a dropdown can do, and at column width it read as a
-   long grey slab. Instead each row carries a gradient bar at its left
-   edge that grows from nothing on hover - drawn with a background
-   layer rather than a pseudo-element, because ::after is spoken for
-   by the nav underline in section 20 and ::before by the arrow. */
+   Nothing draws behind or beside a menu row: no hover pill, no left
+   bar, no arrow. Each of those was an object added to say "this is
+   hoverable" when the colour already says it, and three of them in a
+   column of five links is more decoration than menu. The row changes
+   colour and that is the whole interaction. */
 
 .header-dropdown-wrapper a {
   display: block;
-  padding: 9px 14px;
+  padding: 8px 14px;
   margin: 1px 0;
   border-radius: 0 !important;
   color: var(--ss-dim);
   font-weight: 600;
   text-decoration: none !important;
-  background-color: transparent !important;
-  background-image: var(--ss-grad-bar) !important;
-  background-repeat: no-repeat !important;
-  background-position: left center !important;
-  background-size: 2px 0% !important;
-  transition:
-    background-size 0.26s var(--ss-ease),
-    color 0.18s var(--ss-ease);
+  background: none !important;
+  transition: color 0.18s var(--ss-ease);
 }
 
 /* Section 20 draws a pink rule under nav links on hover. The dropdown
@@ -686,8 +620,6 @@ button.add-to-cart-button[disabled] {
 
 .header-dropdown-wrapper a:hover,
 .header-dropdown-wrapper a:focus-visible {
-  background-color: transparent !important;
-  background-size: 2px 62% !important;
   color: var(--ss-accent) !important;
   outline: none;
 }
@@ -718,17 +650,12 @@ button.add-to-cart-button[disabled] {
   display: none !important;
 }
 
-/* Neither a column heading nor the CTA takes the hover bar. */
-.header-dropdown-wrapper .dropdown-item-level1 a {
-  background-image: none !important;
-}
-
 /* Column headings. A hairline under the label groups the links
    beneath it without drawing a box around them.
    (The trailing colons in "SHOP:" and "SHOP ESSENTIALS:" are builder
    content, not CSS - edit those in the menu settings.) */
 .header-dropdown-wrapper .dropdown-column:has(.dropdown-item-level2) .dropdown-item-level1 a {
-  padding: 0 12px 10px 26px;
+  padding: 0 12px 10px 14px;
   margin-bottom: 8px;
   border-bottom: 1px solid var(--ss-line);
   border-radius: 0 !important;
@@ -742,29 +669,9 @@ button.add-to-cart-button[disabled] {
 }
 
 .header-dropdown-wrapper .dropdown-item-level2 a {
-  position: relative;
-  padding: 9px 12px 9px 26px;
+  padding: 8px 12px 8px 14px;
   color: var(--ss-text) !important;
   font-size: 15px !important;
-}
-
-/* An arrow rides in from the left on hover, matching the one on the
-   product cards, so a menu row reads as a destination. */
-.header-dropdown-wrapper .dropdown-item-level2 a::before {
-  content: "\2192";
-  position: absolute;
-  left: 9px;
-  color: var(--ss-accent);
-  opacity: 0;
-  transform: translateX(-5px);
-  transition:
-    opacity 0.2s var(--ss-ease),
-    transform 0.2s var(--ss-ease);
-}
-
-.header-dropdown-wrapper .dropdown-item-level2 a:hover::before {
-  opacity: 1;
-  transform: none;
 }
 
 /* A column holding a level-1 link and nothing under it is a
@@ -1297,6 +1204,91 @@ button.add-to-cart-button[disabled] {
   }
   .collection-tabs-wrapper li {
     scroll-snap-align: start;
+  }
+}
+
+/* ============================================================
+   10. THE VAULT FEATURE
+
+   The one section selling a $29 bundle, so it gets the most
+   deliberate layout on the page. Payhip gives it a 50/50
+   .columns-wrapper with the artwork left and an h1 + richtext +
+   button right.
+
+   Three things were wrong. The columns were top-aligned, so a 603px
+   image sat beside a text block half its height with the rest of the
+   column empty. The h1 inherited the page's display size at 96px and
+   swallowed everything under it, including the thing you are meant to
+   click. And the call to action was a 213x49 button - smaller than
+   the paragraph above it.
+
+   The price lives inside the heading text itself ("The Vault Is
+   Here! - $29.00"). That is builder copy, not CSS; splitting it onto
+   its own line would want the heading edited in the builder.
+   ============================================================ */
+
+.js-section-wrapper[data-section-key="image-and-text-advanced"] .columns-wrapper {
+  align-items: center !important;
+  gap: clamp(28px, 4vw, 72px);
+}
+
+.js-section-wrapper[data-section-key="image-and-text-advanced"] .image-column .media {
+  border-radius: var(--ss-radius-media);
+  overflow: hidden;
+}
+
+/* Its own scale, well under the 96px it inherited, so the heading
+   leads the block instead of burying it. */
+.js-section-wrapper[data-section-key="image-and-text-advanced"] .heading-text {
+  font-size: clamp(2rem, 3.9vw, 3.5rem) !important;
+  margin: 0 0 18px !important;
+}
+
+.js-section-wrapper[data-section-key="image-and-text-advanced"] .richtext h3 {
+  font-family: "neue-haas-grotesk-text", rubik, sans-serif !important;
+  font-size: clamp(1rem, 1.2vw, 1.1875rem) !important;
+  font-weight: 500 !important;
+  line-height: 1.45 !important;
+  color: var(--ss-text) !important;
+  margin: 0 0 14px !important;
+}
+
+/* The pack manifest. It ships as an <em>, and a long italic line in
+   accent colour reads as an apology; set as a small tracked-out list
+   it reads as contents. */
+.js-section-wrapper[data-section-key="image-and-text-advanced"] .richtext p {
+  margin: 0 0 30px !important;
+}
+
+.js-section-wrapper[data-section-key="image-and-text-advanced"] .richtext em {
+  display: block;
+  font-style: normal;
+  font-size: 0.8125rem !important;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  line-height: 1.9;
+  text-transform: uppercase;
+  color: var(--ss-muted) !important;
+}
+
+/* The button is the point of the section, so it is sized like it. */
+.js-section-wrapper[data-section-key="image-and-text-advanced"] .button-wrapper .btn {
+  padding: 18px 40px !important;
+  font-size: 1.0625rem !important;
+  box-shadow: 0 14px 38px rgba(255, 61, 158, 0.28) !important;
+}
+
+.js-section-wrapper[data-section-key="image-and-text-advanced"] .button-wrapper .btn:hover {
+  box-shadow: 0 18px 46px rgba(255, 61, 158, 0.36) !important;
+}
+
+@media (max-width: 900px) {
+  .js-section-wrapper[data-section-key="image-and-text-advanced"] .columns-wrapper {
+    flex-direction: column !important;
+  }
+  .js-section-wrapper[data-section-key="image-and-text-advanced"] .image-column,
+  .js-section-wrapper[data-section-key="image-and-text-advanced"] .text-column {
+    width: 100% !important;
   }
 }
 
@@ -1872,10 +1864,6 @@ button:focus-visible {
 /* Nav links get a rule that draws in from the left. */
 .header-nav-wrapper nav.header-nav-list .header-nav-item a {
   position: relative;
-}
-
-.header-nav-wrapper nav.header-nav-list .header-nav-item:nth-last-child(-n + 2) a::after {
-  content: none;
 }
 
 .header-nav-wrapper nav.header-nav-list .header-nav-item a::after {
