@@ -765,6 +765,7 @@ button.add-to-cart-button[disabled] {
    It spilled out and painted straight over the title and price below,
    which read as the label having disappeared. The media is absolutely
    positioned inside the frame now, so it can never push past it. */
+.product-card-wrapper .card .card__inner.ratio,
 .product-card-wrapper .card .ratio {
   display: block !important;
   position: relative !important;
@@ -965,7 +966,16 @@ button.add-to-cart-button[disabled] {
   position: relative !important;
 }
 
-.product-card-wrapper .card .card__inner,
+/* NOT .card__inner: that is the same element as .ratio, which must stay
+   positioned so the media can be absolutely contained inside it. Forcing
+   it static made the media anchor to .card instead and fill the entire
+   card, painting over the title and price. Equal specificity to the
+   .ratio rule meant whichever came last in the file won, which is a
+   coin-flip this comment exists to prevent.
+
+   The stretched link lives in the second .card__content, a direct child
+   of .card, so .card__inner is not on its ancestor path and does not
+   need resetting for the link to cover the whole card. */
 .product-card-wrapper .card .card__content,
 .product-card-wrapper .card .card__information,
 .product-card-wrapper .card .card__heading {
