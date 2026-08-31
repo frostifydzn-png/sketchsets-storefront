@@ -12,16 +12,28 @@ export function AnnouncementBar() {
   const saving = (bundleTotal(vault) - vault.price).toFixed(2);
 
   return (
-    <div className="bg-accent text-ink">
+    /* Quiet strip. A solid accent bar shouted louder than the offer deserved. */
+    <div className="border-line bg-surface border-b">
       <Link
         href={`/products/${vault.slug}`}
-        className="shell flex h-9 items-center justify-center gap-2 text-center text-[13px] font-semibold"
+        className="shell text-dim hover:text-text group flex h-11 items-center justify-center gap-2.5 text-center text-[13.5px] transition-colors"
       >
+        <span
+          className="bg-accent h-1.5 w-1.5 rounded-full"
+          aria-hidden="true"
+        />
         <span>
-          The Vault: {vault.includedFiles.length} packs for{" "}
-          {formatPrice(vault.price)}. Save ${saving}.
+          <span className="text-text font-semibold">The Vault</span>
+          <span className="mx-1.5">·</span>
+          {vault.includedFiles.length} packs for {formatPrice(vault.price)},
+          save ${saving}
         </span>
-        <span aria-hidden="true">→</span>
+        <span
+          aria-hidden="true"
+          className="transition-transform group-hover:translate-x-1"
+        >
+          →
+        </span>
       </Link>
     </div>
   );

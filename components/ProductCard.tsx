@@ -6,9 +6,12 @@ import { formatPrice, type Product } from "@/lib/products";
 export function ProductCard({
   product,
   priority = false,
+  featured = false,
 }: {
   product: Product;
   priority?: boolean;
+  /** Runs taller with larger type, for the lead slot in a feature row. */
+  featured?: boolean;
 }) {
   const creator = getCreator(product.creatorSlug);
   const alt = product.previewImages[1];
@@ -20,14 +23,22 @@ export function ProductCard({
       className="group block focus-visible:outline-none"
     >
       {/* Artwork carries the card. No panel, no ring, no chrome around it. */}
-      <div className="bg-surface relative aspect-[4/3] overflow-hidden rounded-2xl transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:-translate-y-1.5 group-focus-visible:ring-2 group-focus-visible:ring-[var(--color-accent)]">
+      <div
+        className={`bg-surface relative overflow-hidden rounded-2xl shadow-[0_0_0_rgba(0,0,0,0)] transition-all duration-[550ms] ease-[var(--ease-glide)] group-hover:-translate-y-2 group-hover:shadow-[0_26px_50px_-24px_rgba(0,0,0,0.95)] group-focus-visible:ring-2 group-focus-visible:ring-[var(--color-accent)] ${
+          featured ? "aspect-[4/3] lg:aspect-[5/4]" : "aspect-[4/3]"
+        }`}
+      >
         <Image
           src={product.thumbnail}
           alt={`${product.title} preview`}
           fill
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          sizes={
+            featured
+              ? "(max-width: 1024px) 100vw, 45vw"
+              : "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          }
           priority={priority}
-          className={`object-cover transition-all duration-[600ms] ease-[var(--ease-out-soft)] group-hover:scale-[1.05] ${
+          className={`object-cover transition-all duration-[700ms] ease-[var(--ease-glide)] group-hover:scale-[1.06] ${
             alt ? "group-hover:opacity-0" : ""
           }`}
         />
@@ -38,7 +49,7 @@ export function ProductCard({
             aria-hidden="true"
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="scale-[1.05] object-cover opacity-0 transition-opacity duration-[600ms] ease-[var(--ease-out-soft)] group-hover:opacity-100"
+            className="scale-[1.06] object-cover opacity-0 transition-opacity duration-[700ms] ease-[var(--ease-glide)] group-hover:opacity-100"
           />
         )}
 
@@ -51,13 +62,17 @@ export function ProductCard({
 
       <div className="mt-4">
         <div className="flex items-baseline justify-between gap-4">
-          <h3 className="font-display group-hover:text-accent truncate text-[1.0625rem] leading-tight transition-colors">
+          <h3
+            className={`font-display group-hover:text-accent truncate leading-tight transition-colors ${
+              featured ? "text-[1.375rem]" : "text-[1.0625rem]"
+            }`}
+          >
             {product.title}
           </h3>
           <span
-            className={`font-display shrink-0 text-[1.0625rem] leading-tight ${
-              free ? "text-accent" : "text-text"
-            }`}
+            className={`font-display shrink-0 leading-tight ${
+              featured ? "text-[1.375rem]" : "text-[1.0625rem]"
+            } ${free ? "text-accent" : "text-text"}`}
           >
             {formatPrice(product.price)}
           </span>

@@ -238,19 +238,28 @@ export function ProductBrowser({
             </button>
           ))}
 
-          <label className="ml-auto flex items-center gap-2 text-[13px]">
+          {/* Native select chrome is the loudest "app" tell on the page. */}
+          <label className="relative ml-auto flex items-center gap-2 text-[14px]">
             <span className="text-muted">Sort</span>
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value as SortKey)}
-              className="bg-elevated ring-line text-text rounded-lg px-3 py-2 text-[13px] ring-1 outline-none"
-            >
-              {sorts.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
+            <span className="relative">
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value as SortKey)}
+                className="text-text cursor-pointer appearance-none bg-transparent py-2 pr-6 pl-0 text-[14px] font-medium outline-none"
+              >
+                {sorts.map((s) => (
+                  <option key={s.id} value={s.id} className="bg-surface">
+                    {s.label}
+                  </option>
+                ))}
+              </select>
+              <span
+                aria-hidden="true"
+                className="text-muted pointer-events-none absolute top-1/2 right-0 -translate-y-1/2 text-[10px]"
+              >
+                ▼
+              </span>
+            </span>
           </label>
         </div>
 
@@ -357,30 +366,33 @@ function Option({
 }) {
   const empty = count === 0 && !checked;
 
+  /*
+   * No radio dots. Selection reads through colour and weight, with a short
+   * accent rule marking the active row, which keeps the sidebar looking like a
+   * shop's filters rather than a settings panel.
+   */
   return (
     <button
       type="button"
       onClick={onSelect}
       aria-pressed={checked}
       disabled={empty}
-      className={`flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-left text-[14px] transition-colors ${
+      className={`group flex w-full items-center gap-3 py-2 text-left text-[15px] transition-colors ${
         checked
-          ? "text-text bg-elevated font-semibold"
+          ? "text-text font-semibold"
           : empty
-            ? "text-muted/40 cursor-not-allowed"
-            : "text-dim hover:text-text hover:bg-elevated/60"
+            ? "text-muted/35 cursor-not-allowed"
+            : "text-dim hover:text-text"
       }`}
     >
       <span
         aria-hidden="true"
-        className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition-colors ${
-          checked ? "border-accent bg-accent" : "border-line-bright"
+        className={`h-px shrink-0 transition-all duration-300 ease-[var(--ease-glide)] ${
+          checked ? "bg-accent w-5" : "bg-line-bright w-0 group-hover:w-3"
         }`}
-      >
-        {checked && <span className="bg-ink h-1.5 w-1.5 rounded-full" />}
-      </span>
+      />
       <span className="flex-1 truncate">{children}</span>
-      <span className="text-muted text-[12px] tabular-nums">{count}</span>
+      <span className="text-muted text-[13px] tabular-nums">{count}</span>
     </button>
   );
 }

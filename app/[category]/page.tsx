@@ -38,7 +38,7 @@ export default async function CategoryPage({
   const software = [...new Set(items.flatMap((p) => p.compatibility))].sort();
 
   return (
-    <div className="shell pt-14 sm:pt-20">
+    <div className="shell pt-16 sm:pt-24">
       <header>
         {/* Each category carries its own identity colour, one hairline only. */}
         <span

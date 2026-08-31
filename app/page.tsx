@@ -43,6 +43,7 @@ export default function HomePage() {
     ...products.filter((p) => p.price > 0).map((p) => p.price),
   );
 
+  const [leadPick, ...restPicks] = picks;
   const vaultContents = vault ? bundleContents(vault) : [];
   const vaultTotal = vault ? bundleTotal(vault) : 0;
 
@@ -95,12 +96,23 @@ export default function HomePage() {
           note="The packs Frostify actually reaches for."
           action={{ href: "/browse", label: "All packs" }}
         />
-        <div className="grid grid-cols-2 gap-x-5 gap-y-9 lg:grid-cols-4">
-          {picks.map((product, i) => (
-            <Reveal key={product.id} delay={i * 70}>
-              <ProductCard product={product} priority={i < 4} />
+        {/*
+          One pick runs large beside the rest, so the page has a focal point
+          instead of a fourth identical row of equal cards.
+        */}
+        <div className="grid gap-x-5 gap-y-9 lg:grid-cols-2 lg:gap-x-8">
+          {leadPick && (
+            <Reveal>
+              <ProductCard product={leadPick} priority featured />
             </Reveal>
-          ))}
+          )}
+          <div className="grid grid-cols-2 gap-x-5 gap-y-9 self-center">
+            {restPicks.map((product, i) => (
+              <Reveal key={product.id} delay={(i + 1) * 70}>
+                <ProductCard product={product} priority={i < 2} />
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
