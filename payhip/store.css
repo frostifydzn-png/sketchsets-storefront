@@ -58,38 +58,65 @@
   --ss-shadow-2: 0 16px 44px rgba(0, 0, 0, 0.38);
 
   /* ---- rhythm ----
-     The single biggest lever on how considered the shop looks.
-     Payhip's builder sets its own section padding; set that to
-     its minimum and tune this instead. */
-  --ss-section-y: clamp(56px, 8vw, 112px);
-  --ss-grid-gap: clamp(18px, 2.4vw, 30px);
+     These now replace Payhip's section padding rather than
+     adding to it, so the numbers are the real gap between
+     sections. Tune --ss-section-y first; it is the single
+     biggest lever on how considered the shop looks. */
+  --ss-section-y: clamp(44px, 4.4vw, 76px);
+  --ss-gutter: clamp(20px, 3vw, 48px);
+  --ss-grid-gap: clamp(16px, 1.6vw, 26px);
 
   --ss-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ============================================================
-   1. RHYTHM
-   More air between sections was the main ask. This adds a
-   floor, so a section is never cramped even if the builder
-   padding is set low.
+   1. RHYTHM AND WIDTH
+   Measured on the live store, not guessed. Three things were
+   fighting each other:
+
+   a) Payhip already pads .section-contents-wrapper by 52.8px
+      top and bottom. An earlier version of this file added its
+      own padding to .section-contents *inside* that, so every
+      gap between sections was ~330px of dead space. Own the
+      wrapper's padding rather than stacking on top of it.
+
+   b) The wrapper is capped at max-width 1260px with 64px
+      gutters, leaving content at 1132px no matter how wide the
+      screen is. On a large monitor the shop sat in a narrow
+      column with the artwork shrunk to 274px cards.
+
+   c) The builder forces min-height 297px on every section, so
+      an empty section is 300px of void rather than nothing.
    ============================================================ */
 
+/* (a) One source of vertical rhythm: the wrapper. */
 .js-section-wrapper .section-contents {
-  padding-top: var(--ss-section-y);
-  padding-bottom: var(--ss-section-y);
-}
-
-/* The header is a section wrapper too; it must not gain 100px. */
-#header .section-contents,
-#header.js-section-wrapper .section-contents {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
+  max-width: none !important;
 }
 
-/* Let wide sections actually use the screen. */
-.js-section-wrapper .section-contents {
-  max-width: 1440px;
-  margin-inline: auto;
+.content-main-wrapper .section-contents-wrapper {
+  padding-top: var(--ss-section-y) !important;
+  padding-bottom: var(--ss-section-y) !important;
+  padding-left: var(--ss-gutter) !important;
+  padding-right: var(--ss-gutter) !important;
+  /* (b) Let the shop use the screen it is given. */
+  max-width: min(1660px, 100%) !important;
+}
+
+/* (c) Empty sections collapse. `:has(img)` means a logo row
+   reappears by itself the moment a logo is actually added, so
+   this hides a placeholder without hiding real content. The
+   tidier fix is to delete the empty sections in the builder. */
+.js-section-wrapper[data-section-key="logo-list"]:not(:has(img)) {
+  display: none !important;
+}
+
+/* Product grids sat 12px apart inside that narrow cap: cramped
+   across, cavernous down. */
+.grid-list.js-grid-list {
+  gap: var(--ss-grid-gap) !important;
 }
 
 /* ============================================================
