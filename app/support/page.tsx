@@ -13,36 +13,44 @@ export const metadata: Metadata = {
 export default function SupportPage() {
   return (
     <>
-      <section className="relative py-14 text-center sm:py-20">
-        <div
-          aria-hidden="true"
-          className="hero-glow pointer-events-none absolute inset-0 z-0"
-        />
-        <div className="shell relative z-10">
-          <h1 className="font-display-tight text-[clamp(2.25rem,6vw,4.5rem)] leading-[0.95] uppercase">
-            Support
-          </h1>
-          <p className="text-dim mx-auto mt-4 max-w-xl text-[17px] leading-relaxed">
-            The questions we get asked most. If the answer is not here, write to
-            us and a person will reply.
-          </p>
+      <header className="border-line border-b">
+        <div className="shell pt-14 pb-12 sm:pt-20 sm:pb-14">
+          <div className="rule-out text-muted mb-8">
+            <span className="label shrink-0">Ask us anything</span>
+          </div>
 
-          <nav
-            aria-label="Support sections"
-            className="mt-8 flex flex-wrap items-center justify-center gap-2.5"
-          >
-            {supportSections.map((s) => (
-              <a
-                key={s.id}
-                href={`#${s.id}`}
-                className="border-line hover:border-line-bright hover:bg-elevated rounded-full border px-4 py-2 text-[14px] font-medium transition-colors"
-              >
-                {s.title}
-              </a>
-            ))}
-          </nav>
+          <div className="grid items-end gap-x-16 gap-y-8 lg:grid-cols-[1.2fr_0.8fr]">
+            <div>
+              <h1 className="font-display-tight text-[clamp(2.75rem,7vw,5.5rem)] leading-[0.94]">
+                Support
+              </h1>
+              <p className="text-dim mt-5 max-w-[52ch] text-[17px] leading-relaxed">
+                The questions we get asked most. If the answer is not here,
+                write to us and a person will reply.
+              </p>
+            </div>
+
+            {/* Contents, numbered — a page index rather than a row of chips. */}
+            <nav aria-label="Support sections">
+              <ol className="border-line border-t">
+                {supportSections.map((s, i) => (
+                  <li key={s.id} className="border-line border-b">
+                    <a
+                      href={`#${s.id}`}
+                      className="group text-dim hover:text-text flex items-baseline gap-4 py-2.5 transition-colors"
+                    >
+                      <span className="text-muted group-hover:text-accent font-mono text-[11px] transition-colors">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="text-[14px]">{s.title}</span>
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          </div>
         </div>
-      </section>
+      </header>
 
       <div className="shell">
         {supportSections.map((section) => (
@@ -89,7 +97,7 @@ export default function SupportPage() {
 
         {/* Contact */}
         <section className="section-gap">
-          <div className="bg-surface ring-line rounded-3xl p-8 text-center ring-1 sm:p-14">
+          <div className="bg-surface ring-line p-8 text-center ring-1 sm:p-14">
             <h2 className="font-display text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.05]">
               Still stuck?
             </h2>
@@ -100,13 +108,13 @@ export default function SupportPage() {
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <a
                 href={payhipPage("contact")}
-                className="bg-accent text-ink rounded-full px-7 py-3.5 text-[15px] font-bold transition-transform hover:scale-[1.02]"
+                className="bg-accent text-ink px-7 py-3.5 text-[15px] font-bold transition-transform hover:scale-[1.02]"
               >
                 Write to the team
               </a>
               <a
                 href={PAYHIP_ACCOUNT}
-                className="border-line hover:border-line-bright hover:bg-elevated rounded-full border px-7 py-3.5 text-[15px] font-semibold transition-colors"
+                className="border-line hover:border-line-bright hover:bg-elevated border px-7 py-3.5 text-[15px] font-semibold transition-colors"
               >
                 Find past downloads
               </a>

@@ -16,14 +16,14 @@ export function AnnouncementBar() {
     <div className="border-line bg-surface border-b">
       <Link
         href={`/products/${vault.slug}`}
-        className="shell text-dim hover:text-text group flex h-11 items-center justify-center gap-2.5 text-center text-[13.5px] transition-colors"
+        className="shell text-dim hover:text-text group flex h-11 items-center justify-center gap-2.5 text-center font-mono text-[12px] transition-colors"
       >
         <span
           className="bg-accent h-1.5 w-1.5 rounded-full"
           aria-hidden="true"
         />
         <span>
-          <span className="text-text font-semibold">The Vault</span>
+          <span className="text-text">The Vault</span>
           <span className="mx-1.5">·</span>
           {vault.includedFiles.length} packs for {formatPrice(vault.price)},
           save ${saving}

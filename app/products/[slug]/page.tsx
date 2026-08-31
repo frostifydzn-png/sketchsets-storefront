@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { LicencePicker } from "@/components/LicencePicker";
 import { MobileBuyBar } from "@/components/MobileBuyBar";
 import { ProductCard } from "@/components/ProductCard";
+import { SectionHeader } from "@/components/SectionHeader";
 import { ProductGallery } from "@/components/ProductGallery";
 import { getCreator, monogram } from "@/lib/creators";
 import {
@@ -114,22 +115,20 @@ export default async function ProductPage({
       </nav>
 
       {/* Catalogue number sits with the name, the way an archive labels a piece. */}
-      <header className="relative pt-8 pb-10 sm:pt-10 sm:pb-12">
-        <div
-          aria-hidden="true"
-          className="hero-glow pointer-events-none absolute inset-0 z-0"
-        />
-        <div className="relative z-10 flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+      <header className="pt-10 pb-10 sm:pt-12 sm:pb-14">
+        <div className="rule-out text-muted mb-7">
+          <span className="label text-accent shrink-0">
+            Set {product.setNumber}
+          </span>
+        </div>
+        <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
           <div>
-            <p className="text-accent font-mono text-[13px] tracking-widest">
-              SET {product.setNumber}
-            </p>
-            <h1 className="font-display-tight mt-3 max-w-[18ch] text-[clamp(2rem,5vw,3.75rem)] leading-[1.02]">
+            <h1 className="font-display-tight max-w-[16ch] text-[clamp(2.25rem,5.6vw,4.25rem)] leading-[0.98]">
               {product.title}
             </h1>
           </div>
           {product.rating && (
-            <p className="text-muted text-[14px]">
+            <p className="text-muted font-mono text-[13px]">
               <span className="text-accent">★</span>{" "}
               {product.rating.average.toFixed(1)} from {product.rating.count}{" "}
               {product.rating.count === 1 ? "review" : "reviews"}
@@ -256,7 +255,7 @@ export default async function ProductPage({
                 {product.tags.map((tag) => (
                   <li
                     key={tag}
-                    className="border-line text-muted rounded-full border px-3 py-1.5 font-mono text-[12px] tracking-wide"
+                    className="border-line text-muted border px-3 py-1.5 font-mono text-[12px] tracking-wide"
                   >
                     {tag}
                   </li>
@@ -267,7 +266,7 @@ export default async function ProductPage({
             {creator && (
               <Block title="About the creator">
                 <div className="flex items-start gap-4">
-                  <span className="bg-elevated text-dim flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[14px] font-semibold">
+                  <span className="bg-elevated border-line text-dim flex h-11 w-11 shrink-0 items-center justify-center border font-mono text-[13px]">
                     {monogram(creator.name)}
                   </span>
                   <div className="max-w-[56ch]">
@@ -297,12 +296,10 @@ export default async function ProductPage({
 
       {related.length > 0 && (
         <section className="section-gap">
-          <h2 className="font-display mb-7 text-[clamp(1.5rem,3vw,2.25rem)] leading-[1.05]">
-            More like this
-          </h2>
-          <div className="grid grid-cols-2 gap-x-5 gap-y-9 lg:grid-cols-4">
+          <SectionHeader marker="Nearby on the shelf" title="More like this" />
+          <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
             {related.map((item) => (
-              <ProductCard key={item.id} product={item} />
+              <ProductCard key={item.id} product={item} size="compact" />
             ))}
           </div>
         </section>
@@ -390,7 +387,7 @@ function PairsWith({ slug }: { slug: string }) {
     <section className="section-gap-sm">
       <Link
         href={`/products/${bundle.slug}`}
-        className="bg-surface ring-line hover:ring-line-bright flex flex-col gap-4 rounded-2xl p-6 ring-1 transition-all sm:flex-row sm:items-center sm:justify-between sm:p-8"
+        className="bg-surface ring-line hover:ring-line-bright flex flex-col gap-4 p-6 ring-1 transition-all sm:flex-row sm:items-center sm:justify-between sm:p-8"
       >
         <div>
           <p className="text-muted text-[14px]">Pairs well with</p>

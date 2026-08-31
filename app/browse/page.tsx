@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import { PageHeader } from "@/components/PageHeader";
 import { ShopBrowser } from "@/components/ShopBrowser";
-import { products } from "@/lib/products";
+import { formatPrice, products } from "@/lib/products";
 
 export const metadata: Metadata = {
   title: "The Shop",
@@ -10,22 +11,25 @@ export const metadata: Metadata = {
 };
 
 export default function BrowsePage() {
+  const free = products.filter((p) => p.price === 0);
+  const lowest = Math.min(
+    ...products.filter((p) => p.price > 0).map((p) => p.price),
+  );
+
   return (
     <>
-      <section className="relative py-14 text-center sm:py-20">
-        <div
-          aria-hidden="true"
-          className="hero-glow pointer-events-none absolute inset-0 z-0"
-        />
-        <div className="shell relative z-10">
-          <h1 className="font-display-tight text-[clamp(2.25rem,6vw,4.5rem)] leading-[0.95] uppercase">
-            The Shop
-          </h1>
-          <p className="text-dim mt-3 text-[17px]">Discover our products</p>
-        </div>
-      </section>
+      <PageHeader
+        marker="The whole floor"
+        title="Everything we stock"
+        note="The full catalogue in one place. Small on purpose — every pack here earned its slot."
+        index={[
+          { term: "PACKS", value: String(products.length).padStart(3, "0") },
+          { term: "FREE", value: String(free.length).padStart(3, "0") },
+          { term: "FROM", value: formatPrice(lowest), accent: true },
+        ]}
+      />
 
-      <div className="shell pb-4">
+      <div className="shell pt-10 pb-4">
         <ShopBrowser products={products} />
       </div>
     </>

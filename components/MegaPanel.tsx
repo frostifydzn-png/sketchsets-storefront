@@ -116,7 +116,7 @@ export function MegaPanel({
           <Link
             href={`/${category.id}`}
             onClick={onNavigate}
-            className="border-line hover:border-line-bright hover:bg-elevated mt-6 inline-block rounded-full border px-5 py-2.5 text-[14px] font-semibold transition-colors"
+            className="border-line hover:border-line-bright hover:bg-elevated mt-6 inline-block border px-5 py-2.5 text-[14px] font-semibold transition-colors"
           >
             View all {items.length}
           </Link>
@@ -134,7 +134,7 @@ export function MegaPanel({
 
 function Panel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="bg-ink border-line animate-menu-drop border-t border-b shadow-[0_30px_60px_-30px_rgba(0,0,0,1)]">
+    <div className="bg-ink border-line animate-menu-drop border-t border-b">
       <div className="shell py-10">{children}</div>
     </div>
   );
@@ -173,7 +173,7 @@ function BigLink({
     <Link
       href={href}
       onClick={onNavigate}
-      className="group -mx-3 block rounded-xl px-3 py-2.5 transition-colors hover:bg-white/[0.04]"
+      className="group -mx-3 block px-3 py-2.5 transition-colors hover:bg-white/[0.04]"
     >
       <span className="font-display group-hover:text-accent block text-[1.25rem] leading-tight transition-colors">
         {children}
@@ -198,7 +198,7 @@ function MiniCard({
       onClick={onNavigate}
       className="group block"
     >
-      <div className="bg-surface ring-line group-hover:ring-line-bright relative aspect-[4/3] overflow-hidden rounded-xl ring-1 transition-all">
+      <div className="bg-surface ring-line group-hover:ring-line-bright relative aspect-[4/3] overflow-hidden ring-1 transition-all">
         <Image
           src={product.thumbnail}
           alt=""

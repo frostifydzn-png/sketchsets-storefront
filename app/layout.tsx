@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo, Inter_Tight } from "next/font/google";
+import { IBM_Plex_Mono, Instrument_Serif, Inter_Tight } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { site } from "@/lib/site";
@@ -10,14 +10,30 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import "./globals.css";
 
-// Width axis is what gives the display face its semi-condensed, confident set.
-const archivo = Archivo({
-  variable: "--font-archivo",
+/*
+ * Three voices, and the tension between the first two is the brand.
+ *
+ * Editorial serif: headlines, the wordmark, anything a person wrote. Single
+ * weight by design — the contrast in the strokes carries it, so nothing here
+ * ever needs to shout in bold.
+ */
+const instrument = Instrument_Serif({
+  variable: "--font-instrument",
   subsets: ["latin"],
-  axes: ["wdth"],
+  weight: "400",
+  style: ["normal", "italic"],
   display: "swap",
 });
 
+/* Technical mono: catalogue numbers, formats, sizes, prices, section markers. */
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+});
+
+/* Neutral carrier: body copy and controls. Meant to be unremarkable. */
 const interTight = Inter_Tight({
   variable: "--font-inter-tight",
   subsets: ["latin"],
@@ -63,12 +79,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${interTight.variable} h-full antialiased`}
+      className={`${instrument.variable} ${plexMono.variable} ${interTight.variable} h-full antialiased`}
     >
       <body className="bg-ink text-text flex min-h-full flex-col">
         <a
           href="#main"
-          className="bg-accent text-ink sr-only rounded-full px-4 py-2 font-semibold focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50"
+          className="bg-accent text-ink sr-only px-4 py-2 font-semibold focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50"
         >
           Skip to content
         </a>

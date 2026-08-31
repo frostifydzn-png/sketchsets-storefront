@@ -5,11 +5,16 @@ import { formatPrice, licenceTiers, type Product } from "@/lib/products";
 import { checkoutFor, checkoutUrl, payhipPage } from "@/lib/site";
 
 /**
- * Licence selector and purchase card.
+ * Licence selector and purchase panel.
+ *
+ * Set as a ruled list rather than a row of boxed options on purpose: three
+ * bordered tiles side by side is a SaaS plan comparison, and this is a shop
+ * counter. Same choice, none of the Basic/Pro/Premium furniture — the rows
+ * read as lines on an order form, with every price in the technical voice.
  *
  * A tier only points somewhere different once it has its own payhipId, since
  * Payhip prices one listing at one price. Until then every tier resolves to the
- * product's base checkout, and the card says so rather than implying a price
+ * product's base checkout, and the panel says so rather than implying a price
  * the checkout will not honour.
  */
 export function LicencePicker({ product }: { product: Product }) {
@@ -25,63 +30,69 @@ export function LicencePicker({ product }: { product: Product }) {
   const tiersWired = tiers.every((t) => t.payhipId);
 
   return (
-    <div className="bg-surface ring-line rounded-2xl p-6 ring-1 sm:p-7">
+    <div className="border-line bg-surface border p-6 sm:p-7">
       {tiers.length > 0 && (
         <>
-          <p className="text-muted text-center text-[12px] font-semibold tracking-wider uppercase">
-            Licence options
-          </p>
+          <div className="rule-out text-muted">
+            <span className="label shrink-0">Licence</span>
+          </div>
+
+          <fieldset className="mt-4">
+            <legend className="sr-only">Choose a licence</legend>
+            {tiers.map((t) => {
+              const active = selected === t.id;
+              return (
+                <label
+                  key={t.id}
+                  className={`border-line hover:bg-elevated flex cursor-pointer gap-3 border-b py-3.5 transition-colors first:border-t ${
+                    active ? "bg-elevated" : ""
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="licence"
+                    value={t.id}
+                    checked={active}
+                    onChange={() => setSelected(t.id)}
+                    className="accent-accent mt-1 shrink-0"
+                  />
+                  <span className="min-w-0 flex-1">
+                    <span className="flex flex-wrap items-baseline gap-x-2.5">
+                      <span
+                        className={`font-display text-[1.125rem] leading-none ${
+                          active ? "text-accent" : "text-text"
+                        }`}
+                      >
+                        {t.label}
+                      </span>
+                      {t.recommended && (
+                        <span className="label-sm text-muted">Most bought</span>
+                      )}
+                      <span className="text-dim ml-auto font-mono text-[13px]">
+                        {formatPrice(t.price)}
+                      </span>
+                    </span>
+                    <span className="text-muted mt-1 block text-[13px] leading-relaxed">
+                      {t.blurb}
+                    </span>
+                  </span>
+                </label>
+              );
+            })}
+          </fieldset>
+
           <a
             href={payhipPage("license")}
-            className="text-accent mx-auto mt-1 block text-center text-[13px] hover:underline"
+            className="text-muted hover:text-accent mt-3 inline-block font-mono text-[12px] transition-colors"
           >
-            Learn more
+            Read the full licence &rarr;
           </a>
-
-          <fieldset className="border-line mt-5 border-t pt-5">
-            <legend className="sr-only">Choose a licence</legend>
-            {tiers.map((t) => (
-              <label
-                key={t.id}
-                className="hover:bg-elevated -mx-2 flex cursor-pointer gap-3 rounded-lg px-2 py-2.5 transition-colors"
-              >
-                <input
-                  type="radio"
-                  name="licence"
-                  value={t.id}
-                  checked={selected === t.id}
-                  onChange={() => setSelected(t.id)}
-                  className="accent-accent mt-1 shrink-0"
-                />
-                <span className="min-w-0 flex-1">
-                  <span className="flex flex-wrap items-center gap-2">
-                    <span className="text-text text-[15px] font-semibold">
-                      {t.label}
-                    </span>
-                    {t.recommended && (
-                      <span className="bg-accent/15 text-accent rounded px-1.5 py-0.5 text-[10px] font-bold tracking-wide uppercase">
-                        Recommended
-                      </span>
-                    )}
-                    <span className="text-muted ml-auto font-mono text-[14px]">
-                      {formatPrice(t.price)}
-                    </span>
-                  </span>
-                  <span className="text-muted mt-0.5 block text-[13px] leading-relaxed">
-                    {t.blurb}
-                  </span>
-                </span>
-              </label>
-            ))}
-          </fieldset>
         </>
       )}
 
-      <div className="border-line mt-5 flex items-baseline justify-between gap-4 border-t pt-5">
-        <span className="text-muted text-[12px] font-semibold tracking-wider uppercase">
-          Total price
-        </span>
-        <span className="font-display text-[2.25rem] leading-none">
+      <div className="border-line mt-6 flex items-baseline justify-between gap-4 border-t pt-6">
+        <span className="label text-muted">Total</span>
+        <span className="font-display text-[2.5rem] leading-none">
           {formatPrice(total)}
         </span>
       </div>
@@ -89,19 +100,19 @@ export function LicencePicker({ product }: { product: Product }) {
       <a
         id="buy-button"
         href={href}
-        className={`bg-accent text-ink mt-5 block rounded-xl px-6 py-4 text-center text-[16px] font-bold transition-transform hover:scale-[1.015] active:scale-[0.99] ${
+        className={`bg-accent text-ink font-ui hover:bg-accent-dim mt-5 block px-6 py-4 text-center text-[16px] transition-colors ${
           base.overlay ? "lemonsqueezy-button" : ""
         }`}
       >
         {product.price === 0 ? "Get it free" : "Get the pack"}
       </a>
 
-      <p className="text-muted mt-3.5 text-center text-[13px]">
-        Secure checkout via {base.overlay ? "Lemon Squeezy" : "Payhip"}
+      <p className="text-muted mt-3.5 text-center font-mono text-[12px]">
+        Instant download &middot; via {base.overlay ? "Lemon Squeezy" : "Payhip"}
       </p>
 
       {tiers.length > 0 && !tiersWired && (
-        <p className="text-muted border-line mt-4 border-t pt-4 text-center text-[12px] leading-relaxed">
+        <p className="text-muted border-line mt-5 border-t pt-4 text-[12px] leading-relaxed">
           Every licence currently checks out at {formatPrice(product.price)}{" "}
           under the commercial terms. Separate tier pricing goes live once each
           tier has its own listing.

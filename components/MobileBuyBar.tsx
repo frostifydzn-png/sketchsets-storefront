@@ -39,7 +39,7 @@ export function MobileBuyBar({ product }: { product: Product }) {
         </div>
         <a
           href={checkout.href}
-          className={`bg-accent text-ink shrink-0 rounded-lg px-5 py-3 text-[14px] font-bold ${
+          className={`bg-accent text-ink shrink-0 px-5 py-3 text-[14px] font-bold ${
             checkout.overlay ? "lemonsqueezy-button" : ""
           }`}
         >

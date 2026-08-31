@@ -3,15 +3,47 @@ import Link from "next/link";
 import { getCreator } from "@/lib/creators";
 import { formatPrice, type Product } from "@/lib/products";
 
+/**
+ * How much room a card is given, which is a statement about the product rather
+ * than a layout detail. A $9 pack and the complete library should not occupy
+ * the same footprint just because they are both products.
+ */
+export type CardSize = "lead" | "standard" | "compact";
+
+const ASPECT: Record<CardSize, string> = {
+  lead: "aspect-[16/11]",
+  standard: "aspect-[4/3]",
+  compact: "aspect-[3/2]",
+};
+
+const TITLE: Record<CardSize, string> = {
+  lead: "text-[clamp(1.75rem,3vw,2.5rem)]",
+  standard: "text-[1.375rem]",
+  compact: "text-[1.0625rem]",
+};
+
+const SIZES: Record<CardSize, string> = {
+  lead: "(max-width: 1024px) 100vw, 58vw",
+  standard: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
+  compact: "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 22vw",
+};
+
+/**
+ * A catalogue entry, not a card.
+ *
+ * Square artwork inside a hairline, then a ruled label block underneath:
+ * catalogue number and price set in mono on one line, the title in the
+ * editorial serif beneath it. That is a gallery wall label, and it is the
+ * opposite of an icon-over-title-over-body feature tile.
+ */
 export function ProductCard({
   product,
   priority = false,
-  featured = false,
+  size = "standard",
 }: {
   product: Product;
   priority?: boolean;
-  /** Runs taller with larger type, for the lead slot in a feature row. */
-  featured?: boolean;
+  size?: CardSize;
 }) {
   const creator = getCreator(product.creatorSlug);
   const alt = product.previewImages[1];
@@ -22,23 +54,16 @@ export function ProductCard({
       href={`/products/${product.slug}`}
       className="group block focus-visible:outline-none"
     >
-      {/* Artwork carries the card. No panel, no ring, no chrome around it. */}
       <div
-        className={`bg-surface relative overflow-hidden rounded-2xl shadow-[0_0_0_rgba(0,0,0,0)] transition-all duration-[550ms] ease-[var(--ease-glide)] group-hover:-translate-y-2 group-hover:shadow-[0_26px_50px_-24px_rgba(0,0,0,0.95)] group-focus-visible:ring-2 group-focus-visible:ring-[var(--color-accent)] ${
-          featured ? "aspect-[4/3] lg:aspect-[5/4]" : "aspect-[4/3]"
-        }`}
+        className={`border-line group-hover:border-line-bright group-focus-visible:border-accent bg-surface relative overflow-hidden border transition-colors duration-500 ${ASPECT[size]}`}
       >
         <Image
           src={product.thumbnail}
           alt={`${product.title} preview`}
           fill
-          sizes={
-            featured
-              ? "(max-width: 1024px) 100vw, 45vw"
-              : "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          }
+          sizes={SIZES[size]}
           priority={priority}
-          className={`object-cover transition-all duration-[700ms] ease-[var(--ease-glide)] group-hover:scale-[1.06] ${
+          className={`object-cover transition-all duration-[900ms] ease-[var(--ease-glide)] group-hover:scale-[1.04] ${
             alt ? "group-hover:opacity-0" : ""
           }`}
         />
@@ -48,43 +73,48 @@ export function ProductCard({
             alt=""
             aria-hidden="true"
             fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="scale-[1.06] object-cover opacity-0 transition-opacity duration-[700ms] ease-[var(--ease-glide)] group-hover:opacity-100"
+            sizes={SIZES[size]}
+            className="scale-[1.04] object-cover opacity-0 transition-opacity duration-[900ms] ease-[var(--ease-glide)] group-hover:opacity-100"
           />
         )}
 
-        {/* Catalogue number, the way an archive labels a piece. */}
-        <span className="bg-ink/75 text-dim pointer-events-none absolute top-3 left-3 rounded px-2 py-1 font-mono text-[11px] tracking-widest backdrop-blur-md">
-          {product.setNumber}
-        </span>
-
         {product.isNew && (
-          <span className="bg-accent text-ink pointer-events-none absolute top-3 right-3 rounded-full px-2.5 py-1 text-[11px] font-bold">
+          <span className="label-sm bg-accent text-ink pointer-events-none absolute top-0 right-0 px-2 py-1">
             New
           </span>
         )}
       </div>
 
-      <div className="mt-4">
+      {/* Label block. The rule ties it to the artwork the way a mount does. */}
+      <div className="border-line group-hover:border-line-bright mt-3 border-t pt-2.5 transition-colors duration-500">
         <div className="flex items-baseline justify-between gap-4">
-          <h3
-            className={`font-display group-hover:text-accent truncate leading-tight transition-colors ${
-              featured ? "text-[1.375rem]" : "text-[1.0625rem]"
+          <span className="label text-muted group-hover:text-accent transition-colors duration-300">
+            {product.setNumber}
+          </span>
+          <span
+            className={`shrink-0 font-mono text-[13px] font-medium ${
+              free ? "text-accent" : "text-dim"
             }`}
           >
-            {product.title}
-          </h3>
-          <span
-            className={`font-display shrink-0 leading-tight ${
-              featured ? "text-[1.375rem]" : "text-[1.0625rem]"
-            } ${free ? "text-accent" : "text-text"}`}
-          >
-            {formatPrice(product.price)}
+            {free ? "FREE" : formatPrice(product.price)}
           </span>
         </div>
-        <p className="text-muted mt-1.5 truncate text-[13.5px]">
+
+        <h3
+          className={`font-display group-hover:text-accent mt-1.5 leading-[1.08] transition-colors duration-300 ${TITLE[size]}`}
+        >
+          {product.title}
+        </h3>
+
+        <p className="text-muted mt-1.5 truncate text-[13px]">
           {product.subcategory} · {creator?.name ?? product.creatorSlug}
         </p>
+
+        {size === "lead" && (
+          <p className="text-dim mt-3 max-w-[52ch] text-[15px] leading-relaxed">
+            {product.valueProp}
+          </p>
+        )}
       </div>
     </Link>
   );

@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local dev-server launch config (contains machine-specific absolute paths).
+.claude/

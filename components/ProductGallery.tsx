@@ -19,7 +19,7 @@ export function ProductGallery({
 
   return (
     <div>
-      <div className="bg-surface ring-line relative aspect-[4/3] overflow-hidden rounded-2xl ring-1">
+      <div className="bg-surface ring-line relative aspect-[4/3] overflow-hidden ring-1">
         {current === "__video__" && video ? (
           <video
             src={video}
@@ -56,7 +56,7 @@ export function ProductGallery({
               onClick={() => setActive(i)}
               aria-label={`Show preview ${i + 1}`}
               aria-pressed={i === active}
-              className={`bg-elevated relative aspect-[4/3] w-24 shrink-0 overflow-hidden rounded-lg ring-inset transition-all ${
+              className={`bg-elevated relative aspect-[4/3] w-24 shrink-0 overflow-hidden ring-inset transition-all ${
                 i === active
                   ? "ring-accent opacity-100 ring-2"
                   : "ring-line opacity-60 ring-1 hover:opacity-100"

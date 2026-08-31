@@ -225,7 +225,7 @@ export function ProductBrowser({
         <button
           type="button"
           onClick={() => setSheetOpen(true)}
-          className="border-line hover:border-line-bright ml-auto flex items-center gap-2 rounded-full border px-4 py-2 text-[14px] font-medium"
+          className="border-line hover:border-line-bright ml-auto flex items-center gap-2 border px-4 py-2 text-[14px] font-medium"
         >
           Filters
           {active.length > 0 && (
@@ -247,7 +247,7 @@ export function ProductBrowser({
               key={f.label}
               type="button"
               onClick={f.clear}
-              className="bg-elevated text-dim hover:text-text inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] transition-colors"
+              className="bg-elevated text-dim hover:text-text inline-flex items-center gap-1.5 px-3 py-1.5 text-[13px] transition-colors"
             >
               {f.label}
               <span aria-hidden="true">×</span>
@@ -297,7 +297,7 @@ export function ProductBrowser({
             <button
               type="button"
               onClick={clearAll}
-              className="bg-accent text-ink mt-6 rounded-xl px-5 py-3 text-[14px] font-bold"
+              className="bg-accent text-ink mt-6 px-5 py-3 text-[14px] font-bold"
             >
               Clear all filters
             </button>
@@ -318,7 +318,7 @@ export function ProductBrowser({
             onClick={() => setSheetOpen(false)}
             className="bg-ink/80 absolute inset-0 backdrop-blur-sm"
           />
-          <div className="bg-surface border-line animate-fade-up absolute inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto rounded-t-2xl border-t p-6">
+          <div className="bg-surface border-line animate-fade-up absolute inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto -2xl border-t p-6">
             <div className="mb-6 flex items-center justify-between">
               <h2 className="font-display text-xl">Filters</h2>
               <button
@@ -334,14 +334,14 @@ export function ProductBrowser({
               <button
                 type="button"
                 onClick={clearAll}
-                className="border-line flex-1 rounded-xl border py-3.5 text-[15px] font-semibold"
+                className="border-line flex-1 border py-3.5 text-[15px] font-semibold"
               >
                 Clear all
               </button>
               <button
                 type="button"
                 onClick={() => setSheetOpen(false)}
-                className="bg-accent text-ink flex-1 rounded-xl py-3.5 text-[15px] font-bold"
+                className="bg-accent text-ink flex-1 py-3.5 text-[15px] font-bold"
               >
                 Show {results.length}
               </button>

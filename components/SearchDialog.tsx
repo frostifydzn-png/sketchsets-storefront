@@ -61,7 +61,7 @@ export function SearchDialog() {
         type="button"
         onClick={() => setOpen(true)}
         aria-label="Search products"
-        className="text-dim hover:text-text hover:border-line-bright border-line flex items-center gap-2 rounded-full border px-3 py-1.5 text-[13px] transition-colors"
+        className="text-dim hover:text-text hover:border-line-bright border-line flex items-center gap-2 border px-3 py-1.5 text-[13px] transition-colors"
       >
         <SearchIcon />
         <span className="hidden lg:inline">Search</span>
@@ -84,7 +84,7 @@ export function SearchDialog() {
             className="bg-ink/80 absolute inset-0 backdrop-blur-sm"
           />
 
-          <div className="bg-surface ring-line animate-fade-up relative w-full max-w-xl overflow-hidden rounded-2xl ring-1 shadow-2xl">
+          <div className="bg-surface ring-line animate-fade-up relative w-full max-w-xl overflow-hidden ring-1 shadow-2xl">
             <div className="border-line flex items-center gap-3 border-b px-4">
               <SearchIcon />
               <input
@@ -115,11 +115,11 @@ export function SearchDialog() {
                       type="button"
                       onClick={() => go(p.slug)}
                       onMouseEnter={() => setActive(i)}
-                      className={`flex w-full items-center gap-3 rounded-xl p-2 text-left transition-colors ${
+                      className={`flex w-full items-center gap-3 p-2 text-left transition-colors ${
                         i === active ? "bg-elevated" : ""
                       }`}
                     >
-                      <span className="bg-elevated relative h-11 w-14 shrink-0 overflow-hidden rounded-lg">
+                      <span className="bg-elevated relative h-11 w-14 shrink-0 overflow-hidden ">
                         <Image
                           src={p.thumbnail}
                           alt=""

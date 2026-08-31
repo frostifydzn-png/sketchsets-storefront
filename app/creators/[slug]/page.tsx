@@ -42,7 +42,7 @@ export default async function CreatorPage({
   return (
     <div className="shell pt-16 sm:pt-24">
       <header className="max-w-2xl">
-        <span className="bg-elevated ring-line flex h-16 w-16 items-center justify-center rounded-full text-[20px] font-bold ring-1">
+        <span className="bg-elevated ring-line flex h-16 w-16 items-center justify-center text-[20px] font-bold ring-1">
           {monogram(creator.name)}
         </span>
         <h1 className="font-display-tight mt-6 text-[clamp(2.25rem,5vw,3.75rem)] leading-[0.95]">

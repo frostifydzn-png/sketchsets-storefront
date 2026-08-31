@@ -25,7 +25,7 @@ export function HeroSearch() {
 
   return (
     <div className="relative w-full max-w-2xl">
-      <div className="bg-surface ring-line focus-within:ring-accent flex items-center gap-3 rounded-2xl px-5 py-4 ring-1 transition-shadow focus-within:ring-2 sm:py-5">
+      <div className="bg-surface ring-line focus-within:ring-accent flex items-center gap-3 px-5 py-4 ring-1 transition-shadow focus-within:ring-2 sm:py-5">
         <svg
           width="20"
           height="20"
@@ -72,7 +72,7 @@ export function HeroSearch() {
         />
         <Link
           href="/browse"
-          className="bg-accent text-ink hidden shrink-0 rounded-xl px-5 py-2.5 text-[14px] font-bold transition-transform hover:scale-[1.03] sm:block"
+          className="bg-accent text-ink hidden shrink-0 px-5 py-2.5 text-[14px] font-bold transition-transform hover:scale-[1.03] sm:block"
         >
           Browse all
         </Link>
@@ -85,7 +85,7 @@ export function HeroSearch() {
             key={s}
             type="button"
             onClick={() => setQuery(s)}
-            className="border-line text-dim hover:text-text hover:border-line-bright rounded-full border px-3 py-1 text-[13px] transition-colors"
+            className="border-line text-dim hover:text-text hover:border-line-bright border px-3 py-1 text-[13px] transition-colors"
           >
             {s}
           </button>
@@ -93,7 +93,7 @@ export function HeroSearch() {
       </div>
 
       {showPanel && (
-        <div className="bg-surface ring-line animate-fade-up absolute inset-x-0 top-full z-30 mt-2 overflow-hidden rounded-2xl ring-1 shadow-2xl">
+        <div className="bg-surface ring-line animate-fade-up absolute inset-x-0 top-full z-30 mt-2 overflow-hidden ring-1 shadow-2xl">
           {results.length > 0 ? (
             <ul className="p-2">
               {results.map((p) => (
@@ -101,9 +101,9 @@ export function HeroSearch() {
                   <button
                     type="button"
                     onClick={() => go(p.slug)}
-                    className="hover:bg-elevated flex w-full items-center gap-3 rounded-xl p-2 text-left transition-colors"
+                    className="hover:bg-elevated flex w-full items-center gap-3 p-2 text-left transition-colors"
                   >
-                    <span className="bg-elevated relative h-12 w-16 shrink-0 overflow-hidden rounded-lg">
+                    <span className="bg-elevated relative h-12 w-16 shrink-0 overflow-hidden ">
                       <Image
                         src={p.thumbnail}
                         alt=""

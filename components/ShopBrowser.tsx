@@ -133,7 +133,7 @@ export function ShopBrowser({ products }: { products: Product[] }) {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search products…"
-              className="bg-surface ring-line focus:ring-accent text-text placeholder:text-muted w-full rounded-full px-5 py-3 text-[15px] ring-1 outline-none focus:ring-2"
+              className="bg-surface ring-line focus:ring-accent text-text placeholder:text-muted w-full px-5 py-3 text-[15px] ring-1 outline-none focus:ring-2"
             />
           </label>
 
@@ -142,7 +142,7 @@ export function ShopBrowser({ products }: { products: Product[] }) {
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortKey)}
-              className="border-line hover:border-line-bright text-text cursor-pointer appearance-none rounded-full border bg-transparent py-3 pr-10 pl-5 text-[14px] font-medium outline-none"
+              className="border-line hover:border-line-bright text-text cursor-pointer appearance-none border bg-transparent py-3 pr-10 pl-5 text-[14px] font-medium outline-none"
             >
               {sorts.map((s) => (
                 <option key={s.id} value={s.id} className="bg-surface">
@@ -185,7 +185,7 @@ export function ShopBrowser({ products }: { products: Product[] }) {
                 setFilter({ kind: "all" });
                 setQuery("");
               }}
-              className="bg-accent text-ink mt-6 rounded-full px-6 py-3 text-[14px] font-bold"
+              className="bg-accent text-ink mt-6 px-6 py-3 text-[14px] font-bold"
             >
               Show everything
             </button>

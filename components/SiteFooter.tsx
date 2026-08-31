@@ -28,12 +28,10 @@ export function SiteFooter() {
           <div>
             <div className="flex items-center gap-2.5">
               <Logomark className="text-text h-7 w-7 shrink-0" />
-              <span className="font-display-tight text-[19px] leading-none">
+              <span className="font-display-tight text-[21px] leading-none">
                 SketchSets
               </span>
-              <span className="text-muted text-[11px] font-medium">
-                · by {site.parent}
-              </span>
+              <span className="label-sm text-muted">· by {site.parent}</span>
             </div>
             <p className="text-dim mt-4 max-w-xs text-[14px] leading-relaxed">
               Curated resources for people who make internet content. If it is
@@ -108,7 +106,7 @@ export function SiteFooter() {
           </FooterColumn>
         </div>
 
-        <div className="border-line text-muted mt-12 flex flex-col gap-2 border-t pt-7 text-[13px] sm:flex-row sm:items-center sm:justify-between">
+        <div className="border-line text-muted mt-12 flex flex-col gap-2 border-t pt-7 font-mono text-[12px] sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {new Date().getFullYear()} SketchSets. A {site.parent} project.
           </p>
@@ -128,7 +126,7 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <h2 className="text-muted mb-2.5 text-[13px] font-medium">{title}</h2>
+      <h2 className="label text-muted mb-4">{title}</h2>
       {children}
     </div>
   );

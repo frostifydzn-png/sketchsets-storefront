@@ -39,10 +39,10 @@ export function SiteHeader() {
         >
           <Logomark className="text-text h-7 w-7 shrink-0 transition-transform duration-500 ease-[var(--ease-glide)] group-hover:-rotate-6" />
           <span className="flex items-baseline gap-2">
-            <span className="font-display-tight text-[20px] leading-none">
+            <span className="font-display-tight text-[22px] leading-none">
               SketchSets
             </span>
-            <span className="text-muted hidden text-[11px] leading-none sm:inline">
+            <span className="label-sm text-muted hidden leading-none sm:inline">
               by {site.parent}
             </span>
           </span>
@@ -62,11 +62,23 @@ export function SiteHeader() {
                 href={link.href}
                 onClick={close}
                 aria-current={active ? "page" : undefined}
-                className={`text-[15px] transition-colors ${
+                /*
+                 * Mono, because the nav is a shop directory rather than a
+                 * product menu. It also puts a deliberate gap between the
+                 * serif wordmark and the links, which is the whole point of
+                 * running two voices.
+                 */
+                className={`relative font-mono text-[12.5px] transition-colors ${
                   active ? "text-text" : "text-dim hover:text-text"
                 }`}
               >
                 {link.label}
+                {active && (
+                  <span
+                    aria-hidden="true"
+                    className="bg-accent absolute -bottom-1.5 left-0 h-px w-full"
+                  />
+                )}
               </Link>
             );
           })}

@@ -1,43 +1,61 @@
 import Link from "next/link";
 
 /**
- * Section heading. The eyebrow is small, muted and un-tracked, closer to a
- * print standfirst than the accent-coloured SaaS label it replaced.
+ * Section heading, set the way a catalogue divides a page rather than the way
+ * a marketing site announces a feature block.
+ *
+ * A mono marker sits on its own line with a hairline running out to the end of
+ * the column, and the title lands underneath in the editorial serif. The
+ * marker is the technical voice, the title is the human one; keeping them on
+ * separate lines is what stops it collapsing back into an eyebrow-over-heading
+ * SaaS pattern.
  */
 export function SectionHeader({
-  eyebrow,
+  marker,
   title,
   note,
   action,
 }: {
-  eyebrow?: string;
+  /** Mono section marker, e.g. "01 / NEW THIS DROP". Reads as a shelf label. */
+  marker?: string;
   title: string;
   note?: string;
   action?: { href: string; label: string };
 }) {
   return (
-    <div className="mb-9 flex flex-wrap items-end justify-between gap-x-10 gap-y-4 sm:mb-12">
-      <div className="max-w-xl">
-        {eyebrow && (
-          <p className="text-muted mb-2 text-[12px] font-semibold uppercase">
-            {eyebrow}
-          </p>
-        )}
-        <h2 className="font-display text-[clamp(1.875rem,3.6vw,3rem)] leading-[1.02]">
-          {title}
-        </h2>
-        {note && (
-          <p className="text-dim mt-3 text-[16px] leading-relaxed">{note}</p>
+    <div className="mb-10 sm:mb-14">
+      {marker && (
+        <div className="rule-out text-muted mb-6">
+          <span className="label shrink-0">{marker}</span>
+        </div>
+      )}
+
+      <div className="flex flex-wrap items-end justify-between gap-x-12 gap-y-5">
+        <div className="max-w-2xl">
+          <h2 className="font-display-tight text-[clamp(2rem,4.4vw,3.5rem)] leading-[1.0]">
+            {title}
+          </h2>
+          {note && (
+            <p className="text-dim mt-4 max-w-[54ch] text-[16px] leading-relaxed">
+              {note}
+            </p>
+          )}
+        </div>
+
+        {action && (
+          <Link
+            href={action.href}
+            className="group text-text hover:text-accent shrink-0 pb-1 text-[14px] font-medium whitespace-nowrap transition-colors"
+          >
+            <span className="border-line group-hover:border-accent border-b pb-1 transition-colors">
+              {action.label}
+            </span>
+            <span aria-hidden="true" className="ml-2 inline-block">
+              &rarr;
+            </span>
+          </Link>
         )}
       </div>
-      {action && (
-        <Link
-          href={action.href}
-          className="border-line hover:border-line-bright hover:bg-elevated shrink-0 rounded-full border px-5 py-2.5 text-[14px] font-semibold whitespace-nowrap transition-colors"
-        >
-          {action.label}
-        </Link>
-      )}
     </div>
   );
 }

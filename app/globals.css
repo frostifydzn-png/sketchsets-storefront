@@ -3,46 +3,55 @@
 /*
  * SketchSets design system.
  *
- * Dark, near-monochrome, with one signature accent (lime) used only for
- * commerce moments: buy buttons, prices, active filters, Frostify Picks. The
- * product artwork supplies all other colour.
+ * The brief for this build was explicit: stop looking like a SaaS product,
+ * start looking like a shop you would browse even if you were not buying.
+ * Three rules carry that, and everything below is downstream of them.
+ *
+ *   1. Type does the work. An editorial serif for anything a human wrote, a
+ *      technical mono for anything a machine would print on a label. The
+ *      tension between those two IS the brand. Sans is a neutral carrier for
+ *      body copy and controls, nothing more.
+ *   2. Hairlines, not shadows. Soft drop shadows and gradient washes are the
+ *      house style of software marketing. A catalogue is ruled, not floated.
+ *   3. Square by default. Uniform 16px radii on every surface is the single
+ *      loudest SaaS tell. Structure is square; only things you press get a
+ *      hint of a corner.
  */
 @theme {
   /* Surfaces */
   --color-ink: #09090b;
-  --color-surface: #111114;
-  --color-elevated: #18181c;
-  --color-line: #27272d;
-  --color-line-bright: #3a3a42;
+  --color-surface: #101013;
+  --color-elevated: #17171b;
+  --color-line: #26262c;
+  --color-line-bright: #3d3d46;
 
   /* Text */
-  --color-text: #f5f5f7;
-  --color-dim: #a1a1aa;
+  --color-text: #f4f4f6;
+  --color-dim: #a3a3ad;
   --color-muted: #71717a;
 
   /*
-   * Signature accent — commerce only. Ember, not lime: lime reads as Envato,
-   * pink as Gumroad, and blue belongs to Frostify. Clears 7.3:1 as text on
-   * ink and 8:1 as a button with ink text.
+   * Signature accent — commerce and wayfinding only. Ember, not lime: lime
+   * reads as Envato, pink as Gumroad, blue belongs to Frostify.
    */
   --color-accent: #ff6b3d;
   --color-accent-dim: #e85a2e;
 
-  /* Category identity, used sparingly */
+  /* Room accents. Each category is a different part of the shop. */
   --color-cat-editing: #ff6b3d;
-  --color-cat-thumbnails: #7c6cff;
+  --color-cat-thumbnails: #8b7cff;
   --color-cat-tools: #45e0ff;
 
-  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-editorial: var(--font-instrument), ui-serif, Georgia, serif;
   --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
-  /* Longer tail than ease-out-soft, for anything that moves a long distance. */
   --ease-glide: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /*
- * Fine grain over the whole page. At 2% it is invisible as texture but stops
+ * Fine grain over the whole page. At 2.2% it is invisible as texture but stops
  * large dark areas banding, which is most of what separates a flat dark site
  * from an expensive-looking one.
  */
@@ -52,7 +61,7 @@ body::after {
   inset: 0;
   z-index: 200;
   pointer-events: none;
-  opacity: 0.02;
+  opacity: 0.022;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -91,24 +100,120 @@ body {
   padding-top: clamp(4rem, 7vw, 8rem);
 }
 
+/* ---------- type ---------- */
+
 /*
- * Display face. Set close to normal width in mixed case rather than the
- * condensed all-caps poster treatment it used to carry: the caps read loud and
- * dated, and at small sizes they were harder to scan.
+ * Editorial voice. Instrument Serif is a single-weight display serif with real
+ * stroke contrast, so it carries authority at size without needing to be bold.
+ * Used for every headline a person wrote. Never for UI, never for numbers on a
+ * spec sheet — those belong to the mono.
  */
-/* Heavy, semi-condensed poster type: the look the shop is built around. */
 .font-display {
-  font-family: var(--font-display);
-  font-variation-settings: "wdth" 88;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  letter-spacing: -0.018em;
 }
 
+/*
+ * Same face, wound tighter, for the largest settings where default tracking
+ * opens up too far.
+ */
 .font-display-tight {
-  font-family: var(--font-display);
-  font-variation-settings: "wdth" 80;
-  font-weight: 800;
-  letter-spacing: -0.028em;
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  letter-spacing: -0.032em;
+}
+
+/* The counterweight: an editorial italic, for asides and the shop's own voice. */
+.font-display-italic {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: -0.012em;
+}
+
+/*
+ * Technical voice. Every catalogue number, format, file size, count, price and
+ * section marker. This is the "spec sheet" half of the personality.
+ */
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.label-sm {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* UI voice. Buttons, card titles, form controls. Deliberately unremarkable. */
+.font-ui {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/*
+ * A label with a rule running off to the end of its column — the way a
+ * catalogue divides a page. Put it on a flex row.
+ */
+.rule-out {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.rule-out::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--color-line);
+}
+
+/* ---------- structure ---------- */
+
+/*
+ * Rooms. Each category page and category tile sets data-room, which repoints
+ * --room; anything inside can then reach for var(--room) and pick up the local
+ * accent without a single conditional in the components.
+ */
+[data-room] {
+  --room: var(--color-accent);
+}
+[data-room="editing"] {
+  --room: var(--color-cat-editing);
+}
+[data-room="thumbnails"] {
+  --room: var(--color-cat-thumbnails);
+}
+[data-room="creator-tools"] {
+  --room: var(--color-cat-tools);
+}
+
+.room-accent {
+  color: var(--room, var(--color-accent));
+}
+.room-bg {
+  background-color: var(--room, var(--color-accent));
+}
+.room-border {
+  border-color: var(--room, var(--color-accent));
+}
+
+/*
+ * Tailwind cannot put a variant in front of a plain custom class, so the
+ * group-hover form of .room-accent is spelled out here. `group` is emitted as
+ * a real class name, which is what makes this work.
+ */
+.group:hover .group-hover-room {
+  color: var(--room, var(--color-accent));
+}
+.hover-room:hover {
+  color: var(--room, var(--color-accent));
 }
 
 ::selection {
@@ -119,7 +224,6 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
-  border-radius: 3px;
 }
 
 /*
@@ -139,16 +243,49 @@ textarea:focus-visible {
   display: none;
 }
 
+/* Blueprint grid, for sections that would otherwise be flat black. */
+.grid-lines {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+/* Crop marks: a print motif, and the opposite of a rounded SaaS card. */
+.crop-marks::before,
+.crop-marks::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--room, var(--color-accent));
+  pointer-events: none;
+}
+.crop-marks::before {
+  top: 14px;
+  left: 14px;
+  border-top: 2px solid;
+  border-left: 2px solid;
+}
+.crop-marks::after {
+  right: 14px;
+  bottom: 14px;
+  border-right: 2px solid;
+  border-bottom: 2px solid;
+}
+
 /* ---------- motion ---------- */
 
 /*
  * Mask rise. Each line sits in its own clipped box and slides up from beneath
  * it, so type arrives rather than fades. Reads far more deliberate than an
- * opacity change and costs nothing extra.
+ * opacity change and costs nothing extra. The padding keeps serif descenders
+ * from being clipped by the mask.
  */
 .rise-line {
   display: block;
   overflow: hidden;
+  padding-bottom: 0.09em;
 }
 .rise-line > span {
   display: block;
@@ -165,36 +302,8 @@ textarea:focus-visible {
 .rise-line:nth-child(3) > span {
   transition-delay: 0.16s;
 }
-
-/* Blueprint grid, for sections that would otherwise be flat black. */
-.grid-lines {
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.028) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
-  background-size: 72px 72px;
-}
-
-/* Crop marks: a print motif, and the opposite of a rounded SaaS card. */
-.crop-marks::before,
-.crop-marks::after {
-  content: "";
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  border-color: var(--color-accent);
-  pointer-events: none;
-}
-.crop-marks::before {
-  top: 14px;
-  left: 14px;
-  border-top: 2px solid;
-  border-left: 2px solid;
-}
-.crop-marks::after {
-  right: 14px;
-  bottom: 14px;
-  border-right: 2px solid;
-  border-bottom: 2px solid;
+.rise-line:nth-child(4) > span {
+  transition-delay: 0.24s;
 }
 
 /* Scroll reveal. JS adds .is-visible; reduced motion skips straight to shown. */
@@ -210,26 +319,18 @@ textarea:focus-visible {
   transform: none;
 }
 
-/* Hero headline: each line rises in sequence. */
-@keyframes line-rise {
-  from {
-    opacity: 0;
-    transform: translateY(0.5em);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+/*
+ * A hairline that draws itself in when its section arrives. Cheap, and it
+ * makes the ruled layout feel constructed rather than static.
+ */
+.rule-draw {
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 1s var(--ease-glide);
 }
-.line-rise > span {
-  display: block;
-  animation: line-rise 0.85s var(--ease-out-soft) both;
-}
-.line-rise > span:nth-child(2) {
-  animation-delay: 0.09s;
-}
-.line-rise > span:nth-child(3) {
-  animation-delay: 0.18s;
+.reveal.is-visible .rule-draw,
+.rise-now .rule-draw {
+  transform: none;
 }
 
 /* Continuous artwork rail. Duplicated track scrolls exactly half its width. */
@@ -254,20 +355,6 @@ textarea:focus-visible {
 /* Text ticker runs quicker than the artwork rail. */
 .marquee-track--fast {
   animation-duration: 30s;
-}
-
-/*
- * Warm bloom behind the hero headline. Applied to its own absolutely
- * positioned element rather than a ::before with negative z-index: the old
- * version needed `isolation: isolate`, which trapped the search dropdown
- * inside the hero's stacking context and let the artwork rail paint over it.
- */
-.hero-glow {
-  background: radial-gradient(
-    55% 60% at 50% 45%,
-    rgba(255, 107, 61, 0.14),
-    transparent 70%
-  );
 }
 
 /* Mega menu panel drop. */
@@ -305,7 +392,8 @@ textarea:focus-visible {
     transform: none;
     transition: none;
   }
-  .rise-line > span {
+  .rise-line > span,
+  .rule-draw {
     transform: none;
     transition: none;
   }

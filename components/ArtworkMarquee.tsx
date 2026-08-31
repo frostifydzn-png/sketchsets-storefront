@@ -24,7 +24,7 @@ export function ArtworkMarquee({ products }: { products: Product[] }) {
             tabIndex={i >= products.length ? -1 : undefined}
             className="group relative block w-[260px] shrink-0 sm:w-[340px]"
           >
-            <div className="bg-surface ring-line group-hover:ring-accent relative aspect-[4/3] overflow-hidden rounded-xl ring-1 transition-all duration-300">
+            <div className="bg-surface ring-line group-hover:ring-accent relative aspect-[4/3] overflow-hidden ring-1 transition-all duration-300">
               <Image
                 src={product.thumbnail}
                 alt={i < products.length ? `${product.title} preview` : ""}
@@ -32,7 +32,7 @@ export function ArtworkMarquee({ products }: { products: Product[] }) {
                 sizes="340px"
                 className="object-cover transition-transform duration-700 ease-[var(--ease-out-soft)] group-hover:scale-105"
               />
-              <span className="bg-ink/85 group-hover:bg-accent group-hover:text-ink absolute right-2.5 bottom-2.5 rounded-full px-2.5 py-1 text-[13px] font-bold backdrop-blur-md transition-colors">
+              <span className="bg-ink/85 group-hover:bg-accent group-hover:text-ink absolute right-2.5 bottom-2.5 px-2.5 py-1 text-[13px] font-bold backdrop-blur-md transition-colors">
                 {formatPrice(product.price)}
               </span>
             </div>
