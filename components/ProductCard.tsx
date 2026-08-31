@@ -4,37 +4,21 @@ import { getCreator } from "@/lib/creators";
 import { formatPrice, type Product } from "@/lib/products";
 
 /**
- * How much room a card is given, which is a statement about the product rather
- * than a layout detail. A $9 pack and the complete library should not occupy
- * the same footprint just because they are both products.
+ * How much room a card is given. Rails and grids both use `standard`; `lead`
+ * is for the one card in a section that should carry more weight than the rest.
  */
-export type CardSize = "lead" | "standard" | "compact";
-
-const ASPECT: Record<CardSize, string> = {
-  lead: "aspect-[16/11]",
-  standard: "aspect-[4/3]",
-  compact: "aspect-[3/2]",
-};
-
-const TITLE: Record<CardSize, string> = {
-  lead: "text-[clamp(1.75rem,3vw,2.5rem)]",
-  standard: "text-[1.375rem]",
-  compact: "text-[1.0625rem]",
-};
-
-const SIZES: Record<CardSize, string> = {
-  lead: "(max-width: 1024px) 100vw, 58vw",
-  standard: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
-  compact: "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 22vw",
-};
+export type CardSize = "lead" | "standard";
 
 /**
- * A catalogue entry, not a card.
+ * Product card.
  *
- * Square artwork inside a hairline, then a ruled label block underneath:
- * catalogue number and price set in mono on one line, the title in the
- * editorial serif beneath it. That is a gallery wall label, and it is the
- * opposite of an icon-over-title-over-body feature tile.
+ * Cover art in a rounded panel, then a tight label block: title, creator, and
+ * the price pushed to the right in pink. The card is a bordered surface that
+ * lifts on hover with a pink bloom, which is what stops a wall of dark violet
+ * cards reading as flat.
+ *
+ * Width comes from the parent — a rail sets a fixed track width, a grid lets
+ * the column decide — so this component never fights its container.
  */
 export function ProductCard({
   product,
@@ -52,18 +36,24 @@ export function ProductCard({
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group block focus-visible:outline-none"
+      className="group bg-elevated border-line hover:border-accent/60 block h-full overflow-hidden rounded-2xl border transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_rgba(255,61,158,0.5)] focus-visible:outline-none"
     >
       <div
-        className={`border-line group-hover:border-line-bright group-focus-visible:border-accent bg-surface relative overflow-hidden border transition-colors duration-500 ${ASPECT[size]}`}
+        className={`bg-raised relative overflow-hidden ${
+          size === "lead" ? "aspect-[16/10]" : "aspect-[16/11]"
+        }`}
       >
         <Image
           src={product.thumbnail}
           alt={`${product.title} preview`}
           fill
-          sizes={SIZES[size]}
+          sizes={
+            size === "lead"
+              ? "(max-width: 1024px) 100vw, 50vw"
+              : "(max-width: 640px) 70vw, (max-width: 1024px) 40vw, 260px"
+          }
           priority={priority}
-          className={`object-cover transition-all duration-[900ms] ease-[var(--ease-glide)] group-hover:scale-[1.04] ${
+          className={`object-cover transition-all duration-[900ms] ease-[var(--ease-glide)] group-hover:scale-[1.05] ${
             alt ? "group-hover:opacity-0" : ""
           }`}
         />
@@ -73,45 +63,42 @@ export function ProductCard({
             alt=""
             aria-hidden="true"
             fill
-            sizes={SIZES[size]}
-            className="scale-[1.04] object-cover opacity-0 transition-opacity duration-[900ms] ease-[var(--ease-glide)] group-hover:opacity-100"
+            sizes="(max-width: 640px) 70vw, (max-width: 1024px) 40vw, 260px"
+            className="scale-[1.05] object-cover opacity-0 transition-opacity duration-[900ms] ease-[var(--ease-glide)] group-hover:opacity-100"
           />
         )}
 
         {product.isNew && (
-          <span className="label-sm bg-accent text-ink pointer-events-none absolute top-0 right-0 px-2 py-1">
+          <span className="grad-fill absolute top-2.5 left-2.5 rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide text-white uppercase">
             New
           </span>
         )}
       </div>
 
-      {/* Label block. The rule ties it to the artwork the way a mount does. */}
-      <div className="border-line group-hover:border-line-bright mt-3 border-t pt-2.5 transition-colors duration-500">
-        <div className="flex items-baseline justify-between gap-4">
-          <span className="label text-muted group-hover:text-accent transition-colors duration-300">
-            {product.setNumber}
+      <div className={size === "lead" ? "p-5" : "p-3.5"}>
+        <h3
+          className={`group-hover:text-accent truncate font-bold text-white transition-colors ${
+            size === "lead" ? "text-[1.0625rem]" : "text-[13.5px]"
+          }`}
+        >
+          {product.title}
+        </h3>
+
+        <div className="mt-1 flex items-baseline justify-between gap-3">
+          <span className="text-muted truncate text-[11.5px]">
+            by {creator?.name ?? product.creatorSlug}
           </span>
           <span
-            className={`shrink-0 font-mono text-[13px] font-medium ${
-              free ? "text-accent" : "text-dim"
+            className={`text-accent shrink-0 font-bold ${
+              size === "lead" ? "text-[15px]" : "text-[13px]"
             }`}
           >
             {free ? "FREE" : formatPrice(product.price)}
           </span>
         </div>
 
-        <h3
-          className={`font-display group-hover:text-accent mt-1.5 leading-[1.08] transition-colors duration-300 ${TITLE[size]}`}
-        >
-          {product.title}
-        </h3>
-
-        <p className="text-muted mt-1.5 truncate text-[13px]">
-          {product.subcategory} · {creator?.name ?? product.creatorSlug}
-        </p>
-
         {size === "lead" && (
-          <p className="text-dim mt-3 max-w-[52ch] text-[15px] leading-relaxed">
+          <p className="text-dim mt-2.5 line-clamp-2 text-[14px] leading-relaxed">
             {product.valueProp}
           </p>
         )}

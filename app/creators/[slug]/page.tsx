@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { LabelPanel } from "@/components/LabelPanel";
 import { ProductCard } from "@/components/ProductCard";
 import { creators, getCreator, monogram } from "@/lib/creators";
 import { byCreator } from "@/lib/products";
@@ -40,12 +41,12 @@ export default async function CreatorPage({
   const items = byCreator(creator.slug);
 
   return (
-    <div className="shell pt-16 sm:pt-24">
-      <header className="max-w-2xl">
-        <span className="bg-elevated ring-line flex h-16 w-16 items-center justify-center text-[20px] font-bold ring-1">
+    <div className="shell stack-bottom">
+      <header className="max-w-2xl pt-10 pb-10 sm:pt-14 sm:pb-12">
+        <span className="bg-elevated border-line flex h-16 w-16 items-center justify-center rounded-2xl border text-[20px] font-extrabold">
           {monogram(creator.name)}
         </span>
-        <h1 className="font-display-tight mt-6 text-[clamp(2.25rem,5vw,3.75rem)] leading-[0.95]">
+        <h1 className="mt-6 text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.04] font-extrabold tracking-[-0.03em]">
           {creator.name}
         </h1>
         <p className="text-muted mt-2 text-[15px]">{creator.role}</p>
@@ -69,14 +70,17 @@ export default async function CreatorPage({
         )}
       </header>
 
-      <h2 className="font-display border-line mt-16 border-t pt-10 text-[clamp(1.5rem,3vw,2rem)] leading-none">
-        {items.length} {items.length === 1 ? "pack" : "packs"}
-      </h2>
-      <div className="mt-7 grid grid-cols-2 gap-x-5 gap-y-9 lg:grid-cols-4">
-        {items.map((product, i) => (
-          <ProductCard key={product.id} product={product} priority={i < 4} />
-        ))}
-      </div>
+      <LabelPanel
+        title={`${items.length} ${items.length === 1 ? "pack" : "packs"}`}
+        description={`Everything ${creator.name} has in the shop.`}
+        action={{ href: "/browse", label: "Browse everything" }}
+      >
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+          {items.map((product, i) => (
+            <ProductCard key={product.id} product={product} priority={i < 4} />
+          ))}
+        </div>
+      </LabelPanel>
     </div>
   );
 }

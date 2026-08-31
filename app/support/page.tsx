@@ -12,19 +12,19 @@ export const metadata: Metadata = {
 
 export default function SupportPage() {
   return (
-    <>
-      <header className="border-line border-b">
-        <div className="shell pt-14 pb-12 sm:pt-20 sm:pb-14">
-          <div className="rule-out text-muted mb-8">
-            <span className="label shrink-0">Ask us anything</span>
-          </div>
+    <div className="shell stack-bottom">
+      <header className="pt-10 pb-10 sm:pt-14 sm:pb-12">
+        <div>
+          <span className="border-accent/35 bg-accent/10 text-accent label mb-6 inline-flex items-center rounded-full border px-3.5 py-1.5">
+            Ask us anything
+          </span>
 
-          <div className="grid items-end gap-x-16 gap-y-8 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="grid items-end gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
             <div>
-              <h1 className="font-display-tight text-[clamp(2.75rem,7vw,5.5rem)] leading-[0.94]">
+              <h1 className="text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.04] font-extrabold tracking-[-0.03em]">
                 Support
               </h1>
-              <p className="text-dim mt-5 max-w-[52ch] text-[17px] leading-relaxed">
+              <p className="text-dim mt-4 max-w-[52ch] text-[16px] leading-relaxed">
                 The questions we get asked most. If the answer is not here,
                 write to us and a person will reply.
               </p>
@@ -39,7 +39,7 @@ export default function SupportPage() {
                       href={`#${s.id}`}
                       className="group text-dim hover:text-text flex items-baseline gap-4 py-2.5 transition-colors"
                     >
-                      <span className="text-muted group-hover:text-accent font-mono text-[11px] transition-colors">
+                      <span className="text-muted group-hover:text-accent text-[11px] transition-colors">
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       <span className="text-[14px]">{s.title}</span>
@@ -52,19 +52,19 @@ export default function SupportPage() {
         </div>
       </header>
 
-      <div className="shell">
+      <div className="stack">
         {supportSections.map((section) => (
           <section
             key={section.id}
             id={section.id}
-            className="section-gap scroll-mt-24"
+            className="panel scroll-mt-24"
           >
-            <div className="grid gap-8 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
+            <div className="grid gap-6 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.6fr)] lg:gap-12">
               <div className="lg:sticky lg:top-24 lg:self-start">
-                <h2 className="font-display text-[clamp(1.625rem,3vw,2.25rem)] leading-[1.05]">
+                <h2 className="text-[15px] font-extrabold tracking-[0.06em] text-white uppercase">
                   {section.title}
                 </h2>
-                <p className="text-dim mt-3 text-[16px] leading-relaxed">
+                <p className="text-dim mt-3 text-[14px] leading-relaxed">
                   {section.intro}
                 </p>
               </div>
@@ -74,9 +74,9 @@ export default function SupportPage() {
                 {section.items.map((item) => (
                   <details
                     key={item.q}
-                    className="border-line group border-t last:border-b"
+                    className="border-line group border-b last:border-b-0"
                   >
-                    <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-[17px] font-semibold [&::-webkit-details-marker]:hidden">
+                    <summary className="hover:text-accent flex cursor-pointer list-none items-center justify-between gap-4 py-4.5 text-[16px] font-semibold transition-colors [&::-webkit-details-marker]:hidden">
                       {item.q}
                       <span
                         aria-hidden="true"
@@ -96,25 +96,29 @@ export default function SupportPage() {
         ))}
 
         {/* Contact */}
-        <section className="section-gap">
-          <div className="bg-surface ring-line p-8 text-center ring-1 sm:p-14">
-            <h2 className="font-display text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.05]">
+        <section>
+          <div className="panel relative overflow-hidden text-center">
+            <div
+              aria-hidden="true"
+              className="glow-pink pointer-events-none absolute -top-1/2 left-1/4 h-[200%] w-1/2"
+            />
+            <h2 className="relative text-[clamp(1.75rem,3.4vw,2.5rem)] leading-[1.1] font-extrabold tracking-[-0.02em]">
               Still stuck?
             </h2>
             <p className="text-dim mx-auto mt-4 max-w-md text-[16px] leading-relaxed">
               Send a message and a real person will get back to you. No ticket
               queue, no bots.
             </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <div className="relative mt-8 flex flex-wrap items-center justify-center gap-3">
               <a
                 href={payhipPage("contact")}
-                className="bg-accent text-ink px-7 py-3.5 text-[15px] font-bold transition-transform hover:scale-[1.02]"
+                className="btn-primary px-7 py-3.5 text-[15px]"
               >
                 Write to the team
               </a>
               <a
                 href={PAYHIP_ACCOUNT}
-                className="border-line hover:border-line-bright hover:bg-elevated border px-7 py-3.5 text-[15px] font-semibold transition-colors"
+                className="btn-ghost px-7 py-3.5 text-[15px]"
               >
                 Find past downloads
               </a>
@@ -137,10 +141,10 @@ export default function SupportPage() {
           </div>
         </section>
 
-        <p className="text-muted section-gap-sm pb-4 text-center text-[14px]">
+        <p className="text-muted pt-2 text-center text-[13.5px]">
           SketchSets is a {site.parent} project.
         </p>
       </div>
-    </>
+    </div>
   );
 }

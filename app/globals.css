@@ -3,56 +3,58 @@
 /*
  * SketchSets design system.
  *
- * The brief for this build was explicit: stop looking like a SaaS product,
- * start looking like a shop you would browse even if you were not buying.
- * Three rules carry that, and everything below is downstream of them.
+ * Built to a supplied mockup: a neon storefront on near-black violet, where
+ * every section is its own rounded, bordered panel stacked down the page. The
+ * three rules that hold it together:
  *
- *   1. Type does the work. An editorial serif for anything a human wrote, a
- *      technical mono for anything a machine would print on a label. The
- *      tension between those two IS the brand. Sans is a neutral carrier for
- *      body copy and controls, nothing more.
- *   2. Hairlines, not shadows. Soft drop shadows and gradient washes are the
- *      house style of software marketing. A catalogue is ruled, not floated.
- *   3. Square by default. Uniform 16px radii on every surface is the single
- *      loudest SaaS tell. Structure is square; only things you press get a
- *      hint of a corner.
+ *   1. The page is a stack of panels, not a flow of sections. Each block sits
+ *      in a bordered container with generous internal padding and a consistent
+ *      gap between it and the next. That stacking IS the layout signature.
+ *   2. One brand gradient — pink into violet into blue — used for the headline
+ *      accent, primary buttons and glows. Flat pink is the workhorse; the
+ *      gradient is the moment.
+ *   3. Left label column, right content. Most panels put a short title and
+ *      description in a narrow left rail and let products run horizontally
+ *      beside it. It reads as shelves rather than a grid.
  */
 @theme {
-  /* Surfaces */
-  --color-ink: #09090b;
-  --color-surface: #101013;
-  --color-elevated: #17171b;
-  --color-line: #26262c;
-  --color-line-bright: #3d3d46;
+  /* Surfaces. Every one carries a violet cast; nothing is neutral grey. */
+  --color-ink: #0a0512;
+  --color-surface: #120a1e;
+  --color-elevated: #1a1029;
+  --color-raised: #221636;
+  --color-line: #2a1a3f;
+  --color-line-bright: #3f2960;
 
   /* Text */
-  --color-text: #f4f4f6;
-  --color-dim: #a3a3ad;
-  --color-muted: #71717a;
+  --color-text: #ffffff;
+  --color-dim: #b6a6c9;
+  --color-muted: #877796;
 
   /*
-   * Signature accent — commerce and wayfinding only. Ember, not lime: lime
-   * reads as Envato, pink as Gumroad, blue belongs to Frostify.
+   * Signature accent. Hot pink leads, violet and blue complete the gradient.
+   * Pink on the violet ink clears 5.6:1, and every pink button takes white
+   * text rather than dark, which is how the mockup reads.
    */
-  --color-accent: #ff6b3d;
-  --color-accent-dim: #e85a2e;
+  --color-accent: #ff3d9e;
+  --color-accent-dim: #e02a86;
+  --color-violet: #a855f7;
+  --color-blue: #5b7cfa;
 
-  /* Room accents. Each category is a different part of the shop. */
-  --color-cat-editing: #ff6b3d;
-  --color-cat-thumbnails: #8b7cff;
-  --color-cat-tools: #45e0ff;
+  /* Category identity, kept inside the pink/violet/blue family. */
+  --color-cat-editing: #a855f7;
+  --color-cat-thumbnails: #ff3d9e;
+  --color-cat-tools: #5b7cfa;
 
-  --font-editorial: var(--font-instrument), ui-serif, Georgia, serif;
   --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-glide: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /*
- * Fine grain over the whole page. At 2.2% it is invisible as texture but stops
- * large dark areas banding, which is most of what separates a flat dark site
+ * Fine grain over the whole page. Invisible as texture, but it stops the large
+ * dark violet fields banding, which is most of what separates a flat dark site
  * from an expensive-looking one.
  */
 body::after {
@@ -61,7 +63,7 @@ body::after {
   inset: 0;
   z-index: 200;
   pointer-events: none;
-  opacity: 0.022;
+  opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -80,88 +82,139 @@ body {
 /* Single source of truth for page gutters and max width. */
 .shell {
   margin-inline: auto;
-  max-width: 1560px;
-  padding-inline: 1.25rem;
+  max-width: 1400px;
+  padding-inline: 1rem;
 }
 @media (min-width: 640px) {
   .shell {
-    padding-inline: 2rem;
+    padding-inline: 1.75rem;
   }
 }
 
+/* ---------- the panel stack ---------- */
+
 /*
- * Rhythm between major sections. Deliberately generous — the whitespace is
- * what makes a small catalogue read as curated rather than sparse.
+ * The page's core unit. Sections are cards on the background rather than bands
+ * running edge to edge, and the gap between them is deliberately even so the
+ * stack reads as a considered rhythm instead of arbitrary whitespace.
  */
+.panel {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 22px;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+/* Vertical rhythm for the stack. One value, applied everywhere. */
+.stack > * + * {
+  margin-top: clamp(1.25rem, 2.2vw, 1.75rem);
+}
+
+/* Breathing room above and below the whole stack. */
+.stack-top {
+  padding-top: clamp(1.25rem, 2.2vw, 1.75rem);
+}
+.stack-bottom {
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+/* Interior rhythm between a panel's own sub-blocks. */
 .section-gap {
-  padding-top: clamp(5.5rem, 11vw, 13rem);
+  padding-top: clamp(3.5rem, 7vw, 6rem);
 }
 .section-gap-sm {
-  padding-top: clamp(4rem, 7vw, 8rem);
+  padding-top: clamp(2rem, 4vw, 3rem);
 }
 
-/* ---------- type ---------- */
+/* ---------- brand gradient ---------- */
 
 /*
- * Editorial voice. Instrument Serif is a single-weight display serif with real
- * stroke contrast, so it carries authority at size without needing to be bold.
- * Used for every headline a person wrote. Never for UI, never for numbers on a
- * spec sheet — those belong to the mono.
+ * Pink into violet into blue. Applied as a text clip for headline accents and
+ * as a fill for primary buttons. Kept as variables so the angle and stops stay
+ * identical everywhere it appears.
  */
-.font-display {
-  font-family: var(--font-editorial);
-  font-weight: 400;
-  letter-spacing: -0.018em;
+.grad-text {
+  background-image: linear-gradient(
+    96deg,
+    #ff3d9e 0%,
+    #c04ae8 52%,
+    #6b8bff 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* Descenders clip against the text box without this. */
+  padding-bottom: 0.06em;
+}
+
+.grad-fill {
+  background-image: linear-gradient(92deg, #f0389f 0%, #c93bd4 100%);
 }
 
 /*
- * Same face, wound tighter, for the largest settings where default tracking
- * opens up too far.
+ * Primary call to action. Pill, gradient, and a pink bloom underneath that
+ * tightens on hover — the glow is what makes it read as neon rather than as a
+ * flat coloured rectangle.
  */
-.font-display-tight {
-  font-family: var(--font-editorial);
-  font-weight: 400;
-  letter-spacing: -0.032em;
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  background-image: linear-gradient(92deg, #f0389f 0%, #c93bd4 100%);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 8px 30px -8px rgba(255, 61, 158, 0.55);
+  transition:
+    box-shadow 0.35s var(--ease-out-soft),
+    transform 0.35s var(--ease-out-soft);
+}
+.btn-primary:hover {
+  box-shadow: 0 12px 38px -8px rgba(255, 61, 158, 0.8);
+  transform: translateY(-1px);
 }
 
-/* The counterweight: an editorial italic, for asides and the shop's own voice. */
-.font-display-italic {
-  font-family: var(--font-editorial);
-  font-weight: 400;
-  font-style: italic;
-  letter-spacing: -0.012em;
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-line-bright);
+  background-color: transparent;
+  color: var(--color-text);
+  font-weight: 600;
+  transition:
+    background-color 0.3s var(--ease-out-soft),
+    border-color 0.3s var(--ease-out-soft);
 }
+.btn-ghost:hover {
+  background-color: var(--color-elevated);
+  border-color: var(--color-accent);
+}
+
+/* ---------- section labels ---------- */
 
 /*
- * Technical voice. Every catalogue number, format, file size, count, price and
- * section marker. This is the "spec sheet" half of the personality.
+ * Small, heavy, tracked-out caps. This is how every section in the reference
+ * design names itself — panel titles, footer column heads, eyebrow markers —
+ * so it is worth a class rather than the same six utilities repeated.
  */
 .label {
-  font-family: var(--font-mono);
   font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
+  font-weight: 800;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
 }
 .label-sm {
-  font-family: var(--font-mono);
   font-size: 0.625rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-/* UI voice. Buttons, card titles, form controls. Deliberately unremarkable. */
-.font-ui {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-/*
- * A label with a rule running off to the end of its column — the way a
- * catalogue divides a page. Put it on a flex row.
- */
+/* A label with a hairline running out to the end of its column. */
 .rule-out {
   display: flex;
   align-items: center;
@@ -174,12 +227,34 @@ body {
   background: var(--color-line);
 }
 
-/* ---------- structure ---------- */
+/* ---------- glows ---------- */
 
 /*
- * Rooms. Each category page and category tile sets data-room, which repoints
- * --room; anything inside can then reach for var(--room) and pick up the local
- * accent without a single conditional in the components.
+ * Ambient bloom. Sits behind the hero art and the Vault panel, always on its
+ * own absolutely positioned element rather than a ::before with negative
+ * z-index — that older approach needed `isolation: isolate`, which trapped
+ * the search dropdown inside the hero's stacking context.
+ */
+.glow-pink {
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    rgba(255, 61, 158, 0.28),
+    transparent 70%
+  );
+}
+.glow-violet {
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    rgba(168, 85, 247, 0.24),
+    transparent 70%
+  );
+}
+
+/* ---------- rooms ---------- */
+
+/*
+ * Each category sets data-room, which repoints --room; anything inside then
+ * picks up the local accent without a conditional in the component.
  */
 [data-room] {
   --room: var(--color-accent);
@@ -200,14 +275,10 @@ body {
 .room-bg {
   background-color: var(--room, var(--color-accent));
 }
-.room-border {
-  border-color: var(--room, var(--color-accent));
-}
-
 /*
  * Tailwind cannot put a variant in front of a plain custom class, so the
- * group-hover form of .room-accent is spelled out here. `group` is emitted as
- * a real class name, which is what makes this work.
+ * hover forms are spelled out. `group` is emitted as a real class name, which
+ * is what makes the first of these work.
  */
 .group:hover .group-hover-room {
   color: var(--room, var(--color-accent));
@@ -216,20 +287,20 @@ body {
   color: var(--room, var(--color-accent));
 }
 
+/* ---------- controls ---------- */
+
 ::selection {
   background: var(--color-accent);
-  color: var(--color-ink);
+  color: #fff;
 }
 
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
+  border-radius: 4px;
 }
 
-/*
- * Text fields sit inside wrappers that already show focus with a ring. Letting
- * the global outline through as well drew a second box inside the first.
- */
+/* Text fields show focus with their own ring; the global outline doubled it. */
 input:focus-visible,
 textarea:focus-visible {
   outline: none;
@@ -243,73 +314,32 @@ textarea:focus-visible {
   display: none;
 }
 
-/* Blueprint grid, for sections that would otherwise be flat black. */
-.grid-lines {
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.028) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
-  background-size: 72px 72px;
+/*
+ * Horizontal product rail. Scroll-snap so a drag or a nudge from the arrow
+ * button always lands on a card edge rather than mid-cover.
+ */
+.rail {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
 }
-
-/* Crop marks: a print motif, and the opposite of a rounded SaaS card. */
-.crop-marks::before,
-.crop-marks::after {
-  content: "";
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  border-color: var(--room, var(--color-accent));
-  pointer-events: none;
+.rail::-webkit-scrollbar {
+  display: none;
 }
-.crop-marks::before {
-  top: 14px;
-  left: 14px;
-  border-top: 2px solid;
-  border-left: 2px solid;
-}
-.crop-marks::after {
-  right: 14px;
-  bottom: 14px;
-  border-right: 2px solid;
-  border-bottom: 2px solid;
+.rail > * {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
 }
 
 /* ---------- motion ---------- */
 
-/*
- * Mask rise. Each line sits in its own clipped box and slides up from beneath
- * it, so type arrives rather than fades. Reads far more deliberate than an
- * opacity change and costs nothing extra. The padding keeps serif descenders
- * from being clipped by the mask.
- */
-.rise-line {
-  display: block;
-  overflow: hidden;
-  padding-bottom: 0.09em;
-}
-.rise-line > span {
-  display: block;
-  transform: translateY(115%);
-  transition: transform 0.9s var(--ease-glide);
-}
-.rise-now .rise-line > span,
-.reveal.is-visible .rise-line > span {
-  transform: none;
-}
-.rise-line:nth-child(2) > span {
-  transition-delay: 0.08s;
-}
-.rise-line:nth-child(3) > span {
-  transition-delay: 0.16s;
-}
-.rise-line:nth-child(4) > span {
-  transition-delay: 0.24s;
-}
-
 /* Scroll reveal. JS adds .is-visible; reduced motion skips straight to shown. */
 .reveal {
   opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(16px);
   transition:
     opacity 0.7s var(--ease-out-soft),
     transform 0.7s var(--ease-out-soft);
@@ -319,53 +349,37 @@ textarea:focus-visible {
   transform: none;
 }
 
-/*
- * A hairline that draws itself in when its section arrives. Cheap, and it
- * makes the ruled layout feel constructed rather than static.
- */
-.rule-draw {
-  transform-origin: left;
-  transform: scaleX(0);
-  transition: transform 1s var(--ease-glide);
-}
-.reveal.is-visible .rule-draw,
-.rise-now .rule-draw {
-  transform: none;
-}
-
-/* Continuous artwork rail. Duplicated track scrolls exactly half its width. */
-@keyframes marquee-slide {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee-slide 46s linear infinite;
-}
-.marquee:hover .marquee-track,
-.marquee:focus-within .marquee-track {
-  animation-play-state: paused;
-}
-
-/* Text ticker runs quicker than the artwork rail. */
-.marquee-track--fast {
-  animation-duration: 30s;
-}
-
-/* Mega menu panel drop. */
-@keyframes menu-drop {
+/* Hero lines arrive in sequence rather than all at once. */
+@keyframes line-rise {
   from {
     opacity: 0;
-    transform: translateY(-8px);
+    transform: translateY(0.4em);
   }
   to {
     opacity: 1;
     transform: none;
+  }
+}
+.line-rise > span {
+  display: block;
+  animation: line-rise 0.8s var(--ease-out-soft) both;
+}
+.line-rise > span:nth-child(2) {
+  animation-delay: 0.09s;
+}
+.line-rise > span:nth-child(3) {
+  animation-delay: 0.18s;
+}
+
+/* Categories dropdown in the header. */
+@keyframes menu-drop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
   }
 }
 .animate-menu-drop {
@@ -392,13 +406,8 @@ textarea:focus-visible {
     transform: none;
     transition: none;
   }
-  .rise-line > span,
-  .rule-draw {
-    transform: none;
-    transition: none;
-  }
-  .marquee-track {
-    animation: none;
+  .rail {
+    scroll-behavior: auto;
   }
   *,
   *::before,

@@ -16,41 +16,38 @@ export default function FreePage() {
   const free = products.filter((p) => p.price === 0);
 
   return (
-    <>
+    <div className="shell stack-bottom">
       <PageHeader
         marker="No charge"
-        title="Take these for nothing"
-        note="Real packs with the same commercial licence as everything else. No email gate, no trial limits. Take them and see whether the quality holds up before you spend anything."
+        title="Real packs, not"
+        titleAccent="trials."
+        note="Free downloads carrying the same commercial licence as everything else. No email gate, no watermarks, no expiry. Take them and see whether the quality holds up before you spend anything."
         index={[
-          { term: "PACKS", value: String(free.length).padStart(2, "0") },
-          { term: "PRICE", value: "FREE", accent: true },
-          { term: "LICENCE", value: "COMMERCIAL" },
+          { term: "Packs", value: String(free.length) },
+          { term: "Price", value: "Free", accent: true },
+          { term: "Licence", value: "Commercial" },
         ]}
       />
 
-      <div className="shell pt-12">
+      <div className="panel">
         {free.length > 0 ? (
-          <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
             {free.map((product, i) => (
               <Reveal key={product.id} delay={Math.min(i, 7) * 60}>
-                <ProductCard
-                  product={product}
-                  priority={i < 4}
-                  size="compact"
-                />
+                <ProductCard product={product} priority={i < 4} />
               </Reveal>
             ))}
           </div>
         ) : (
-          <p className="text-muted text-[16px]">
+          <p className="text-dim text-[15px]">
             No free packs right now.{" "}
             <Link href="/browse" className="text-accent hover:underline">
-              See everything
+              Browse everything
             </Link>{" "}
             instead.
           </p>
         )}
       </div>
-    </>
+    </div>
   );
 }

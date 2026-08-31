@@ -20,9 +20,23 @@ export function SearchDialog() {
     setActive(0);
   }, []);
 
-  // ⌘K / Ctrl+K opens, Escape closes.
+  /*
+   * "/" opens, matching the hint printed on the trigger; ⌘K / Ctrl+K still
+   * works for anyone who reaches for it. "/" is ignored while the caret is in
+   * a field, otherwise it would swallow the character mid-word.
+   */
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      const typing =
+        !!target &&
+        (target.isContentEditable ||
+          ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName));
+
+      if (e.key === "/" && !typing) {
+        e.preventDefault();
+        setOpen(true);
+      }
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setOpen((v) => !v);
@@ -61,12 +75,14 @@ export function SearchDialog() {
         type="button"
         onClick={() => setOpen(true)}
         aria-label="Search products"
-        className="text-dim hover:text-text hover:border-line-bright border-line flex items-center gap-2 border px-3 py-1.5 text-[13px] transition-colors"
+        className="bg-elevated border-line hover:border-line-bright text-muted flex items-center gap-2.5 rounded-full border px-4 py-2.5 text-[13.5px] transition-colors lg:w-[19rem]"
       >
         <SearchIcon />
-        <span className="hidden lg:inline">Search</span>
-        <kbd className="text-muted hidden font-sans text-[11px] lg:inline">
-          ⌘K
+        <span className="hidden flex-1 text-left lg:inline">
+          Search products…
+        </span>
+        <kbd className="border-line bg-raised text-muted hidden rounded-md border px-1.5 py-0.5 font-sans text-[11px] lg:inline">
+          /
         </kbd>
       </button>
 
@@ -84,7 +100,7 @@ export function SearchDialog() {
             className="bg-ink/80 absolute inset-0 backdrop-blur-sm"
           />
 
-          <div className="bg-surface ring-line animate-fade-up relative w-full max-w-xl overflow-hidden ring-1 shadow-2xl">
+          <div className="bg-surface border-line animate-fade-up relative w-full max-w-xl overflow-hidden rounded-2xl border shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)]">
             <div className="border-line flex items-center gap-3 border-b px-4">
               <SearchIcon />
               <input

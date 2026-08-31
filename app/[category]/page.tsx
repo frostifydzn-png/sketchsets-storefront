@@ -30,13 +30,13 @@ export async function generateMetadata({
 }
 
 /**
- * A room in the shop.
+ * A category page.
  *
- * `data-room` on the wrapper repoints `--room` for everything inside, so this
- * one file gives Editing, Thumbnails and Creator Tools genuinely different
- * treatments while sharing a single layout. The header is deliberately heavier
- * than a filtered-list heading — you should feel you walked somewhere, not
- * that a query string changed.
+ * `data-room` on the wrapper repoints `--room` for everything inside, so
+ * Editing, Thumbnails and Creator Tools each get their own hue through one
+ * shared layout — violet, pink and blue, all inside the site's gradient family.
+ * The header is deliberately heavier than a filtered-list heading: you should
+ * feel you arrived somewhere, not that a query string changed.
  */
 export default async function CategoryPage({
   params,
@@ -47,67 +47,80 @@ export default async function CategoryPage({
 
   const items = byCategory(found.id as CategoryId);
   const software = [...new Set(items.flatMap((p) => p.compatibility))].sort();
-  const roomNumber = categories.findIndex((c) => c.id === found.id) + 1;
   const from = items.length > 0 ? Math.min(...items.map((p) => p.price)) : 0;
 
   return (
-    <div data-room={found.id}>
-      {/* Room header: full bleed, ruled top and bottom, accent bar on the edge. */}
-      <header className="border-line relative border-b">
-        <span
+    <div data-room={found.id} className="shell stack-bottom">
+      <header className="relative pt-10 pb-10 sm:pt-14 sm:pb-12">
+        {/* The bloom takes the room's own hue rather than a fixed violet. */}
+        <div
           aria-hidden="true"
-          className="room-bg absolute inset-x-0 top-0 h-[3px]"
+          className="pointer-events-none absolute -top-[60%] -left-[15%] h-[260%] w-[75%]"
+          style={{
+            background:
+              "radial-gradient(45% 45% at 45% 50%, color-mix(in srgb, var(--room) 13%, transparent), transparent 72%)",
+          }}
         />
-        <div className="shell pt-14 pb-12 sm:pt-20 sm:pb-16">
-          <div className="rule-out text-muted mb-8">
-            <span className="label room-accent shrink-0">
-              Room {roomNumber} of {categories.length}
-            </span>
-          </div>
 
-          <div className="grid items-end gap-x-16 gap-y-8 lg:grid-cols-[1.2fr_0.8fr]">
+        <div className="relative">
+          <span
+            className="label inline-flex items-center rounded-full border px-3.5 py-1.5"
+            style={{
+              color: "var(--room)",
+              borderColor: "color-mix(in srgb, var(--room) 40%, transparent)",
+              backgroundColor:
+                "color-mix(in srgb, var(--room) 12%, transparent)",
+            }}
+          >
+            Category
+          </span>
+
+          <div className="mt-6 grid items-end gap-x-14 gap-y-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)]">
             <div>
-              <h1 className="font-display-tight text-[clamp(2.75rem,7vw,5.5rem)] leading-[0.94]">
+              <h1 className="text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.04] font-extrabold tracking-[-0.03em]">
                 {found.name}
               </h1>
-              <p className="text-dim mt-5 max-w-[48ch] text-[17px] leading-relaxed">
+              <p className="text-dim mt-4 max-w-[52ch] text-[16px] leading-relaxed">
                 {found.intro}
               </p>
             </div>
 
-            {/* The room's own index card. */}
-            <dl className="border-line text-muted flex flex-wrap gap-x-10 gap-y-3 border-t pt-5 font-mono text-[12px] lg:justify-end">
-              <div className="flex gap-2">
-                <dt>PACKS</dt>
-                <dd className="text-text">
-                  {String(items.length).padStart(2, "0")}
+            <dl className="border-line flex flex-wrap gap-x-8 gap-y-3 border-t pt-5 lg:justify-end">
+              <div>
+                <dt className="text-muted label">Packs</dt>
+                <dd className="mt-1 text-[18px] font-extrabold text-white">
+                  {items.length}
                 </dd>
               </div>
-              <div className="flex gap-2">
-                <dt>FROM</dt>
-                <dd className="room-accent">
-                  {from > 0 ? formatPrice(from) : "FREE"}
+              <div>
+                <dt className="text-muted label">From</dt>
+                <dd className="room-accent mt-1 text-[18px] font-extrabold">
+                  {from > 0 ? formatPrice(from) : "Free"}
                 </dd>
               </div>
-              <div className="flex gap-2">
-                <dt>WORKS IN</dt>
-                <dd className="text-text">{software.length} apps</dd>
+              <div>
+                <dt className="text-muted label">Works in</dt>
+                <dd className="mt-1 text-[18px] font-extrabold text-white">
+                  {software.length} apps
+                </dd>
               </div>
             </dl>
           </div>
         </div>
       </header>
 
-      <div className="shell pt-10">
-        <ProductBrowser
-          products={items}
-          software={software}
-          lockedCategory={found.id}
-        />
+      <div className="stack">
+        <div className="panel">
+          <ProductBrowser
+            products={items}
+            software={software}
+            lockedCategory={found.id}
+          />
+        </div>
 
-        {/* The way out, so a room is never a dead end. */}
-        <nav className="border-line mt-20 border-t pt-8">
-          <span className="label text-muted">Elsewhere in the shop</span>
+        {/* The way out, so a category is never a dead end. */}
+        <nav className="panel">
+          <h2 className="label text-muted">Elsewhere in the shop</h2>
           <ul className="mt-5 flex flex-wrap gap-x-10 gap-y-4">
             {categories
               .filter((c) => c.id !== found.id)
@@ -116,7 +129,7 @@ export default async function CategoryPage({
                   <Link
                     href={`/${c.id}`}
                     data-room={c.id}
-                    className="group text-text hover-room font-display text-[1.5rem] transition-colors"
+                    className="group hover-room text-[1.375rem] font-extrabold tracking-[-0.02em] text-white transition-colors"
                   >
                     {c.name}
                     <span
@@ -131,7 +144,7 @@ export default async function CategoryPage({
             <li>
               <Link
                 href="/browse"
-                className="text-muted hover:text-text font-display text-[1.5rem] transition-colors"
+                className="text-muted text-[1.375rem] font-extrabold tracking-[-0.02em] transition-colors hover:text-white"
               >
                 Everything
               </Link>

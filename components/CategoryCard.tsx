@@ -1,96 +1,115 @@
 import Image from "next/image";
 import Link from "next/link";
-import { byCategory, formatPrice, type Category } from "@/lib/products";
+import { byCategory, type Category, type CategoryId } from "@/lib/products";
 
 /**
- * A room in the shop, not a filter chip.
+ * Category tile.
  *
- * Each category sets `data-room`, which repoints the `--room` custom property
- * to that category's accent; everything inside then picks the colour up
- * without a conditional. That is what makes Editing and Thumbnails feel like
- * different parts of a shop rather than the same page with a query string on
- * the end — the treatment is shared, the colour is local.
- *
- * The doorway metaphor is literal: an accent bar along the top edge, the room
- * number in mono, the name in the editorial serif, and a strip of what is
- * actually on the shelves inside.
+ * Icon chip and label on the left, a real preview of what is inside on the
+ * right. `data-room` repoints `--room`, so Editing, Thumbnails and Creator
+ * Tools each pick up their own hue through one shared component — violet, pink
+ * and blue, all inside the site's gradient family so the row still reads as a
+ * set rather than three unrelated tiles.
  */
-export function CategoryCard({
-  category,
-  index,
-}: {
-  category: Category;
-  /** Position in the shop, printed as the room number. */
-  index: number;
-}) {
+export function CategoryCard({ category }: { category: Category }) {
   const items = byCategory(category.id);
   if (items.length === 0) return null;
 
-  const from = Math.min(...items.map((p) => p.price));
-  const shelf = items.slice(0, 3);
+  const preview = items[0];
 
   return (
     <Link
       href={`/${category.id}`}
       data-room={category.id}
-      className="group border-line hover:border-line-bright bg-surface relative flex h-full flex-col border transition-colors duration-500"
+      className="group bg-elevated border-line hover:border-line-bright relative flex items-center gap-4 overflow-hidden rounded-2xl border p-4 transition-colors duration-500 sm:p-5"
     >
-      {/* The doorway. Grows on hover, so the room opens up rather than lifting. */}
-      <span
-        aria-hidden="true"
-        className="room-bg h-[3px] w-full origin-left scale-x-[0.18] transition-transform duration-[700ms] ease-[var(--ease-glide)] group-hover:scale-x-100"
-      />
+      <div className="min-w-0 flex-1">
+        <span
+          className="border-line-bright bg-raised flex h-10 w-10 items-center justify-center rounded-xl border"
+          style={{ color: "var(--room)" }}
+        >
+          <CategoryIcon id={category.id} />
+        </span>
 
-      <div className="flex flex-1 flex-col p-7 sm:p-9">
-        <div className="flex items-baseline justify-between gap-4">
-          <span className="label room-accent">Room {index}</span>
-          {/* Spelled out, so the count is not mistaken for a second room number. */}
-          <span className="text-muted font-mono text-[12px]">
-            {String(items.length).padStart(2, "0")}{" "}
-            {items.length === 1 ? "pack" : "packs"}
-          </span>
-        </div>
-
-        <h3 className="font-display mt-6 text-[clamp(1.875rem,3vw,2.5rem)] leading-[1.02]">
+        <h3 className="mt-4 text-[13px] font-extrabold tracking-[0.05em] text-white uppercase">
           {category.name}
         </h3>
-        <p className="text-dim mt-3 max-w-[34ch] text-[15px] leading-relaxed">
+        <p className="text-dim mt-1.5 text-[13px] leading-relaxed">
           {category.blurb}
         </p>
 
-        {/* What is actually on the shelves, at full opacity. Contents, not decoration. */}
-        <div className="mt-8 grid grid-cols-3 gap-1.5">
-          {shelf.map((p) => (
-            <span
-              key={p.id}
-              className="bg-elevated border-line relative block aspect-[4/3] overflow-hidden border"
-            >
-              <Image
-                src={p.thumbnail}
-                alt={p.title}
-                fill
-                sizes="(max-width: 640px) 30vw, 180px"
-                className="object-cover transition-transform duration-[900ms] ease-[var(--ease-glide)] group-hover:scale-[1.06]"
-              />
-            </span>
-          ))}
-        </div>
-
-        <div className="border-line mt-auto flex items-baseline justify-between gap-4 border-t pt-5 sm:mt-8">
-          <span className="text-muted font-mono text-[12.5px]">
-            {from > 0 ? `From ${formatPrice(from)}` : "Free options inside"}
+        <span className="group-hover-room text-accent mt-4 inline-flex items-center gap-1.5 text-[13px] font-semibold transition-colors">
+          View all
+          <span
+            aria-hidden="true"
+            className="transition-transform duration-300 group-hover:translate-x-1"
+          >
+            &rarr;
           </span>
-          <span className="text-text group-hover-room text-[14px] font-medium transition-colors">
-            Go in{" "}
-            <span
-              aria-hidden="true"
-              className="inline-block transition-transform duration-300 group-hover:translate-x-1"
-            >
-              &rarr;
-            </span>
-          </span>
-        </div>
+        </span>
       </div>
+
+      {/* What is actually inside, at full opacity. Contents, not decoration. */}
+      <span className="bg-raised border-line relative hidden aspect-[4/3] w-[38%] shrink-0 overflow-hidden rounded-xl border sm:block">
+        <Image
+          src={preview.thumbnail}
+          alt={preview.title}
+          fill
+          sizes="(max-width: 1024px) 40vw, 220px"
+          className="object-cover transition-transform duration-[900ms] ease-[var(--ease-glide)] group-hover:scale-[1.06]"
+        />
+      </span>
     </Link>
+  );
+}
+
+/**
+ * One glyph per room. Deliberately geometric and stroke-only so they read as
+ * wayfinding marks rather than as the icon-above-title feature furniture the
+ * shop is trying not to look like.
+ */
+function CategoryIcon({ id }: { id: CategoryId }) {
+  const common = {
+    width: 18,
+    height: 18,
+    viewBox: "0 0 18 18",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.6,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    "aria-hidden": true,
+  };
+
+  if (id === "editing") {
+    /* Stacked frames: a timeline. */
+    return (
+      <svg {...common}>
+        <rect x="2" y="3" width="14" height="8" rx="1.5" />
+        <path d="M4 14h10M6.5 8.2V5.8L10 7z" />
+      </svg>
+    );
+  }
+
+  if (id === "thumbnails") {
+    /* Nodes and links: composed assets. */
+    return (
+      <svg {...common}>
+        <circle cx="4.5" cy="4.5" r="2" />
+        <circle cx="13.5" cy="4.5" r="2" />
+        <circle cx="9" cy="13.5" r="2" />
+        <path d="M6.5 4.5h5M5.6 6.2l2.4 5.4M12.4 6.2 10 11.6" />
+      </svg>
+    );
+  }
+
+  /* Creator tools: a bundle of panels. */
+  return (
+    <svg {...common}>
+      <rect x="2" y="2.5" width="6" height="6" rx="1.2" />
+      <rect x="10" y="2.5" width="6" height="6" rx="1.2" />
+      <rect x="2" y="10.5" width="6" height="5" rx="1.2" />
+      <rect x="10" y="10.5" width="6" height="5" rx="1.2" />
+    </svg>
   );
 }

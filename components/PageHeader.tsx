@@ -1,56 +1,67 @@
 /**
  * Standard header for a list page.
  *
- * Left-aligned, ruled, and paired with a mono index of whatever the page
- * actually contains — the same shelf-label pattern the homepage and the room
- * pages use. Nothing here is centred, because a centred title over a centred
- * paragraph is the layout every software landing page opens with.
+ * Sits on the bare page above the panel stack, mirroring the home page hero:
+ * a pill marker, a heavy left-aligned title with an optional trailing clause in
+ * the brand gradient, and a small index of what the page contains. Keeping it
+ * out of a panel is what signals "this is the top of the page" rather than
+ * "this is another shelf".
  */
 export function PageHeader({
   marker,
   title,
+  titleAccent,
   note,
   index,
 }: {
-  /** Mono marker, e.g. "The shop". Sits above the rule. */
   marker: string;
   title: string;
+  /** Optional trailing clause, set in the brand gradient. */
+  titleAccent?: string;
   note?: string;
-  /** Technical facts about this page, printed as a small index card. */
+  /** Facts about this page, printed as a small index beside the title. */
   index?: { term: string; value: string; accent?: boolean }[];
 }) {
   return (
-    <header className="border-line border-b">
-      <div className="shell pt-14 pb-12 sm:pt-20 sm:pb-14">
-        <div className="rule-out text-muted mb-8">
-          <span className="label shrink-0">{marker}</span>
-        </div>
+    <header className="pt-10 pb-10 sm:pt-14 sm:pb-12">
+      <span className="border-accent/35 bg-accent/10 text-accent label inline-flex items-center rounded-full border px-3.5 py-1.5">
+        {marker}
+      </span>
 
-        <div className="grid items-end gap-x-16 gap-y-8 lg:grid-cols-[1.2fr_0.8fr]">
-          <div>
-            <h1 className="font-display-tight text-[clamp(2.75rem,7vw,5.5rem)] leading-[0.94]">
-              {title}
-            </h1>
-            {note && (
-              <p className="text-dim mt-5 max-w-[52ch] text-[17px] leading-relaxed">
-                {note}
-              </p>
+      <div className="mt-6 grid items-end gap-x-14 gap-y-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)]">
+        <div>
+          <h1 className="text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.04] font-extrabold tracking-[-0.03em]">
+            {title}
+            {titleAccent && (
+              <>
+                {" "}
+                <span className="grad-text">{titleAccent}</span>
+              </>
             )}
-          </div>
-
-          {index && index.length > 0 && (
-            <dl className="border-line text-muted flex flex-wrap gap-x-10 gap-y-3 border-t pt-5 font-mono text-[12px] lg:justify-end">
-              {index.map((row) => (
-                <div key={row.term} className="flex gap-2">
-                  <dt>{row.term}</dt>
-                  <dd className={row.accent ? "text-accent" : "text-text"}>
-                    {row.value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
+          </h1>
+          {note && (
+            <p className="text-dim mt-4 max-w-[52ch] text-[16px] leading-relaxed">
+              {note}
+            </p>
           )}
         </div>
+
+        {index && index.length > 0 && (
+          <dl className="border-line flex flex-wrap gap-x-8 gap-y-3 border-t pt-5 lg:justify-end">
+            {index.map((row) => (
+              <div key={row.term}>
+                <dt className="text-muted label">{row.term}</dt>
+                <dd
+                  className={`mt-1 text-[18px] font-extrabold ${
+                    row.accent ? "text-accent" : "text-white"
+                  }`}
+                >
+                  {row.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        )}
       </div>
     </header>
   );

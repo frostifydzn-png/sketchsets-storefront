@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Instrument_Serif, Inter_Tight } from "next/font/google";
+import { Inter_Tight } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { site } from "@/lib/site";
@@ -11,29 +11,13 @@ import { SiteFooter } from "@/components/SiteFooter";
 import "./globals.css";
 
 /*
- * Three voices, and the tension between the first two is the brand.
+ * One face, worked hard across its weight range.
  *
- * Editorial serif: headlines, the wordmark, anything a person wrote. Single
- * weight by design — the contrast in the strokes carries it, so nothing here
- * ever needs to shout in bold.
+ * The reference design is set entirely in a tight grotesque: 800 for headlines,
+ * 700 for section titles and prices, 600 for buttons, 400 for body. Pairing it
+ * with a second display face would fight the neon colour for attention, and the
+ * colour is doing the identity work here.
  */
-const instrument = Instrument_Serif({
-  variable: "--font-instrument",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  display: "swap",
-});
-
-/* Technical mono: catalogue numbers, formats, sizes, prices, section markers. */
-const plexMono = IBM_Plex_Mono({
-  variable: "--font-plex-mono",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  display: "swap",
-});
-
-/* Neutral carrier: body copy and controls. Meant to be unremarkable. */
 const interTight = Inter_Tight({
   variable: "--font-inter-tight",
   subsets: ["latin"],
@@ -79,12 +63,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${instrument.variable} ${plexMono.variable} ${interTight.variable} h-full antialiased`}
+      className={`${interTight.variable} h-full antialiased`}
     >
       <body className="bg-ink text-text flex min-h-full flex-col">
         <a
           href="#main"
-          className="bg-accent text-ink sr-only px-4 py-2 font-semibold focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50"
+          className="bg-accent text-white sr-only px-4 py-2 font-semibold focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50"
         >
           Skip to content
         </a>

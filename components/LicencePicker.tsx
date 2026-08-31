@@ -30,7 +30,7 @@ export function LicencePicker({ product }: { product: Product }) {
   const tiersWired = tiers.every((t) => t.payhipId);
 
   return (
-    <div className="border-line bg-surface border p-6 sm:p-7">
+    <div className="border-line bg-surface rounded-2xl border p-6 sm:p-7">
       {tiers.length > 0 && (
         <>
           <div className="rule-out text-muted">
@@ -44,8 +44,10 @@ export function LicencePicker({ product }: { product: Product }) {
               return (
                 <label
                   key={t.id}
-                  className={`border-line hover:bg-elevated flex cursor-pointer gap-3 border-b py-3.5 transition-colors first:border-t ${
-                    active ? "bg-elevated" : ""
+                  className={`mt-2 flex cursor-pointer gap-3 rounded-xl border p-3.5 transition-colors first:mt-0 ${
+                    active
+                      ? "border-accent/60 bg-accent/10"
+                      : "border-line hover:border-line-bright hover:bg-elevated"
                   }`}
                 >
                   <input
@@ -59,7 +61,7 @@ export function LicencePicker({ product }: { product: Product }) {
                   <span className="min-w-0 flex-1">
                     <span className="flex flex-wrap items-baseline gap-x-2.5">
                       <span
-                        className={`font-display text-[1.125rem] leading-none ${
+                        className={`font-extrabold tracking-[-0.02em] text-[1.125rem] leading-none ${
                           active ? "text-accent" : "text-text"
                         }`}
                       >
@@ -68,7 +70,7 @@ export function LicencePicker({ product }: { product: Product }) {
                       {t.recommended && (
                         <span className="label-sm text-muted">Most bought</span>
                       )}
-                      <span className="text-dim ml-auto font-mono text-[13px]">
+                      <span className="text-dim ml-auto text-[13px]">
                         {formatPrice(t.price)}
                       </span>
                     </span>
@@ -83,7 +85,7 @@ export function LicencePicker({ product }: { product: Product }) {
 
           <a
             href={payhipPage("license")}
-            className="text-muted hover:text-accent mt-3 inline-block font-mono text-[12px] transition-colors"
+            className="text-muted hover:text-accent mt-3 inline-block text-[12px] transition-colors"
           >
             Read the full licence &rarr;
           </a>
@@ -92,7 +94,7 @@ export function LicencePicker({ product }: { product: Product }) {
 
       <div className="border-line mt-6 flex items-baseline justify-between gap-4 border-t pt-6">
         <span className="label text-muted">Total</span>
-        <span className="font-display text-[2.5rem] leading-none">
+        <span className="font-extrabold tracking-[-0.02em] text-[2.5rem] leading-none">
           {formatPrice(total)}
         </span>
       </div>
@@ -100,14 +102,14 @@ export function LicencePicker({ product }: { product: Product }) {
       <a
         id="buy-button"
         href={href}
-        className={`bg-accent text-ink font-ui hover:bg-accent-dim mt-5 block px-6 py-4 text-center text-[16px] transition-colors ${
+        className={`btn-primary mt-5 w-full px-6 py-4 text-[16px] ${
           base.overlay ? "lemonsqueezy-button" : ""
         }`}
       >
         {product.price === 0 ? "Get it free" : "Get the pack"}
       </a>
 
-      <p className="text-muted mt-3.5 text-center font-mono text-[12px]">
+      <p className="text-muted mt-3.5 text-center text-[12px]">
         Instant download &middot; via {base.overlay ? "Lemon Squeezy" : "Payhip"}
       </p>
 

@@ -133,7 +133,7 @@ export function ShopBrowser({ products }: { products: Product[] }) {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search products…"
-              className="bg-surface ring-line focus:ring-accent text-text placeholder:text-muted w-full px-5 py-3 text-[15px] ring-1 outline-none focus:ring-2"
+              className="bg-elevated border-line focus:border-accent text-text placeholder:text-muted w-full rounded-full border px-5 py-3 text-[15px] outline-none"
             />
           </label>
 
@@ -142,7 +142,7 @@ export function ShopBrowser({ products }: { products: Product[] }) {
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortKey)}
-              className="border-line hover:border-line-bright text-text cursor-pointer appearance-none border bg-transparent py-3 pr-10 pl-5 text-[14px] font-medium outline-none"
+              className="border-line hover:border-line-bright bg-elevated text-text cursor-pointer appearance-none rounded-full border py-3 pr-10 pl-5 text-[14px] font-medium outline-none"
             >
               {sorts.map((s) => (
                 <option key={s.id} value={s.id} className="bg-surface">
@@ -164,7 +164,7 @@ export function ShopBrowser({ products }: { products: Product[] }) {
         </p>
 
         {results.length > 0 ? (
-          <div className="mt-6 grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-3">
+          <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-3">
             {results.map((product, i) => (
               <ProductCard
                 key={product.id}
@@ -175,7 +175,7 @@ export function ShopBrowser({ products }: { products: Product[] }) {
           </div>
         ) : (
           <div className="py-24 text-center">
-            <p className="font-display text-2xl">Nothing matches</p>
+            <p className="font-extrabold tracking-[-0.02em] text-2xl">Nothing matches</p>
             <p className="text-muted mt-2 text-[15px]">
               Try a different search or category.
             </p>
@@ -185,7 +185,7 @@ export function ShopBrowser({ products }: { products: Product[] }) {
                 setFilter({ kind: "all" });
                 setQuery("");
               }}
-              className="bg-accent text-ink mt-6 px-6 py-3 text-[14px] font-bold"
+              className="btn-primary mt-6 px-6 py-3 text-[14px]"
             >
               Show everything
             </button>

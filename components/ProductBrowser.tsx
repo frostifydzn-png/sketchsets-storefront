@@ -225,11 +225,11 @@ export function ProductBrowser({
         <button
           type="button"
           onClick={() => setSheetOpen(true)}
-          className="border-line hover:border-line-bright ml-auto flex items-center gap-2 border px-4 py-2 text-[14px] font-medium"
+          className="border-line hover:border-line-bright bg-elevated ml-auto flex items-center gap-2 rounded-full border px-4 py-2 text-[14px] font-medium transition-colors"
         >
           Filters
           {active.length > 0 && (
-            <span className="bg-accent text-ink flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold">
+            <span className="bg-accent text-white flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold">
               {active.length}
             </span>
           )}
@@ -247,7 +247,7 @@ export function ProductBrowser({
               key={f.label}
               type="button"
               onClick={f.clear}
-              className="bg-elevated text-dim hover:text-text inline-flex items-center gap-1.5 px-3 py-1.5 text-[13px] transition-colors"
+              className="bg-elevated border-line text-dim hover:text-text hover:border-accent inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[13px] transition-colors"
             >
               {f.label}
               <span aria-hidden="true">×</span>
@@ -290,14 +290,14 @@ export function ProductBrowser({
           </div>
         ) : (
           <div className="py-24 text-center">
-            <p className="font-display text-2xl">Nothing matches</p>
+            <p className="font-extrabold tracking-[-0.02em] text-2xl">Nothing matches</p>
             <p className="text-muted mt-2 text-[15px]">
               Try widening the price range or clearing a filter.
             </p>
             <button
               type="button"
               onClick={clearAll}
-              className="bg-accent text-ink mt-6 px-5 py-3 text-[14px] font-bold"
+              className="btn-primary mt-6 px-5 py-3 text-[14px]"
             >
               Clear all filters
             </button>
@@ -320,7 +320,7 @@ export function ProductBrowser({
           />
           <div className="bg-surface border-line animate-fade-up absolute inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto -2xl border-t p-6">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="font-display text-xl">Filters</h2>
+              <h2 className="font-extrabold tracking-[-0.02em] text-xl">Filters</h2>
               <button
                 type="button"
                 onClick={() => setSheetOpen(false)}
@@ -341,7 +341,7 @@ export function ProductBrowser({
               <button
                 type="button"
                 onClick={() => setSheetOpen(false)}
-                className="bg-accent text-ink flex-1 py-3.5 text-[15px] font-bold"
+                className="btn-primary flex-1 py-3.5 text-[15px]"
               >
                 Show {results.length}
               </button>

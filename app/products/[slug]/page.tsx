@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { LicencePicker } from "@/components/LicencePicker";
 import { MobileBuyBar } from "@/components/MobileBuyBar";
 import { ProductCard } from "@/components/ProductCard";
-import { SectionHeader } from "@/components/SectionHeader";
+import { LabelPanel } from "@/components/LabelPanel";
 import { ProductGallery } from "@/components/ProductGallery";
 import { getCreator, monogram } from "@/lib/creators";
 import {
@@ -86,7 +86,7 @@ export default async function ProductPage({
   };
 
   return (
-    <div className="shell pt-6 pb-24 lg:pb-0">
+    <div className="shell stack-bottom pt-6">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -94,9 +94,9 @@ export default async function ProductPage({
 
       <nav
         aria-label="Breadcrumb"
-        className="text-muted flex gap-2 font-mono text-[12px] tracking-wide"
+        className="text-muted flex gap-2 text-[12px] tracking-wide"
       >
-        <Link href="/browse" className="hover:text-text transition-colors">
+        <Link href="/browse" className="hover:text-accent transition-colors">
           Shop
         </Link>
         <span>/</span>
@@ -104,7 +104,7 @@ export default async function ProductPage({
           <>
             <Link
               href={`/${category.id}`}
-              className="hover:text-text transition-colors"
+              className="hover:text-accent transition-colors"
             >
               {category.name}
             </Link>
@@ -116,19 +116,17 @@ export default async function ProductPage({
 
       {/* Catalogue number sits with the name, the way an archive labels a piece. */}
       <header className="pt-10 pb-10 sm:pt-12 sm:pb-14">
-        <div className="rule-out text-muted mb-7">
-          <span className="label text-accent shrink-0">
-            Set {product.setNumber}
-          </span>
-        </div>
+        <span className="border-accent/35 bg-accent/10 text-accent label mb-6 inline-flex items-center rounded-full border px-3.5 py-1.5">
+          Set {product.setNumber}
+        </span>
         <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
           <div>
-            <h1 className="font-display-tight max-w-[16ch] text-[clamp(2.25rem,5.6vw,4.25rem)] leading-[0.98]">
+            <h1 className="max-w-[16ch] text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.02] font-extrabold tracking-[-0.03em]">
               {product.title}
             </h1>
           </div>
           {product.rating && (
-            <p className="text-muted font-mono text-[13px]">
+            <p className="text-muted text-[13px]">
               <span className="text-accent">★</span>{" "}
               {product.rating.average.toFixed(1)} from {product.rating.count}{" "}
               {product.rating.count === 1 ? "review" : "reviews"}
@@ -159,7 +157,7 @@ export default async function ProductPage({
         </div>
 
         <div className="min-w-0 lg:col-start-1 lg:row-start-2">
-          <div className="section-gap-sm max-w-[68ch]">
+          <div className="panel mt-6 max-w-[70ch]">
             {/* Lead runs bold and large; the rest is body copy. */}
             <p className="text-text text-[19px] leading-snug font-semibold sm:text-[21px]">
               {product.valueProp}
@@ -218,7 +216,7 @@ export default async function ProductPage({
             )}
 
             {/* Spec sheet: label left, value right, hairline between. */}
-            <dl className="section-gap-sm">
+            <dl className="mt-1">
               <Spec label="Set number">{product.setNumber}</Spec>
               <Spec label="File size">
                 {product.fileSize.replace("ZIP · ", "")}
@@ -255,7 +253,7 @@ export default async function ProductPage({
                 {product.tags.map((tag) => (
                   <li
                     key={tag}
-                    className="border-line text-muted border px-3 py-1.5 font-mono text-[12px] tracking-wide"
+                    className="border-line bg-elevated text-muted hover:border-accent hover:text-accent rounded-full border px-3 py-1.5 text-[12px] transition-colors"
                   >
                     {tag}
                   </li>
@@ -266,7 +264,7 @@ export default async function ProductPage({
             {creator && (
               <Block title="About the creator">
                 <div className="flex items-start gap-4">
-                  <span className="bg-elevated border-line text-dim flex h-11 w-11 shrink-0 items-center justify-center border font-mono text-[13px]">
+                  <span className="bg-elevated border-line text-dim flex h-11 w-11 shrink-0 items-center justify-center border text-[13px]">
                     {monogram(creator.name)}
                   </span>
                   <div className="max-w-[56ch]">
@@ -295,13 +293,18 @@ export default async function ProductPage({
       </div>
 
       {related.length > 0 && (
-        <section className="section-gap">
-          <SectionHeader marker="Nearby on the shelf" title="More like this" />
-          <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
-            {related.map((item) => (
-              <ProductCard key={item.id} product={item} size="compact" />
-            ))}
-          </div>
+        <section className="mt-6">
+          <LabelPanel
+            title="More like this"
+            description="Other packs that sit near this one."
+            action={{ href: "/browse", label: "Browse everything" }}
+          >
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+              {related.map((item) => (
+                <ProductCard key={item.id} product={item} />
+              ))}
+            </div>
+          </LabelPanel>
         </section>
       )}
 
@@ -326,7 +329,7 @@ function Spec({
       <dt className="text-muted text-[12px] font-semibold tracking-wider uppercase">
         {label}
       </dt>
-      <dd className="text-text text-right font-mono text-[13.5px] tracking-wide">
+      <dd className="text-text text-right text-[13.5px] tracking-wide">
         {children}
       </dd>
     </div>
@@ -368,9 +371,9 @@ function Block({
   children: React.ReactNode;
 }) {
   return (
-    <section className="border-line border-t pt-7 pb-12 first:border-t-0 first:pt-0 last:pb-0">
+    <section className="border-line border-t pt-7 pb-9 first:border-t-0 first:pt-0 last:pb-0">
       <div className="mb-6 flex items-baseline justify-between gap-4">
-        <h2 className="font-display text-[1.5rem] leading-none">{title}</h2>
+        <h2 className="font-extrabold tracking-[-0.02em] text-[1.5rem] leading-none">{title}</h2>
         {meta && <span className="text-muted text-[14px]">{meta}</span>}
       </div>
       {children}
@@ -384,20 +387,20 @@ function PairsWith({ slug }: { slug: string }) {
   if (!bundle) return null;
 
   return (
-    <section className="section-gap-sm">
+    <section className="mt-6">
       <Link
         href={`/products/${bundle.slug}`}
-        className="bg-surface ring-line hover:ring-line-bright flex flex-col gap-4 p-6 ring-1 transition-all sm:flex-row sm:items-center sm:justify-between sm:p-8"
+        className="bg-surface border-line hover:border-accent/60 flex flex-col gap-4 rounded-2xl border p-6 transition-colors sm:flex-row sm:items-center sm:justify-between sm:p-8"
       >
         <div>
           <p className="text-muted text-[14px]">Pairs well with</p>
-          <h2 className="font-display mt-2 text-2xl">{bundle.title}</h2>
+          <h2 className="font-extrabold tracking-[-0.02em] mt-2 text-2xl">{bundle.title}</h2>
           <p className="text-dim mt-1.5 text-[15px]">
             This pack plus {(bundle.bundleOf?.length ?? 1) - 1} more, bundled.
           </p>
         </div>
         <div className="shrink-0 text-left sm:text-right">
-          <p className="font-display text-3xl">{formatPrice(bundle.price)}</p>
+          <p className="font-extrabold tracking-[-0.02em] text-3xl">{formatPrice(bundle.price)}</p>
           <p className="text-muted text-[13px]">
             <s>${bundleTotal(bundle).toFixed(2)}</s> separately
           </p>

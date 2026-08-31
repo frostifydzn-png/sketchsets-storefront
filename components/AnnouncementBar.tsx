@@ -16,7 +16,7 @@ export function AnnouncementBar() {
     <div className="border-line bg-surface border-b">
       <Link
         href={`/products/${vault.slug}`}
-        className="shell text-dim hover:text-text group flex h-11 items-center justify-center gap-2.5 text-center font-mono text-[12px] transition-colors"
+        className="shell text-dim hover:text-text group flex h-11 items-center justify-center gap-2.5 text-center text-[12px] transition-colors"
       >
         <span
           className="bg-accent h-1.5 w-1.5 rounded-full"

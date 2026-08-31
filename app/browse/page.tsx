@@ -17,21 +17,22 @@ export default function BrowsePage() {
   );
 
   return (
-    <>
+    <div className="shell stack-bottom">
       <PageHeader
-        marker="The whole floor"
-        title="Everything we stock"
+        marker="The whole shop"
+        title="Everything we"
+        titleAccent="stock."
         note="The full catalogue in one place. Small on purpose — every pack here earned its slot."
         index={[
-          { term: "PACKS", value: String(products.length).padStart(3, "0") },
-          { term: "FREE", value: String(free.length).padStart(3, "0") },
-          { term: "FROM", value: formatPrice(lowest), accent: true },
+          { term: "Packs", value: String(products.length) },
+          { term: "Free", value: String(free.length) },
+          { term: "From", value: formatPrice(lowest), accent: true },
         ]}
       />
 
-      <div className="shell pt-10 pb-4">
+      <div className="panel">
         <ShopBrowser products={products} />
       </div>
-    </>
+    </div>
   );
 }
