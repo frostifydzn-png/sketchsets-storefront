@@ -428,11 +428,12 @@ p {
   line-height: 1.65;
 }
 
-/* Display headings run white into pink into violet. Scoped to the four
-   places that hold a real display heading, because -webkit-text-fill-color
-   INHERITS: applied broadly it would turn any nested element transparent,
-   and the testimonial slider and the footer both put text inside a
-   .heading-text. Footer headings are 16px labels and stay white.
+/* Display headings run near-black into magenta into violet. Scoped to
+   the four places that hold a real display heading, because
+   -webkit-text-fill-color INHERITS: applied broadly it would turn any
+   nested element transparent, and the testimonial slider and the footer
+   both put text inside a .heading-text. Footer headings sit on the dark
+   band and are overridden to solid white in section 19b.
 
    Guarded by @supports so a browser without background-clip:text keeps
    the solid colour rather than rendering nothing. */
@@ -502,10 +503,9 @@ button.add-to-cart-button:active,
 
 /* --- secondary ---
    Payhip marks "Buy Now" as .btn-secondary next to a primary "Add to
-   Cart". Solid white with dark ink, straight from NOD's hero pair: on
-   a dark page two solid buttons side by side read as a real choice,
-   where a fill next to an outline reads as one button and one
-   afterthought. */
+   Cart". Two solid buttons side by side read as a real choice, where a
+   fill next to an outline reads as one button and one afterthought -
+   that much is straight from NOD's hero pair. */
 .btn.btn-secondary,
 .btn.payhip-buy-button {
   display: inline-flex !important;
