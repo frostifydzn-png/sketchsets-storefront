@@ -22,6 +22,16 @@
 
    DESIGN DIRECTION
    ---------------------------------------------------------
+   A LIGHT PAGE BETWEEN TWO DARK BANDS, after Nerd or Die:
+   navigation at the top and the footer at the bottom are dark,
+   and everything between them sits on a near-white ground. The
+   bands are what give a light page somewhere to start and stop.
+
+   The header stays dark for a practical reason as well as a
+   visual one: the store logo is white artwork, and it would
+   disappear on a light bar. Swap the logo for a dark version
+   and the header can go light too - see section 4.
+
    Sections are not boxed. They sit on the page and are
    separated by space; the type and the artwork do the
    dividing. Product artwork is rounded; the page is not.
@@ -39,6 +49,14 @@
   --ss-accent-hover: #ff5cae;
   --ss-violet: #a855f7;
 
+  /* THE ACCENT AS TEXT NEEDS TO BE DARKER THAN THE ACCENT AS A FILL.
+     Measured against the light ground below, #ff3d9e is 2.96:1, which
+     fails AA badly - every price on the site was set in it and would
+     have been close to unreadable. #c2166c is 5.24:1 and reads as the
+     same colour. Fills keep the bright accent, because they carry dark
+     ink on top of them rather than sitting on the page. */
+  --ss-accent-text: #c2166c;
+
   /* The one gradient. Every premium surface draws from these two so the
      pink and the violet always run the same direction and the same
      distance apart; mixing bespoke gradients per component is what makes
@@ -52,17 +70,31 @@
      the readable one. */
   --ss-accent-ink: #12040c;
 
-  /* ---- surfaces ---- Every one carries a violet cast. */
-  --ss-bg: #0a0512;
-  --ss-panel: #120a1e;
-  --ss-panel-2: #1a1029;
-  --ss-line: rgba(255, 255, 255, 0.08);
-  --ss-line-strong: rgba(255, 255, 255, 0.16);
+  /* ---- light surfaces ---- Each carries a faint violet cast so the
+     page never reads as plain grey. */
+  --ss-bg: #f4f3f6;
+  --ss-panel: #ffffff;
+  --ss-panel-2: #e9e7ee;
+  --ss-line: rgba(21, 17, 24, 0.11);
+  --ss-line-strong: rgba(21, 17, 24, 0.2);
 
-  /* ---- text ---- */
-  --ss-text: #ffffff;
-  --ss-dim: #b6a6c9;
-  --ss-muted: #877796;
+  /* ---- text on the light ground ----
+     Measured against #f4f3f6: 16.88:1, 8.35:1 and 4.90:1. The muted
+     tone is the lightest that still passes AA for body text; anything
+     paler than this is decoration, not text. */
+  --ss-text: #151118;
+  --ss-dim: #4b4553;
+  --ss-muted: #6f6776;
+
+  /* ---- the dark bands ----
+     The header, its dropdown, the mobile drawer and the footer. These
+     do not follow the page, so they carry their own ink. */
+  --ss-dark: #14101b;
+  --ss-dark-2: #1c1626;
+  --ss-on-dark: #ffffff;
+  --ss-on-dark-dim: #b9b1c4;
+  --ss-on-dark-muted: #8a8194;
+  --ss-line-dark: rgba(255, 255, 255, 0.1);
 
   /* ---- shape ----
      Artwork and cards are rounded; sections are not boxed at all, so
@@ -78,7 +110,7 @@
   --ss-radius-input: 2px;
 
   /* ---- the one shadow, used by the dropdown panel ---- */
-  --ss-shadow-2: 0 16px 44px rgba(0, 0, 0, 0.38);
+  --ss-shadow-2: 0 18px 44px rgba(21, 17, 24, 0.22);
 
   /* ---- rhythm ----
      These replace Payhip's section padding rather than adding to it,
@@ -129,35 +161,34 @@
   --card-corner-radius: 12px;
 }
 
+/* Every scheme resolves to the light ground now. The sections are
+   transparent anyway, but a scheme this file does not name would
+   otherwise paint Payhip's own colour straight onto the page. */
 [data-section-setting-color-scheme-id="lightPrimary"],
-[data-css-variables-color-scheme-id="lightPrimary"] {
-  --color-section-background: 18, 10, 30;
-  --color-variant-pills-block-text: 18, 10, 30;
+[data-css-variables-color-scheme-id="lightPrimary"],
+[data-section-setting-color-scheme-id="whitePrimary"],
+[data-css-variables-color-scheme-id="whitePrimary"] {
+  --color-section-background: 244, 243, 246;
+  --color-variant-pills-block-text: 21, 17, 24;
 }
 
+/* The two dark schemes stay dark: the header uses darkPrimary, and
+   the footer band should keep a dark ground too. */
 [data-section-setting-color-scheme-id="blackPrimary"],
-[data-css-variables-color-scheme-id="blackPrimary"] {
-  --color-section-background: 10, 5, 18;
-  --color-variant-pills-block-text: 10, 5, 18;
-}
-
+[data-css-variables-color-scheme-id="blackPrimary"],
 [data-section-setting-color-scheme-id="darkPrimary"],
 [data-css-variables-color-scheme-id="darkPrimary"] {
-  --color-section-background: 10, 5, 18;
-}
-
-[data-switch-to-color-scheme-id="whitePrimary"],
-[data-css-variables-color-scheme-id="whitePrimary"] {
-  --color-section-background: 18, 10, 30;
+  --color-section-background: 20, 16, 27;
+  --color-variant-pills-block-text: 255, 255, 255;
 }
 
 /* Bootstrap's default anchor colour. Specificity 0-0-1, so every
    rule the theme actually classes still wins over this. */
 a {
-  color: var(--ss-accent);
+  color: var(--ss-accent-text);
 }
 a:hover {
-  color: var(--ss-accent-hover);
+  color: var(--ss-accent);
 }
 
 /* The account and cart glyphs draw from currentColor, so the blue
@@ -176,6 +207,7 @@ a:hover {
 .modal-content {
   background: var(--ss-panel) !important;
   color: var(--ss-dim) !important;
+  border: 1px solid var(--ss-line) !important;
 }
 
 /* Payment brand marks in the footer keep their own colours: those
@@ -409,7 +441,10 @@ p {
   .js-section-wrapper[data-section-key="image-and-text-advanced"] .heading-text,
   .js-section-wrapper[data-section-key="featured-collection"] .heading-text,
   .content-main-wrapper .js-section-wrapper[data-section-key] .heading-text-main {
-    background-image: linear-gradient(103deg, #ffffff 0%, #ffffff 30%, #ffb3dd 66%, #c9a3ff 100%);
+    /* Runs dark into magenta into violet now. The old ramp started at
+       white, which on a light page is invisible for the first third of
+       every headline. */
+    background-image: linear-gradient(103deg, #151118 0%, #151118 26%, #c2166c 68%, #7c3aed 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -477,9 +512,12 @@ button.add-to-cart-button:active,
   align-items: center !important;
   justify-content: center !important;
   font-family: "neue-haas-grotesk-text", rubik, sans-serif !important;
-  background: #ffffff !important;
-  color: #12040c !important;
-  -webkit-text-fill-color: #12040c !important;
+  /* Near-black, not white: on the light page a white button would be
+     invisible. Solid dark next to the magenta fill still gives the
+     pair the two-real-choices reading NOD gets from white-and-lime. */
+  background: var(--ss-dark) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
   border: 0 !important;
   border-radius: var(--ss-radius-btn) !important;
   padding: 15px 30px !important;
@@ -493,7 +531,7 @@ button.add-to-cart-button:active,
 
 .btn.btn-secondary:hover,
 .btn.payhip-buy-button:hover {
-  filter: brightness(0.92);
+  filter: brightness(1.6);
   transform: translateY(-1px);
 }
 
@@ -517,22 +555,37 @@ button.add-to-cart-button[disabled] {
    scrolls away and never comes back. On a 4,300px page that leaves
    no way to navigate without scrolling to the top. Fixed keeps it
    reachable; section 1 gives the content clearance beneath it. */
+/* THE HEADER IS THE TOP DARK BAND.
+   It stays dark on a light page for a practical reason: the store logo
+   is white artwork and would vanish on a light bar. Export a dark logo
+   and this rule plus the dropdown below can flip to light.
+
+   Tint deepened from 0.88 to 0.96. At 0.88 the hero artwork bled
+   through hard enough that the bar read navy rather than violet-black,
+   which is what it looked like in the screenshots. The blur stays. */
 #header {
   position: fixed !important;
   top: 0;
   right: 0;
   left: 0;
   z-index: 200 !important;
-  background: rgba(10, 5, 18, 0.88) !important;
-  backdrop-filter: blur(16px) saturate(130%);
-  -webkit-backdrop-filter: blur(16px) saturate(130%);
-  border-bottom: 1px solid var(--ss-line) !important;
+  background: rgba(20, 16, 27, 0.96) !important;
+  backdrop-filter: blur(18px) saturate(130%);
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
+  border-bottom: 1px solid var(--ss-line-dark) !important;
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   #header {
-    background: rgba(10, 5, 18, 0.98) !important;
+    background: var(--ss-dark) !important;
   }
+}
+
+/* Everything in the band takes the band's ink, not the page's. */
+.header-nav-wrapper nav.header-nav-list .header-nav-item a,
+.nav-mobile-block .menu a,
+.js-nav-mobile-block .menu a {
+  color: var(--ss-on-dark) !important;
 }
 
 .js-section-wrapper[data-section-key],
@@ -632,14 +685,14 @@ button.add-to-cart-button[disabled] {
   margin-top: 10px;
   padding: 14px !important;
   border-radius: 16px !important;
-  border: 1px solid var(--ss-line) !important;
-  box-shadow: var(--ss-shadow-2) !important;
+  border: 1px solid var(--ss-line-dark) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4) !important;
   /* Two soft corner washes over a solid base. The base is last, so it
      is the bottom layer and the whole panel stays opaque. */
   background:
-    radial-gradient(120% 130% at 14% 0%, rgba(255, 61, 158, 0.13), transparent 56%),
-    radial-gradient(120% 130% at 86% 0%, rgba(168, 85, 247, 0.13), transparent 56%),
-    #140b22 !important;
+    radial-gradient(120% 130% at 14% 0%, rgba(255, 61, 158, 0.14), transparent 56%),
+    radial-gradient(120% 130% at 86% 0%, rgba(168, 85, 247, 0.14), transparent 56%),
+    var(--ss-dark) !important;
 }
 
 /* The small panel was 200px wide, which wrapped "Contact Us". */
@@ -655,15 +708,15 @@ button.add-to-cart-button[disabled] {
   margin-top: 0;
   padding: 34px 0 40px !important;
   border-radius: 0 0 20px 20px !important;
-  border-top: 1px solid var(--ss-line) !important;
+  border-top: 1px solid var(--ss-line-dark) !important;
   border-right: 0 !important;
   border-bottom: 0 !important;
   border-left: 0 !important;
   background:
     var(--ss-grad-line) bottom left / 100% 2px no-repeat,
-    radial-gradient(110% 130% at 14% 0%, rgba(255, 61, 158, 0.13), transparent 56%),
-    radial-gradient(110% 130% at 86% 0%, rgba(168, 85, 247, 0.13), transparent 56%),
-    #140b22 !important;
+    radial-gradient(110% 130% at 14% 0%, rgba(255, 61, 158, 0.14), transparent 56%),
+    radial-gradient(110% 130% at 86% 0%, rgba(168, 85, 247, 0.14), transparent 56%),
+    var(--ss-dark) !important;
 }
 
 /* --- links, both shapes ---
@@ -678,7 +731,7 @@ button.add-to-cart-button[disabled] {
   padding: 8px 14px;
   margin: 1px 0;
   border-radius: 0 !important;
-  color: var(--ss-dim);
+  color: var(--ss-on-dark-dim);
   font-weight: 600;
   text-decoration: none !important;
   background: none !important;
@@ -733,10 +786,10 @@ button.add-to-cart-button[disabled] {
 .header-dropdown-wrapper .dropdown-column:has(.dropdown-item-level2) .dropdown-item-level1 a {
   padding: 0 12px 10px 14px;
   margin-bottom: 8px;
-  border-bottom: 1px solid var(--ss-line);
+  border-bottom: 1px solid var(--ss-line-dark);
   border-radius: 0 !important;
   background: none !important;
-  color: var(--ss-muted) !important;
+  color: var(--ss-on-dark-muted) !important;
   font-size: 12px !important;
   font-weight: 700 !important;
   letter-spacing: 0.02em;
@@ -746,7 +799,7 @@ button.add-to-cart-button[disabled] {
 
 .header-dropdown-wrapper .dropdown-item-level2 a {
   padding: 8px 12px 8px 14px;
-  color: var(--ss-text) !important;
+  color: var(--ss-on-dark) !important;
   font-size: 15px !important;
 }
 
@@ -794,8 +847,9 @@ button.add-to-cart-button[disabled] {
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
     overscroll-behavior: contain !important;
-    background: var(--ss-panel) !important;
-    color: var(--ss-text) !important;
+    /* Part of the dark navigation band, not the light page. */
+    background: var(--ss-dark) !important;
+    color: var(--ss-on-dark) !important;
     box-sizing: border-box !important;
     padding-top: max(16px, env(safe-area-inset-top)) !important;
     padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
@@ -806,8 +860,8 @@ button.add-to-cart-button[disabled] {
   .nav-mobile-block .submenu a,
   .js-nav-mobile-block .menu a,
   .js-nav-mobile-block .submenu a {
-    color: var(--ss-text) !important;
-    -webkit-text-fill-color: var(--ss-text) !important;
+    color: var(--ss-on-dark) !important;
+    -webkit-text-fill-color: var(--ss-on-dark) !important;
     opacity: 1 !important;
     font-weight: 600 !important;
     text-decoration: none !important;
@@ -820,20 +874,20 @@ button.add-to-cart-button[disabled] {
     background: transparent !important;
     border: 0 !important;
     box-shadow: none !important;
-    color: var(--ss-text) !important;
+    color: var(--ss-on-dark) !important;
   }
 
   .nav-mobile-block .dropdown-arrow svg path,
   .js-nav-mobile-block .dropdown-arrow svg path,
   .nav-mobile-block .nav-mobile-close-button svg path,
   .js-nav-mobile-block .nav-mobile-close-button svg path {
-    fill: var(--ss-text) !important;
-    stroke: var(--ss-text) !important;
+    fill: var(--ss-on-dark) !important;
+    stroke: var(--ss-on-dark) !important;
   }
 
   .nav-mobile-block .submenu li,
   .js-nav-mobile-block .submenu li {
-    border-color: var(--ss-line) !important;
+    border-color: var(--ss-line-dark) !important;
   }
 
   .nav-mobile-block a[href*="/users/login"],
@@ -1014,8 +1068,17 @@ button.add-to-cart-button[disabled] {
   transition: color 0.25s var(--ss-ease);
 }
 
+/* The theme paints card titles with its own heading colour, which is
+   white; on the light page that is an invisible title. */
+.product-card-wrapper .card__heading,
+.product-card-wrapper .card__heading a {
+  color: var(--ss-text) !important;
+  -webkit-text-fill-color: var(--ss-text) !important;
+}
+
 .product-card-wrapper .card:hover .card__heading a {
-  color: var(--ss-accent) !important;
+  color: var(--ss-accent-text) !important;
+  -webkit-text-fill-color: var(--ss-accent-text) !important;
 }
 
 /* The card wrapper carries the theme's `underline-links-hover` class,
@@ -1109,7 +1172,8 @@ button.add-to-cart-button[disabled] {
    button and invites a click that does nothing. */
 .product-card-wrapper .price__sale .price-item--sale.price-item--last,
 .product-card-wrapper .price:not(.price--on-sale) .price__regular .price-item--regular {
-  color: var(--ss-accent) !important;
+  color: var(--ss-accent-text) !important;
+  -webkit-text-fill-color: var(--ss-accent-text) !important;
   font-weight: 700 !important;
   font-size: 1.0625rem !important;
   line-height: 1 !important;
@@ -1210,8 +1274,8 @@ button.add-to-cart-button[disabled] {
   font-size: clamp(1.625rem, 2.2vw, 2rem) !important;
   font-weight: 700 !important;
   line-height: 1.1 !important;
-  color: var(--ss-accent) !important;
-  -webkit-text-fill-color: var(--ss-accent) !important;
+  color: var(--ss-accent-text) !important;
+  -webkit-text-fill-color: var(--ss-accent-text) !important;
 }
 
 .product-price {
@@ -1262,7 +1326,7 @@ button.add-to-cart-button[disabled] {
 }
 
 .product-description a {
-  color: var(--ss-accent) !important;
+  color: var(--ss-accent-text) !important;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -1304,7 +1368,7 @@ button.add-to-cart-button {
 
 .font-section-product-previewFileLink a,
 a.font-section-product-previewFileLink {
-  color: var(--ss-accent) !important;
+  color: var(--ss-accent-text) !important;
   font-weight: 600 !important;
 }
 
@@ -1682,7 +1746,7 @@ a.font-section-product-previewFileLink {
 
 .js-section-wrapper[data-section-key="slider-list"] .slider-list .richtext p:first-child {
   margin: 0 0 12px !important;
-  color: var(--ss-accent) !important;
+  color: var(--ss-accent-text) !important;
   font-size: 15px !important;
   letter-spacing: 2px;
   line-height: 1;
@@ -1813,7 +1877,7 @@ a.font-section-product-previewFileLink {
 
 .accordion-item .accordion-item-click-target:hover,
 .accordion-item .accordion-item-click-target[aria-expanded="true"] {
-  color: var(--ss-accent) !important;
+  color: var(--ss-accent-text) !important;
 }
 
 .accordion-item .accordion-item-title {
@@ -1843,7 +1907,7 @@ a.font-section-product-previewFileLink {
 .accordion-item .plus-horizontal-line,
 .accordion-item .plus-vertical-line {
   height: 2px !important;
-  background-color: var(--ss-accent) !important;
+  background-color: var(--ss-accent-text) !important;
 }
 
 .accordion-item-dropdown {
@@ -1900,10 +1964,9 @@ a.font-section-product-previewFileLink {
 .js-section-wrapper form input[type="number"],
 .js-section-wrapper form textarea {
   width: 100%;
-  background: var(--ss-panel-2) !important;
+  background: var(--ss-panel) !important;
   color: var(--ss-text) !important;
-  border: 0 !important;
-  border-bottom: 1px solid var(--ss-line-strong) !important;
+  border: 1px solid var(--ss-line-strong) !important;
   border-radius: var(--ss-radius-input) !important;
   padding: 13px 16px !important;
   outline: none !important;
@@ -1921,11 +1984,11 @@ a.font-section-product-previewFileLink {
 
 .js-section-wrapper form input:focus,
 .js-section-wrapper form textarea:focus {
-  border-bottom-color: var(--ss-accent) !important;
+  border-color: var(--ss-accent-text) !important;
 }
 
 .js-section-wrapper form .form-error {
-  color: #ff6b6b !important;
+  color: #c02626 !important;
   font-weight: 600;
   margin-top: 6px;
 }
@@ -1945,7 +2008,7 @@ a.font-section-product-previewFileLink {
   max-width: 100%;
   height: clamp(26px, 4vw, 46px);
   object-fit: contain;
-  opacity: 0.7;
+  opacity: 0.6;
   filter: grayscale(1);
   transition:
     opacity 0.18s var(--ss-ease),
@@ -2057,8 +2120,58 @@ a.font-section-product-previewFileLink {
 .accordion-item-title-wrapper:focus-visible,
 .btn:focus-visible,
 button:focus-visible {
-  outline: 2px solid var(--ss-accent) !important;
+  outline: 2px solid var(--ss-accent-text) !important;
   outline-offset: 3px !important;
+}
+
+/* ============================================================
+   19b. THE FOOTER BAND
+
+   The bottom of the NOD sandwich. A light page needs somewhere to
+   stop, and a footer that fades into the same near-white as the
+   catalogue above it gives the page no ending at all. This is the
+   only section that keeps a dark ground, so it carries its own ink.
+   ============================================================ */
+
+.js-section-wrapper[data-section-key="footer"] {
+  background: var(--ss-dark) !important;
+  color: var(--ss-on-dark-dim) !important;
+  margin-top: var(--ss-section-y);
+  padding-bottom: 44px !important;
+}
+
+.js-section-wrapper[data-section-key="footer"] p,
+.js-section-wrapper[data-section-key="footer"] li,
+.js-section-wrapper[data-section-key="footer"] span {
+  color: var(--ss-on-dark-dim) !important;
+}
+
+.js-section-wrapper[data-section-key="footer"] a {
+  color: var(--ss-on-dark-dim) !important;
+  text-decoration: none;
+  transition: color 0.18s var(--ss-ease);
+}
+
+.js-section-wrapper[data-section-key="footer"] a:hover {
+  color: var(--ss-on-dark) !important;
+}
+
+.js-section-wrapper[data-section-key="footer"] .heading-text,
+.js-section-wrapper[data-section-key="footer"] .heading-text-main {
+  color: var(--ss-on-dark) !important;
+  -webkit-text-fill-color: var(--ss-on-dark) !important;
+  background-image: none !important;
+}
+
+.js-section-wrapper[data-section-key="footer"] input[type="text"],
+.js-section-wrapper[data-section-key="footer"] input[type="email"] {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid var(--ss-line-dark) !important;
+  color: var(--ss-on-dark) !important;
+}
+
+.js-section-wrapper[data-section-key="footer"] ::placeholder {
+  color: var(--ss-on-dark-muted) !important;
 }
 
 /* ============================================================
@@ -2144,6 +2257,8 @@ button:focus-visible {
   background: var(--ss-accent);
   transform: scaleX(0);
   transform-origin: left;
+  /* The nav sits in the dark band, so the bright accent is correct
+     here even though accent-as-text is darker on the page. */
   transition: transform 0.28s var(--ss-ease);
 }
 
