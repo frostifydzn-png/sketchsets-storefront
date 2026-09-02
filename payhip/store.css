@@ -657,7 +657,7 @@ button.add-to-cart-button[disabled] {
 }
 
 /* Small heavy uppercase, exactly NOD's nav. Caps earn their place at
-   13px on a one-word label - they read as signage. They do not earn it
+   14px on a one-word label - they read as signage. They do not earn it
    at headline size, which is why every heading on this store stays
    sentence case (NOD's headlines are sentence case too). */
 .header-nav-wrapper nav.header-nav-list .header-nav-item a {
