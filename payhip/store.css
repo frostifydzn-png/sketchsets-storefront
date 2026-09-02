@@ -125,8 +125,8 @@
      which left the art floating with a gap on all four sides. */
   --card-image-padding: 0rem;
   --media-padding: 0px;
-  --media-radius: 14px;
-  --card-corner-radius: 14px;
+  --media-radius: 12px;
+  --card-corner-radius: 12px;
 }
 
 [data-section-setting-color-scheme-id="lightPrimary"],
@@ -457,14 +457,11 @@ button.add-to-cart-button:active,
 }
 
 /* --- secondary ---
-   Payhip already marks "Buy Now" as .btn-secondary next to a primary
-   "Add to Cart", and the file was painting both with the same gradient
-   - two identical filled buttons stacked on top of each other, which
-   is no hierarchy at all. The secondary is an outline, so the eye is
-   told which one is the default. */
-/* Solid white with black text, straight from NOD's hero pair. On a
-   dark page two solid buttons side by side read as a real choice;
-   an outline next to a fill reads as one button and one afterthought. */
+   Payhip marks "Buy Now" as .btn-secondary next to a primary "Add to
+   Cart". Solid white with dark ink, straight from NOD's hero pair: on
+   a dark page two solid buttons side by side read as a real choice,
+   where a fill next to an outline reads as one button and one
+   afterthought. */
 .btn.btn-secondary,
 .btn.payhip-buy-button {
   display: inline-flex !important;
