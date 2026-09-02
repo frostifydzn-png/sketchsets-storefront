@@ -985,12 +985,11 @@ button.add-to-cart-button[disabled] {
 
 .product-card-wrapper .card__heading {
   text-align: left !important;
-  /* The Text cut, not Display: at 15px the display drawing sets too
-     tight to read as a product name. */
   /* NOD's card title measured exactly: 14px, uppercase, weight 900,
      line-height 1.2. At this size caps are a label rather than
      shouting, and the weight is what makes a small label hold its own
-     under a big piece of artwork. */
+     under a big piece of artwork. The Text cut, not Display: at 14px
+     the display drawing sets too tight to read as a product name. */
   font-family: "neue-haas-grotesk-text", rubik, sans-serif !important;
   font-size: 14px !important;
   font-weight: 800 !important;
