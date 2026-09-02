@@ -1255,8 +1255,10 @@ button.add-to-cart-button[disabled] {
   /* NOD's card title measured exactly: 14px, uppercase, weight 900,
      line-height 1.2. At this size caps are a label rather than
      shouting, and the weight is what makes a small label hold its own
-     under a big piece of artwork. The Text cut, not Display: at 14px
-     the display drawing sets too tight to read as a product name. */
+     under a big piece of artwork. 15px and 700 here: Proxima sets a
+     little narrower than Neue Haas did, and 800 in it is heavier than
+     the 800 that was here before. --ss-font, never the display token,
+     since a display face at 15px sets too tight to read as a name. */
   font-family: var(--ss-font) !important;
   font-size: 15px !important;
   font-weight: 700 !important;
