@@ -51,27 +51,25 @@
      logo still carries a cyan mark, which now clashes. Either update
      the logo artwork or set --ss-accent back to #00bcff. */
   --ss-accent: #ff3d9e;
-  --ss-accent-hover: #ff5cae;
-  --ss-violet: #a855f7;
-
-  /* THE ACCENT AS TEXT NEEDS TO BE DARKER THAN THE ACCENT AS A FILL.
-     Measured against the light ground below, #ff3d9e is 2.96:1, which
-     fails AA badly - every price on the site was set in it and would
-     have been close to unreadable. #c2166c is 5.24:1 and reads as the
-     same colour. Fills keep the bright accent, because they carry dark
-     ink on top of them rather than sitting on the page. */
-  --ss-accent-text: #c2166c;
 
   /* NO GRADIENTS ANYWHERE. There used to be a --ss-grad fill and a
-     --ss-grad-line rule, and they are gone on purpose: NOD has not one
+     --ss-grad-line rule; both are gone on purpose. NOD does not have one
      gradient on it, and a gradient is the fastest way to make a
      marketplace read as a template rather than a shop. One flat accent,
-     used sparingly, is what makes the page look professional. */
-  /* Near-black on the accent, not white. Nerd or Die runs black text on
-     its lime, and the same holds here for a reason beyond taste.
-     Measured against #ff3d9e: white is 3.27:1, which fails AA for body
-     text; #12040c is 6.12:1, which passes. The punchier option is also
-     the readable one. */
+     used sparingly, is what makes the page look professional.
+
+     THE ACCENT AS TEXT IS DARKER THAN THE ACCENT AS A FILL. Measured
+     against the ground below, #ff3d9e is 2.96:1, which fails AA badly -
+     every price on the site was set in it and would have been close to
+     unreadable. #c2166c is 5.41:1 and reads as the same colour. Fills
+     keep the bright accent because they carry dark ink on top of them
+     rather than sitting on the page. */
+  --ss-accent-text: #c2166c;
+
+  /* Near-black on the accent, not white. NOD runs black text on its
+     lime, and the same holds here for a reason beyond taste: against
+     #ff3d9e, white is 3.27:1 and fails AA for body text, while #12040c
+     is 6.12:1 and passes. The punchier option is the readable one. */
   --ss-accent-ink: #12040c;
 
   /* ---- light surfaces ----
@@ -94,11 +92,10 @@
   /* ---- the dark bands ----
      The header, its dropdown, the mobile drawer and the footer. These
      do not follow the page, so they carry their own ink. */
-  --ss-dark: #14101b;
-  --ss-dark-2: #1c1626;
+  --ss-dark: #141618;
   --ss-on-dark: #ffffff;
-  --ss-on-dark-dim: #b9b1c4;
-  --ss-on-dark-muted: #8a8194;
+  --ss-on-dark-dim: #b4b5b7;
+  --ss-on-dark-muted: #85868a;
   --ss-line-dark: rgba(255, 255, 255, 0.1);
 
   /* ---- shape ----
@@ -113,9 +110,6 @@
   --ss-radius-btn: 8px;
   --ss-radius-pill: 9999px;
   --ss-radius-input: 2px;
-
-  /* ---- the one shadow, used by the dropdown panel ---- */
-  --ss-shadow-2: 0 18px 44px rgba(21, 17, 24, 0.22);
 
   /* ---- rhythm ----
      These replace Payhip's section padding rather than adding to it,
@@ -173,8 +167,8 @@
 [data-css-variables-color-scheme-id="lightPrimary"],
 [data-section-setting-color-scheme-id="whitePrimary"],
 [data-css-variables-color-scheme-id="whitePrimary"] {
-  --color-section-background: 244, 243, 246;
-  --color-variant-pills-block-text: 21, 17, 24;
+  --color-section-background: 247, 247, 247;
+  --color-variant-pills-block-text: 21, 21, 21;
 }
 
 /* The two dark schemes stay dark: the header uses darkPrimary, and
@@ -183,7 +177,7 @@
 [data-css-variables-color-scheme-id="blackPrimary"],
 [data-section-setting-color-scheme-id="darkPrimary"],
 [data-css-variables-color-scheme-id="darkPrimary"] {
-  --color-section-background: 20, 16, 27;
+  --color-section-background: 20, 22, 24;
   --color-variant-pills-block-text: 255, 255, 255;
 }
 
@@ -192,8 +186,12 @@
 a {
   color: var(--ss-accent-text);
 }
+
+/* Darkens on hover rather than brightening. The bright accent measures
+   2.96:1 on this ground, so hovering a link used to make it harder to
+   read than it was at rest. */
 a:hover {
-  color: var(--ss-accent);
+  color: var(--ss-text);
 }
 
 /* The account and cart glyphs draw from currentColor, so the blue
@@ -228,14 +226,14 @@ a:hover {
    the top of its gallery. Content clears it everywhere instead. */
 .content-main-wrapper {
   padding-top: 96px !important;
-  /* The dark ground is painted here as well as on body, and the reason
-     is the Payhip builder. Every section below is transparent so the
-     body colour shows through on the live site - but the builder
-     renders sections on its own light-grey canvas, so in there the
-     page looked grey with invisible white text and a washed-out
-     gradient heading. Painting the wrapper gives the builder the same
-     ground the site has. It sits behind every section and in front of
-     nothing, so no section's own artwork is covered. */
+  /* The ground is painted here as well as on body, and the reason is
+     the Payhip builder. Every section below is transparent so the body
+     colour shows through on the live site - but the builder renders
+     sections on its own canvas, so the page did not match what
+     visitors saw and was awkward to edit. Painting the wrapper gives
+     the builder the same ground the site has. It sits behind every
+     section and in front of nothing, so no section's own artwork is
+     covered. */
   background: var(--ss-bg) !important;
 }
 
@@ -563,7 +561,7 @@ button.add-to-cart-button[disabled] {
   right: 0;
   left: 0;
   z-index: 200 !important;
-  background: rgba(20, 16, 27, 0.96) !important;
+  background: rgba(20, 22, 24, 0.96) !important;
   backdrop-filter: blur(18px) saturate(130%);
   -webkit-backdrop-filter: blur(18px) saturate(130%);
   border-bottom: 1px solid var(--ss-line-dark) !important;
