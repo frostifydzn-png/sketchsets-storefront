@@ -41,8 +41,8 @@
    separated by space; the type and the artwork do the
    dividing. Product artwork is rounded; the page is not.
    Headlines are large, sentence case, solid, and tightly
-   tracked in Neue Haas Grotesk Display. Motion is scroll-driven
-   and costs no JavaScript.
+   tracked in Proxima Nova. Motion is scroll-driven and costs
+   no JavaScript.
    ============================================================ */
 
 :root {
@@ -524,8 +524,9 @@ button.btn.btn-primary.add-to-cart-button,
   align-items: center !important;
   justify-content: center !important;
   gap: 8px !important;
-  /* The theme hard-sets .btn to rubik, so the button is the one place
-     the new face has to be named again. */
+  /* The theme hard-sets .btn to rubik. The slot rule in section 2
+     already covers .btn, but this repeats it so the button survives
+     anyone narrowing that rule later. */
   font-family: var(--ss-font) !important;
   background: var(--ss-accent) !important;
   color: var(--ss-accent-ink) !important;
