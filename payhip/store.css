@@ -756,14 +756,14 @@ button.add-to-cart-button[disabled] {
    icons need a little more again.
 
    The vertical padding is deliberately much larger than the gap
-   between rows - 17px of clearance above FAQ and below Contact Us
+   between rows - 25px of clearance above FAQ and below Contact Us
    against 3px between the links themselves. That ratio is what makes
    a tight list read as one deliberate block rather than as text
    crammed against the edge of a box; matching the two would undo the
    tightening. */
 .header-dropdown-wrapper:not(:has(.dropdown-columns-wrapper)) {
   min-width: 252px;
-  padding: 16px 8px !important;
+  padding: 24px 8px !important;
 }
 
 /* The mega panel runs to both edges of the header, so a radius and a
@@ -855,12 +855,15 @@ button.add-to-cart-button[disabled] {
   min-width: 0;
 }
 
-/* The call to action is pinned to the far right of the bar and
-   centred against the column block, so the menu reads links-left,
-   destination-right rather than as a fourth list. */
+/* The call to action follows the last list at the normal column gap
+   rather than being pinned to the far right. It used to carry
+   margin-left: auto, which parked it 540px away from "Shop
+   Essentials" with nothing in between - far enough that it read as
+   part of the header rather than as the end of the menu. It sits at
+   the same gap as every other column now, and stays vertically
+   centred against the block so it does not hang off the top line. */
 .header-dropdown-wrapper .dropdown-columns-wrapper .dropdown-column:not(:has(.dropdown-item-level2)) {
   width: auto !important;
-  margin-left: auto !important;
   align-self: center !important;
 }
 
@@ -873,11 +876,25 @@ button.add-to-cart-button[disabled] {
 
 /* Column headings. A hairline under the label groups the links
    beneath it without drawing a box around them.
+
+   THE 29px INDENT IS THE ICON, AND IT IS WHAT FIXES THE ALIGNMENT.
+   Measured on the live menu, the heading text sat at x=66 while every
+   label under it sat at x=95, because the rows are flex and an 18px
+   icon plus an 11px gap pushes their text across. Two text edges 29px
+   apart down one column is what read as the headings being pushed out
+   of line. text-indent rather than padding-left on purpose: padding
+   would drag the hairline in with the text, and the rule is meant to
+   span the whole column including the icons.
+
+   If the icon size or the gap ever changes, this number has to change
+   with them - it is 18 + 11.
+
    (The trailing colons in "SHOP:" and "SHOP ESSENTIALS:" are builder
    content, not CSS - edit those in the menu settings.) */
 .header-dropdown-wrapper .dropdown-column:has(.dropdown-item-level2) .dropdown-item-level1 a {
-  padding: 0 8px 10px 0;
-  margin-bottom: 7px;
+  padding: 0 8px 12px 0;
+  text-indent: 29px;
+  margin-bottom: 10px;
   border-bottom: 1px solid var(--ss-line-dark);
   border-radius: 0 !important;
   background: none !important;
@@ -897,7 +914,7 @@ button.add-to-cart-button[disabled] {
   display: flex !important;
   align-items: center !important;
   gap: 11px !important;
-  padding: 5px 8px 5px 0 !important;
+  padding: 7px 8px 7px 0 !important;
   color: var(--ss-on-dark) !important;
   font-size: 15.5px !important;
   --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0l-7.2-7.2a2 2 0 0 1-.6-1.4V4.6A1.6 1.6 0 0 1 4.6 3h7.4a2 2 0 0 1 1.4.6l7.2 7.2a2 2 0 0 1 0 2.6z'/%3E%3Ccircle cx='7.6' cy='7.6' r='1.3'/%3E%3C/svg%3E");
