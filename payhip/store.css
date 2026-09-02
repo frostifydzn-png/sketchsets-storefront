@@ -659,9 +659,13 @@ button.add-to-cart-button[disabled] {
 
    Two shapes share these rules. Shop is a mega panel, absolutely
    positioned at left:0/right:0 against the header, so it always spans
-   the whole bar; the columns inside it are capped and centred rather
-   than stretched across 1,431px. Support is a small floating list
-   with no .dropdown-columns-wrapper at all.
+   the whole bar; the columns inside it are aligned to the site grid,
+   so the first one starts exactly under the logo. Support is a small
+   floating list with no .dropdown-columns-wrapper at all.
+
+   Every row carries an icon, drawn as a CSS mask rather than an
+   image - see the icon block at the end of this section for how and
+   why.
 
    THE PANEL IS OPAQUE, AND MUST STAY THAT WAY. It used to be 94%
    with its own backdrop-filter, and the page behind showed straight
@@ -684,9 +688,11 @@ button.add-to-cart-button[disabled] {
   background: var(--ss-dark) !important;
 }
 
-/* The small panel was 200px wide, which wrapped "Contact Us". */
+/* The small panel was 200px wide, which wrapped "Contact Us"; the
+   icons need a little more again. */
 .header-dropdown-wrapper:not(:has(.dropdown-columns-wrapper)) {
-  min-width: 226px;
+  min-width: 252px;
+  padding: 12px 8px !important;
 }
 
 /* The mega panel runs to both edges of the header, so a radius and a
@@ -740,21 +746,51 @@ button.add-to-cart-button[disabled] {
 
 /* --- mega panel columns --- */
 
-/* The theme hangs a Bootstrap-style -27px gutter off both sides of
-   this element and pads it itself, so both need !important or the
-   column block sits off-centre no matter what max-width it is given. */
+/* THE MENU IS ALIGNED TO THE SITE GRID, NOT CENTRED IN THE PANEL.
+   It used to be a 1,080px block centred inside a 1,457px panel, which
+   put the first column 190px in from the logo and left a dead zone
+   down the left of the menu - the thing that made it read as floating
+   rather than designed. Measured on the live header, the panel starts
+   at exactly the same x as the logo, so zeroing the inner wrapper's
+   own 40px padding lines the first column up underneath the brand
+   mark and the last one up with the cart icon.
+
+   The theme also hangs a Bootstrap-style -27px gutter off both sides
+   of this element and pads it itself, so both need !important. */
+.header-dropdown-wrapper:has(.dropdown-columns-wrapper) .header-dropdown-inner-wrapper {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
 .header-dropdown-wrapper .dropdown-columns-wrapper {
   display: flex !important;
   flex-wrap: nowrap;
-  gap: clamp(16px, 2.4vw, 44px);
-  max-width: min(1080px, calc(100% - (var(--ss-gutter) * 2)));
+  align-items: flex-start;
+  gap: clamp(18px, 2.6vw, 48px) !important;
+  width: 100% !important;
+  max-width: var(--ss-max) !important;
   margin: 0 auto !important;
   padding: 0 !important;
 }
 
+/* Fixed columns, not equal shares of the panel. The theme sets
+   width: 20% on these, so flex-basis: auto resolves to 275px and four
+   short lists get spread across the whole bar with nothing holding
+   them together. A set width is also what keeps the three headings'
+   hairlines the same length as each other. */
 .header-dropdown-wrapper .dropdown-columns-wrapper .dropdown-column {
-  flex: 1 1 0;
+  flex: 0 0 auto !important;
+  width: 202px !important;
   min-width: 0;
+}
+
+/* The call to action is pinned to the far right of the bar and
+   centred against the column block, so the menu reads links-left,
+   destination-right rather than as a fourth list. */
+.header-dropdown-wrapper .dropdown-columns-wrapper .dropdown-column:not(:has(.dropdown-item-level2)) {
+  width: auto !important;
+  margin-left: auto !important;
+  align-self: center !important;
 }
 
 /* Payhip reserves a first column for a promo image and leaves it in
@@ -769,7 +805,7 @@ button.add-to-cart-button[disabled] {
    (The trailing colons in "SHOP:" and "SHOP ESSENTIALS:" are builder
    content, not CSS - edit those in the menu settings.) */
 .header-dropdown-wrapper .dropdown-column:has(.dropdown-item-level2) .dropdown-item-level1 a {
-  padding: 0 12px 10px 14px;
+  padding: 0 8px 11px 0;
   margin-bottom: 8px;
   border-bottom: 1px solid var(--ss-line-dark);
   border-radius: 0 !important;
@@ -782,10 +818,23 @@ button.add-to-cart-button[disabled] {
   pointer-events: none;
 }
 
-.header-dropdown-wrapper .dropdown-item-level2 a {
-  padding: 8px 12px 8px 14px;
+/* Rows are flex now because each one carries an icon. The left
+   padding goes to zero so the icons, the heading above them and the
+   logo all sit on the same vertical line. */
+.header-dropdown-wrapper .dropdown-item-level2 a,
+.header-dropdown-wrapper:not(:has(.dropdown-columns-wrapper)) a {
+  display: flex !important;
+  align-items: center !important;
+  gap: 11px !important;
+  padding: 9px 8px 9px 0 !important;
   color: var(--ss-on-dark) !important;
   font-size: 15px !important;
+  --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0l-7.2-7.2a2 2 0 0 1-.6-1.4V4.6A1.6 1.6 0 0 1 4.6 3h7.4a2 2 0 0 1 1.4.6l7.2 7.2a2 2 0 0 1 0 2.6z'/%3E%3Ccircle cx='7.6' cy='7.6' r='1.3'/%3E%3C/svg%3E");
+}
+
+/* The small panel floats, so its rows keep an inset. */
+.header-dropdown-wrapper:not(:has(.dropdown-columns-wrapper)) a {
+  padding: 9px 14px !important;
 }
 
 /* A column holding a level-1 link and nothing under it is a
@@ -812,6 +861,112 @@ button.add-to-cart-button[disabled] {
   background: var(--ss-accent) !important;
   border-color: transparent !important;
   color: var(--ss-accent-ink) !important;
+}
+
+
+/* ------------------------------------------------------------
+   MENU ICONS
+
+   THESE ARE MASKS, NOT IMAGES. Each icon is an SVG data URI set on
+   --ss-icon and applied through mask-image, with the box filled by
+   background-color: currentColor. That is the whole reason for the
+   approach: a masked icon takes the row's own colour, so it turns
+   accent on hover with the label and needs no second asset, no
+   sprite sheet and no second network request.
+
+   EVERY ANGLE BRACKET IS URL-ENCODED, AND THAT IS NOT OPTIONAL.
+   Payhip HTML-escapes "<" and ">" in this box, so a literal "%3Csvg"
+   written as real markup would arrive as "&lt;svg" and every icon
+   would silently vanish. %3C and %3E survive intact. There is no "&"
+   anywhere in these URIs for the same reason - see the top of this
+   file. The stroke colour inside the SVG is irrelevant, since a mask
+   reads alpha only; it is set to white purely so the markup is
+   legible if it is ever pulled out and viewed on its own.
+
+   Icons are matched on the href suffix, so renaming a collection in
+   Payhip silently drops it back to the default tag icon rather than
+   leaving a blank gap. The Vault is matched on its product id
+   (/b/JogCA), which will need updating if that product is ever
+   replaced.
+   ------------------------------------------------------------ */
+
+.header-dropdown-wrapper .dropdown-item-level2 a::before,
+.header-dropdown-wrapper:not(:has(.dropdown-columns-wrapper)) a::before {
+  content: "" !important;
+  flex: 0 0 18px;
+  height: 18px;
+  background-color: currentColor;
+  -webkit-mask: var(--ss-icon) center / contain no-repeat;
+  mask: var(--ss-icon) center / contain no-repeat;
+  /* Held back at rest so the labels lead and the icons support them;
+     full strength on hover, alongside the accent colour. */
+  opacity: 0.55;
+  transition: opacity 0.18s var(--ss-ease);
+}
+
+.header-dropdown-wrapper a:hover::before,
+.header-dropdown-wrapper a:focus-visible::before {
+  opacity: 1;
+}
+
+/* The Vault - a safe */
+.header-dropdown-wrapper a[href$="/b/JogCA"] {
+  --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='16' rx='2.4'/%3E%3Ccircle cx='11' cy='12' r='3.4'/%3E%3Cpath d='M11 12V8.6M17.4 9.6v4.8'/%3E%3C/svg%3E");
+}
+
+/* For Designers - a pen */
+.header-dropdown-wrapper a[href$="/collection/for-designers"] {
+  --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16.9 3.1a2.83 2.83 0 1 1 4 4L7.4 20.6 2 22l1.4-5.4z'/%3E%3Cpath d='m14.5 5.5 4 4'/%3E%3C/svg%3E");
+}
+
+/* For Editors - a video frame */
+.header-dropdown-wrapper a[href$="/collection/for-editors"] {
+  --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2.5' y='4.5' width='19' height='15' rx='2.4'/%3E%3Cpath d='M10 9.3v5.4l4.8-2.7z'/%3E%3C/svg%3E");
+}
+
+/* For Creators - a spark */
+.header-dropdown-wrapper a[href$="/collection/for-creators"] {
+  --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.2 13.9 9.1 19.8 11 13.9 12.9 12 18.8 10.1 12.9 4.2 11 10.1 9.1z'/%3E%3Cpath d='M19 3v3M20.5 4.5h-3'/%3E%3C/svg%3E");
+}
+
+/* Bundles - stacked layers */
+.header-dropdown-wrapper a[href$="/collection/bundles"] {
+  --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m12 2.8 9.2 4.7-9.2 4.7-9.2-4.7z'/%3E%3Cpath d='m2.8 12 9.2 4.7 9.2-4.7'/%3E%3Cpath d='m2.8 16.6 9.2 4.7 9.2-4.7'/%3E%3C/svg%3E");
+}
+
+/* Freebies - a gift */
+.header-dropdown-wrapper a[href$="/collection/freebies"] {
+  --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='10.4' width='18' height='10.2' rx='1.6'/%3E%3Crect x='2.2' y='6.8' width='19.6' height='3.6' rx='1'/%3E%3Cpath d='M12 6.8v13.8'/%3E%3Cpath d='M12 6.8S10.9 3 8.6 3a1.9 1.9 0 0 0 0 3.8zM12 6.8S13.1 3 15.4 3a1.9 1.9 0 0 1 0 3.8z'/%3E%3C/svg%3E");
+}
+
+/* FAQ - a question */
+.header-dropdown-wrapper a[href$="/faq"] {
+  --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9.2'/%3E%3Cpath d='M9.5 9.6a2.6 2.6 0 0 1 5 .9c0 1.8-2.5 2.6-2.5 2.6'/%3E%3Cpath d='M12 17.2h.01'/%3E%3C/svg%3E");
+}
+
+/* Licensing - a document */
+.header-dropdown-wrapper a[href$="/license"] {
+  --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13.6 2.8H6.8A1.9 1.9 0 0 0 4.9 4.7v14.6a1.9 1.9 0 0 0 1.9 1.9h10.4a1.9 1.9 0 0 0 1.9-1.9V8.1z'/%3E%3Cpath d='M13.6 2.8v5.3h5.5'/%3E%3Cpath d='M8.6 13.2h6.8M8.6 16.6h6.8'/%3E%3C/svg%3E");
+}
+
+/* Tutorials - an open book */
+.header-dropdown-wrapper a[href$="/support"] {
+  --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4.6h5.8A3.2 3.2 0 0 1 12 7.8v11.6a2.4 2.4 0 0 0-2.4-1.6H3z'/%3E%3Cpath d='M21 4.6h-5.8A3.2 3.2 0 0 0 12 7.8v11.6a2.4 2.4 0 0 1 2.4-1.6H21z'/%3E%3C/svg%3E");
+}
+
+/* Gallery - an image */
+.header-dropdown-wrapper a[href$="/community-gallery"] {
+  --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3.8' width='18' height='16.4' rx='2.2'/%3E%3Ccircle cx='8.8' cy='9.6' r='1.7'/%3E%3Cpath d='m3.6 17.6 4.9-4.4 4.1 3.5 2.9-2.5 4.5 3.9'/%3E%3C/svg%3E");
+}
+
+/* Affiliate - linked nodes */
+.header-dropdown-wrapper a[href$="/become-an-affiliate"] {
+  --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='17.8' cy='5.6' r='2.6'/%3E%3Ccircle cx='6.2' cy='12' r='2.6'/%3E%3Ccircle cx='17.8' cy='18.4' r='2.6'/%3E%3Cpath d='m8.5 13.3 7.1 3.9M15.6 6.8 8.5 10.7'/%3E%3C/svg%3E");
+}
+
+/* Contact - an envelope */
+.header-dropdown-wrapper a[href$="/contact"] {
+  --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2.6' y='4.8' width='18.8' height='14.4' rx='2.2'/%3E%3Cpath d='m3.6 6.8 8.4 5.9 8.4-5.9'/%3E%3C/svg%3E");
 }
 
 /* ============================================================
