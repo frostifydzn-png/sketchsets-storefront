@@ -191,6 +191,15 @@ a:hover {
    the top of its gallery. Content clears it everywhere instead. */
 .content-main-wrapper {
   padding-top: 96px !important;
+  /* The dark ground is painted here as well as on body, and the reason
+     is the Payhip builder. Every section below is transparent so the
+     body colour shows through on the live site - but the builder
+     renders sections on its own light-grey canvas, so in there the
+     page looked grey with invisible white text and a washed-out
+     gradient heading. Painting the wrapper gives the builder the same
+     ground the site has. It sits behind every section and in front of
+     nothing, so no section's own artwork is covered. */
+  background: var(--ss-bg) !important;
 }
 
 body {
