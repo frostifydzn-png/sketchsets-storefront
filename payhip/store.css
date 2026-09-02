@@ -753,10 +753,17 @@ button.add-to-cart-button[disabled] {
 }
 
 /* The small panel was 200px wide, which wrapped "Contact Us"; the
-   icons need a little more again. */
+   icons need a little more again.
+
+   The vertical padding is deliberately much larger than the gap
+   between rows - 17px of clearance above FAQ and below Contact Us
+   against 3px between the links themselves. That ratio is what makes
+   a tight list read as one deliberate block rather than as text
+   crammed against the edge of a box; matching the two would undo the
+   tightening. */
 .header-dropdown-wrapper:not(:has(.dropdown-columns-wrapper)) {
   min-width: 252px;
-  padding: 8px !important;
+  padding: 16px 8px !important;
 }
 
 /* The mega panel runs to both edges of the header, so a radius and a
@@ -901,7 +908,7 @@ button.add-to-cart-button[disabled] {
    is set tight vertically. The row height floor is the 18px icon, and
    3px of padding on a 1.2 line-height lands at 24px with 6px of
    clearance around the glyph; 2px would put the icons 2px apart and
-   read as cramped. The panel drops from 294px to 232px. */
+   read as cramped. The panel drops from 294px to 248px. */
 .header-dropdown-wrapper:not(:has(.dropdown-columns-wrapper)) a {
   padding: 3px 14px !important;
   line-height: 1.2 !important;
