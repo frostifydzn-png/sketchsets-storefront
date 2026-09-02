@@ -1103,7 +1103,8 @@ button.add-to-cart-button[disabled] {
   gap: 10px;
 }
 
-/* A scrim deepens the art on hover. */
+/* A scrim deepens the art on hover. It stays dark because it sits on
+   the product artwork, not on the page. */
 .product-card-wrapper .card .ratio::before {
   content: "" !important;
   position: absolute;
@@ -1472,7 +1473,7 @@ a.font-section-product-previewFileLink {
 }
 
 .collection-tabs-wrapper a:hover {
-  background: rgba(255, 255, 255, 0.05) !important;
+  background: rgba(21, 17, 24, 0.06) !important;
   color: var(--ss-text) !important;
 }
 
@@ -1604,9 +1605,9 @@ a.font-section-product-previewFileLink {
   color: var(--ss-muted) !important;
 }
 
-/* The button is the point of the section, so it is sized like it. */
-/* NOD carries no shadow on any button. On a dark page a coloured glow
-   is the thing that reads as a template. */
+/* The button is the point of the section, so it is sized like it.
+   NOD carries no shadow on any button; a coloured glow is the thing
+   that reads as a template. */
 .js-section-wrapper[data-section-key="image-and-text-advanced"] .button-wrapper .btn {
   padding: 18px 40px !important;
   font-size: 1.0625rem !important;
@@ -1785,7 +1786,7 @@ a.font-section-product-previewFileLink {
   width: 8px;
   height: 8px;
   border-radius: var(--ss-radius-pill);
-  background: rgba(255, 255, 255, 0.24);
+  background: rgba(21, 17, 24, 0.22);
   opacity: 1;
   margin: 0 5px !important;
   transition: all 0.2s var(--ss-ease);
@@ -1889,10 +1890,10 @@ a.font-section-product-previewFileLink {
   overflow-wrap: anywhere !important;
 }
 
-/* The theme's icon is two 1px white lines stacked into a plus, and it
-   hides the vertical one to make a minus once the row opens. Accent
-   and 2px so it reads at a glance, and the whole thing turns as it
-   opens rather than swapping silently. */
+/* The theme's icon is two 1px lines stacked into a plus, and it hides
+   the vertical one to make a minus once the row opens. Accent and 2px
+   so it reads at a glance, and the whole thing turns as it opens
+   rather than swapping silently. */
 .accordion-item .accordion-icon-container {
   flex: 0 0 16px !important;
   width: 16px !important;
