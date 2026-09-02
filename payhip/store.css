@@ -756,7 +756,7 @@ button.add-to-cart-button[disabled] {
    icons need a little more again. */
 .header-dropdown-wrapper:not(:has(.dropdown-columns-wrapper)) {
   min-width: 252px;
-  padding: 12px 8px !important;
+  padding: 8px !important;
 }
 
 /* The mega panel runs to both edges of the header, so a radius and a
@@ -896,9 +896,15 @@ button.add-to-cart-button[disabled] {
   --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0l-7.2-7.2a2 2 0 0 1-.6-1.4V4.6A1.6 1.6 0 0 1 4.6 3h7.4a2 2 0 0 1 1.4.6l7.2 7.2a2 2 0 0 1 0 2.6z'/%3E%3Ccircle cx='7.6' cy='7.6' r='1.3'/%3E%3C/svg%3E");
 }
 
-/* The small panel floats, so its rows keep an inset. */
+/* The small panel floats, so its rows keep a horizontal inset - but
+   it is a short list of one-word destinations, not body copy, so it
+   is set tight vertically. The row height floor is the 18px icon, and
+   3px of padding on a 1.2 line-height lands at 24px with 6px of
+   clearance around the glyph; 2px would put the icons 2px apart and
+   read as cramped. The panel drops from 294px to 232px. */
 .header-dropdown-wrapper:not(:has(.dropdown-columns-wrapper)) a {
-  padding: 6px 14px !important;
+  padding: 3px 14px !important;
+  line-height: 1.2 !important;
 }
 
 /* A column holding a level-1 link and nothing under it is a
