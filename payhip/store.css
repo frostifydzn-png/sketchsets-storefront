@@ -443,8 +443,8 @@ h2,
 .js-section-wrapper[data-section-key="featured-collection"] .heading-text {
   font-family: var(--ss-font-display) !important;
   /* Sentence case. Caps was doing the shouting the 900 weight used to
-     do, and Neue Haas has real lowercase worth showing - the ascenders
-     and descenders are most of what makes the face look expensive. */
+     do, and the ascenders and descenders are most of what gives a
+     headline its shape - setting it in caps throws all of that away. */
   text-transform: none !important;
   /* NOD sets its headlines at 900 on a 1.2 line-height with normal
      tracking, and the airiness is what stops the weight reading as a
@@ -467,8 +467,9 @@ h2 {
 }
 
 /* The footer builds its column labels out of .heading-text divs at
-   16px. They are labels, not headlines, and tracked-in display caps
-   at that size read as shouting, so they take the Text cut. */
+   16px. They are labels, not headlines, so they take --ss-font rather
+   than the display token - which matters the moment anyone points
+   --ss-font-display at a face drawn only for large sizes. */
 .js-section-wrapper[data-section-key="footer"] .heading-text,
 .js-section-wrapper[data-section-key="footer"] .heading-text-main {
   font-family: var(--ss-font) !important;
@@ -785,7 +786,7 @@ button.add-to-cart-button[disabled] {
   margin: 0;
   border-radius: 0 !important;
   color: var(--ss-on-dark-dim);
-  font-weight: 600;
+  font-weight: var(--ss-w-semi);
   text-decoration: none !important;
   background: none !important;
   transition: color 0.18s var(--ss-ease);
@@ -1065,7 +1066,7 @@ button.add-to-cart-button[disabled] {
     color: var(--ss-on-dark) !important;
     -webkit-text-fill-color: var(--ss-on-dark) !important;
     opacity: 1 !important;
-    font-weight: 600 !important;
+    font-weight: var(--ss-w-semi) !important;
     text-decoration: none !important;
   }
 
@@ -1561,7 +1562,7 @@ button.add-to-cart-button {
 .font-section-product-previewFileLink a,
 a.font-section-product-previewFileLink {
   color: var(--ss-accent-text) !important;
-  font-weight: 600 !important;
+  font-weight: var(--ss-w-semi) !important;
 }
 
 /* ============================================================
@@ -2181,7 +2182,7 @@ a.font-section-product-previewFileLink {
 
 .js-section-wrapper form .form-error {
   color: #c02626 !important;
-  font-weight: 600;
+  font-weight: var(--ss-w-semi);
   margin-top: 6px;
 }
 
