@@ -37,9 +37,12 @@
    is the only place colour runs, which is the whole point: on a
    marketplace the goods should be the loudest thing on screen.
 
-   Sections are not boxed. They sit on the page and are
-   separated by space; the type and the artwork do the
-   dividing. Product artwork is rounded; the page is not.
+   SECTIONS are not boxed - they sit on the page and are
+   separated by space alone. CARDS are: every product and
+   category rides a white panel with a hairline border, which is
+   what the template does and what stops a wall of artwork
+   reading as one continuous strip. Sections and cards are
+   different things and the distinction is deliberate.
    Headlines are large, sentence case, solid, and tightly
    tracked in Proxima Nova. Motion is scroll-driven and costs
    no JavaScript.
@@ -110,6 +113,14 @@
   --ss-radius-btn: 8px;
   --ss-radius-pill: 9999px;
   --ss-radius-input: 2px;
+
+  /* ---- the card panel ----
+     Products and categories sit on white panels now, per the template.
+     The inner radius is derived rather than typed: concentric corners
+     want inner = outer - padding, so the artwork's corner stays
+     parallel to the card's however these two are retuned. */
+  --ss-radius-card: 16px;
+  --ss-card-pad: 8px;
 
   /* ---- rhythm ----
      These replace Payhip's section padding rather than adding to it,
@@ -1220,23 +1231,35 @@ button.add-to-cart-button[disabled] {
    7. PRODUCT CARDS
    ============================================================ */
 
-/* No frame around the product. The cover art is the card; a border
-   and a drop shadow around it only added chrome between the buyer and
-   the thing they came to look at. */
+/* A WHITE PANEL AROUND EVERY PRODUCT, per the template. This used
+   to be a bare piece of artwork on the page ground, on the argument
+   that a frame is chrome between the buyer and the goods. The
+   template makes the opposite call and it is the better one on a
+   grid this dense: at six across, unframed covers run together into
+   one strip and the eye loses where one product ends and the next
+   begins. The panel is what separates them.
+
+   Kept quiet on purpose - white fill, one hairline, no shadow at
+   rest. The border deepens and a soft shadow appears on hover, so
+   the card lifts slightly rather than announcing itself. */
 .product-card-wrapper .card {
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
-  overflow: visible !important;
+  background: var(--ss-panel) !important;
+  border: 1px solid var(--ss-line) !important;
+  border-radius: var(--ss-radius-card) !important;
+  padding: var(--ss-card-pad) !important;
+  overflow: hidden !important;
   box-shadow: none !important;
   position: relative !important;
+  transition:
+    border-color 0.18s var(--ss-ease),
+    box-shadow 0.18s var(--ss-ease) !important;
 }
 
-/* The card frame stays put; only the artwork moves. */
+/* The panel stays put; the artwork inside it is what scales. */
 .product-card-wrapper .card:hover {
   transform: none !important;
-  box-shadow: none !important;
+  border-color: var(--ss-line-strong) !important;
+  box-shadow: 0 6px 18px rgba(21, 21, 21, 0.07) !important;
 }
 
 .product-card-wrapper .card::before,
@@ -1262,7 +1285,8 @@ button.add-to-cart-button[disabled] {
   display: block !important;
   position: relative !important;
   aspect-ratio: 4 / 3 !important;
-  border-radius: var(--ss-radius-media) !important;
+  /* Concentric with the panel: outer radius minus the padding. */
+  border-radius: calc(var(--ss-radius-card) - var(--ss-card-pad)) !important;
   overflow: hidden !important;
   background: var(--ss-panel-2) !important;
   margin-bottom: 0 !important;
@@ -1331,11 +1355,11 @@ button.add-to-cart-button[disabled] {
   padding: 0 !important;
 }
 
-/* A hairline here fought the rounded corners of the artwork above,
-   so the label is separated by space instead. */
+/* The panel already pads the card, so the label only adds the gap
+   between the artwork and the first line of type. */
 .product-card-wrapper .card .card__content .card__information {
   text-align: left !important;
-  padding: 15px 2px 0 !important;
+  padding: 12px 4px 4px !important;
 }
 
 .product-card-wrapper .card__heading {
@@ -1576,11 +1600,23 @@ button.add-to-cart-button[disabled] {
   display: none !important;
 }
 
+/* The same panel as the product cards - one card treatment across
+   the store, not two. */
 .js-section-wrapper[data-section-key="featured-collection-list"] .card {
-  background: transparent !important;
-  border: 0 !important;
+  background: var(--ss-panel) !important;
+  border: 1px solid var(--ss-line) !important;
+  border-radius: var(--ss-radius-card) !important;
+  padding: var(--ss-card-pad) !important;
+  overflow: hidden !important;
   box-shadow: none !important;
-  padding: 0 !important;
+  transition:
+    border-color 0.18s var(--ss-ease),
+    box-shadow 0.18s var(--ss-ease) !important;
+}
+
+.js-section-wrapper[data-section-key="featured-collection-list"] .card-wrapper:hover .card {
+  border-color: var(--ss-line-strong) !important;
+  box-shadow: 0 6px 18px rgba(21, 21, 21, 0.07) !important;
 }
 
 /* 16:9, matching the shape the artwork is already cropped to. The
@@ -1590,7 +1626,7 @@ button.add-to-cart-button[disabled] {
   position: relative !important;
   aspect-ratio: 16 / 9 !important;
   height: auto !important;
-  border-radius: var(--ss-radius-media) !important;
+  border-radius: calc(var(--ss-radius-card) - var(--ss-card-pad)) !important;
   overflow: hidden !important;
   background: var(--ss-panel-2) !important;
   margin: 0 !important;
@@ -1636,7 +1672,7 @@ button.add-to-cart-button[disabled] {
 }
 
 .js-section-wrapper[data-section-key="featured-collection-list"] .card .card__content .card__information {
-  padding: 13px 2px 0 !important;
+  padding: 12px 4px 4px !important;
   text-align: left !important;
 }
 
@@ -1824,7 +1860,7 @@ button.add-to-cart-button[disabled] {
   flex-direction: column;
   align-items: flex-start;
   gap: 5px;
-  padding: 14px 2px 0 !important;
+  padding: 12px 4px 4px !important;
 }
 
 /* THIS RE-HIDE IS LOAD-BEARING, NOT A DUPLICATE. Section 7 hides
@@ -1871,6 +1907,74 @@ button.add-to-cart-button[disabled] {
   color: var(--ss-text) !important;
   -webkit-text-fill-color: var(--ss-text) !important;
   font-size: 1.0625rem !important;
+}
+
+/* ============================================================
+   7d. VIEW-ALL ARROWS, AND ONE LEFT EDGE FOR EVERY HEADING
+   ============================================================ */
+
+/* SECTION 3 KILLS THIS PSEUDO-ELEMENT, so the arrow has to
+   out-specify it rather than merely exist: .btn.btn-primary::after
+   carries content: none !important at (0,3,0), and a plain
+   .view-all-button-wrapper .btn::after at (0,2,0) silently lost.
+   Both selectors below are listed because the button keeps its
+   .btn-primary class even with the fill stripped off.
+
+   The glyph is written as \2192 rather than a literal arrow: an
+   escape is plain ASCII, so it survives being pasted through the
+   Payhip box whatever that box decides to do with encoding. */
+.js-section-wrapper[data-section-key] .view-all-button-wrapper .btn.btn-primary::after,
+.js-section-wrapper[data-section-key] .view-all-button-wrapper .btn::after {
+  content: "\2192" !important;
+  display: inline-block;
+  margin-left: 8px;
+  font-weight: 400;
+  transition: transform 0.18s var(--ss-ease);
+}
+
+.js-section-wrapper[data-section-key] .view-all-button-wrapper .btn:hover::after {
+  transform: translateX(3px);
+}
+
+/* EVERY SECTION HEADING NOW STARTS ON THE SAME LINE AS THE PAGE
+   GUTTER. Measured before this: most sat at x=44 with the content
+   column, but the banner heading sat at 313 and the newsletter at
+   191, both because their section centres its contents with flex
+   rather than because anything was centred deliberately. Two
+   headings out of eight starting somewhere else is the thing that
+   reads as sloppy on a long page.
+
+   Verified after: all eight section headings measure x=44. The
+   only headings that do not are the four column titles inside
+   image-and-text-columns, which are offset by their own left rule
+   and are column content rather than section headings. */
+.js-section-wrapper[data-section-key="headline-image-double"] .banner__content,
+.js-section-wrapper[data-section-key="newsletter"] .banner__content {
+  justify-content: flex-start !important;
+  padding-left: 0 !important;
+}
+
+.js-section-wrapper[data-section-key="headline-image-double"] .banner__box,
+.js-section-wrapper[data-section-key="newsletter"] .banner__box {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+.js-section-wrapper[data-section-key="newsletter"] .section-contents-wrapper {
+  justify-content: flex-start !important;
+}
+
+.js-section-wrapper[data-section-key="newsletter"] .section-contents {
+  width: 100% !important;
+  text-align: left !important;
+}
+
+.content-main-wrapper .js-section-wrapper[data-section-key="headline-image-double"] .heading-text,
+.content-main-wrapper .js-section-wrapper[data-section-key="collage"] .heading-text,
+.content-main-wrapper .js-section-wrapper[data-section-key="image-and-text-columns"] .heading-text-main,
+.content-main-wrapper .js-section-wrapper[data-section-key="newsletter"] .heading-text,
+.content-main-wrapper .js-section-wrapper[data-section-key="newsletter"] .heading-text-main {
+  text-align: left !important;
 }
 
 /* ============================================================
