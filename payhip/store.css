@@ -135,7 +135,11 @@
      considered the shop looks. */
   --ss-section-y: clamp(64px, 6.4vw, 112px);
   --ss-gutter: clamp(22px, 3.4vw, 56px);
-  --ss-grid-gap: clamp(16px, 1.8vw, 30px);
+  /* The floor is 20px and not 16px because of the card shadows: the
+     resting shadow reaches 16px (4px offset plus 12px blur), and at a
+     16px gap the shadow of one card would touch the next card's white
+     panel and be painted over by it. */
+  --ss-grid-gap: clamp(20px, 1.8vw, 30px);
   --ss-max: 1560px;
 
   --ss-ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -2043,6 +2047,26 @@ button.add-to-cart-button[disabled] {
   margin-top: var(--ss-section-y) !important;
 }
 
+/* THIS BANNER WAS SCROLLING THE WHOLE PAGE SIDEWAYS, and that is
+   what was cutting the card shadows off at the right-hand edge.
+
+   Found by hiding each top-level section in turn and re-measuring:
+   with this one hidden the document's horizontal overflow went from
+   27px to zero, and with it back it returned. Nothing inside it
+   measures wider than the viewport - the section's own scrollWidth
+   exceeds its clientWidth while every descendant fits - so the
+   overflow comes from how the theme lays out its full-bleed media
+   rather than from any one element being too wide.
+
+   `clip` rather than `hidden` on purpose: clip does not turn the
+   section into a scroll container, so nothing here can become
+   independently scrollable. It is scoped to this section alone, so
+   card shadows everywhere else are untouched. Verified: page
+   overflow 27px to 0. */
+.content-main-wrapper .js-section-wrapper[data-section-key="headline-image-double"] {
+  overflow-x: clip;
+}
+
 /* THE HOME PAGE'S CATALOGUE BLOCK IS HIDDEN. THE :not(:only-child)
    IS THE ENTIRE SAFETY MECHANISM AND MUST NOT BE REMOVED.
 
@@ -2058,6 +2082,31 @@ button.add-to-cart-button[disabled] {
    .content-main-wrapper; on the home page it is one of eight. */
 .content-main-wrapper .js-section-wrapper[data-section-key="collection"]:not(:only-child) {
   display: none !important;
+}
+
+/* THE SECOND COLLECTION ROW RUNS TWO CARDS, NOT SIX.
+
+   There are now two featured-collection-list sections on the home
+   page - "Find Exactly What You Need" and the promo row - and they
+   share a data-section-key, so the key cannot tell them apart. What
+   can is the id Payhip mints per section, which is stable across
+   edits to the section's contents.
+
+   IF THAT ROW IS EVER DELETED AND RE-ADDED IT WILL GET A NEW ID and
+   this rule will stop matching, leaving it back on six columns. The
+   id to look for is on the section wrapper in the page source.
+
+   The row holds five card slots of which three are unconfigured and
+   already hidden further up, so two columns gives the two real cards
+   an equal half each. */
+#content-section-9G85e0dwWV .collection-list-block {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+@media (max-width: 620px) {
+  #content-section-9G85e0dwWV .collection-list-block {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 /* --- the newsletter --- */
@@ -2992,7 +3041,11 @@ a.font-section-product-previewFileLink {
 .js-section-wrapper[data-section-key="image-and-text-columns"] .content-container {
   position: relative !important;
   display: flex !important;
-  align-items: flex-start;
+  /* Centre, not flex-start. The icon has to sit against the middle of
+     the heading-plus-description block rather than against the top of
+     it, or it reads as hanging off the first line - and it drifts
+     further out of line on any column whose description wraps. */
+  align-items: center;
   gap: 14px;
   background: transparent;
   border: 0 !important;
@@ -3010,11 +3063,17 @@ a.font-section-product-previewFileLink {
   border: 1px solid var(--ss-line-strong);
 }
 
+/* The glyph has to centre the same way the circle does. A fixed
+   top offset anchored it to the container's top edge, so the moment
+   the circle moved to the middle the two came apart. Both are
+   centred against the container now, which is what keeps them
+   registered whatever height the text block ends up. */
 .js-section-wrapper[data-section-key="image-and-text-columns"] .content-container::after {
   content: "" !important;
   position: absolute;
   left: 12px;
-  top: 12px;
+  top: 50%;
+  transform: translateY(-50%);
   width: 20px;
   height: 20px;
   background-color: var(--ss-text);
