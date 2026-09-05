@@ -76,8 +76,25 @@
   --ss-accent-ink: #12040c;
 
   /* ---- light surfaces ----
-     #f7f7f7 is NOD's own page colour, measured off the live site. */
-  --ss-bg: #f7f7f7;
+     THIS HAS TO MATCH PAYHIP'S OWN SECTION BACKGROUND, AND THAT IS
+     WHY IT IS WHITE RATHER THAN #f7f7f7. Payhip renders an opaque
+     .section-background slab inside every section, filled from the
+     section's own colour setting in the builder - measured on the
+     live store, every one of them is rgb(255,255,255). The slabs
+     cover the page ground wherever a section sits, so this token is
+     only ever visible in the space BETWEEN two sections.
+
+     There is exactly one such space: the banner and the collage take
+     their separation as margin rather than padding (see 7e), and a
+     margin is outside the painted slab. At #f7f7f7 that margin showed
+     as a 92px grey bar across the top of "Make It Happen" on an
+     otherwise white page. Matching the token to the slab colour makes
+     it disappear.
+
+     If the sections are ever set to a different colour in the
+     builder, change this to match - the two have to agree or the band
+     comes back in whatever colour they disagree by. */
+  --ss-bg: #ffffff;
   --ss-panel: #ffffff;
   --ss-panel-2: #eaeaea;
   --ss-line: rgba(21, 21, 21, 0.12);
@@ -202,7 +219,8 @@
 [data-css-variables-color-scheme-id="lightPrimary"],
 [data-section-setting-color-scheme-id="whitePrimary"],
 [data-css-variables-color-scheme-id="whitePrimary"] {
-  --color-section-background: 247, 247, 247;
+  /* Same value as --ss-bg above, for the same reason. */
+  --color-section-background: 255, 255, 255;
   --color-variant-pills-block-text: 21, 21, 21;
 }
 
@@ -2067,6 +2085,40 @@ button.add-to-cart-button[disabled] {
   overflow-x: clip;
 }
 
+/* A CARD ROW NEEDS ROOM FOR ITS OWN SHADOW, AND THIS IS WHAT WAS
+   CUTTING THE SHADOWS OFF ALONG THE BOTTOM OF EVERY CARD ROW.
+
+   Measured on the live page: every card grid ends at EXACTLY its
+   section's bottom edge - the section runs padding-bottom: 0, so the
+   last row of cards is flush with it and the 16px of shadow below
+   them (4px offset plus 12px blur) falls outside the section
+   altogether, into the next one.
+
+   That would be harmless if the next section painted nothing. It
+   paints a slab: Payhip puts an opaque .section-background inside
+   every section, so the following section covers the previous
+   section's overhanging shadow with solid white. Nothing is clipping
+   the shadow - it is drawn in full and then painted over, which is
+   why every overflow, clip-path and contain check on the card's
+   ancestors came back clean.
+
+   22px of bottom padding keeps the whole shadow inside the section
+   that owns it. It is deliberately a little more than the 16px the
+   shadow reaches, so the hover shadow (which grows to 28px of blur)
+   is only trimmed at its very faintest edge rather than at full
+   strength.
+
+   Only sections that actually hold cards are listed. Adding it to
+   every section would push the page rhythm 22px looser everywhere for
+   no reason, since a section with no cards has no shadow to hold. */
+.content-main-wrapper .js-section-wrapper[data-section-key="featured-collection-list"],
+.content-main-wrapper .js-section-wrapper[data-section-key="featured-collection"],
+.content-main-wrapper .js-section-wrapper[data-section-key="related-products"],
+.content-main-wrapper .js-section-wrapper[data-section-key="featured-blog-post-list"],
+.content-main-wrapper .js-section-wrapper[data-section-key="collection"] {
+  padding-bottom: 22px !important;
+}
+
 /* THE HOME PAGE'S CATALOGUE BLOCK IS HIDDEN. THE :not(:only-child)
    IS THE ENTIRE SAFETY MECHANISM AND MUST NOT BE REMOVED.
 
@@ -2143,13 +2195,32 @@ button.add-to-cart-button[disabled] {
   margin: 0 !important;
 }
 
+/* THE 10px BOTTOM MARGIN IS WHY THE BUTTON SAT LOW. The theme ships
+   it on the field wrapper, which made that wrapper 60px tall against
+   a 50px input - and the form is align-items: center, so the 49px
+   button was being centred against the 60px wrapper and landed 6px
+   below the top of the field. Measured before: input top 2912,
+   button top 2918. After: both 2978, both 50px tall. */
 .js-section-wrapper[data-section-key="newsletter"] .subscribe-form-field-wrapper {
   flex: 1 1 auto;
   min-width: 0;
+  margin-bottom: 0 !important;
+}
+
+/* Stretch rather than a typed height, so the button matches whatever
+   the input measures instead of the two being kept level by hand. */
+.js-section-wrapper[data-section-key="newsletter"] form .btn {
+  align-self: stretch !important;
 }
 
 .js-section-wrapper[data-section-key="newsletter"] .form-control {
   width: 100% !important;
+  /* The site input radius is 2px and the button radius is 8px, which
+     read as two unrelated controls sitting next to each other rather
+     than as one field-and-button pair. The field takes the button's
+     radius here, and here only - every other form on the store is a
+     column of fields with no button beside them. */
+  border-radius: var(--ss-radius-btn) !important;
 }
 
 /* Every section in this file runs padding-bottom: 0 and takes its
