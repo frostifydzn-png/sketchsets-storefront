@@ -1543,6 +1543,213 @@ button.add-to-cart-button[disabled] {
 }
 
 /* ============================================================
+   7b. COLLECTION CARDS - "SHOP BY CATEGORY"
+
+   Payhip's featured-collection-list section. Structure per card:
+
+     .card-wrapper.animate-arrow
+       .card.card--standard.card--media
+         .card__inner.ratio        the media frame
+           .card__media .media img
+           .card__content          an EMPTY duplicate of the label
+         .card__content            the real label
+           .card__information h3.card__heading
+             a  ->  "Bundle Deals"
+               span.icon-wrap svg.icon-arrow
+
+   THESE ARE .card-wrapper, NOT .product-card-wrapper, SO NOTHING
+   IN SECTION 7 REACHES THEM. That is not a detail: it is why the
+   category names were invisible. With no rule of ours applying,
+   they fell through to the theme's own heading colour, which is
+   rgb(255,255,255) - white type on the near-white page. Measured
+   after this block: #151515 at 17.05:1.
+
+   The arrow the reference draws as a circular button is already
+   in the markup - the theme ships svg.icon-arrow inside the link
+   and gives the wrapper an .animate-arrow class. It was white too,
+   so it was invisible for the same reason. Nothing is fabricated
+   here; it is the theme's own element given the reference's shape.
+
+   NOT IN THE MARKUP, so it cannot be styled into existence - these
+   need adding in the Payhip builder: the "SHOP BY CATEGORY"
+   eyebrow, the "Browse all categories" link on the heading row,
+   and the one-line description under each category name. Payhip's
+   collection card renders a name and nothing else.
+   ============================================================ */
+
+.js-section-wrapper[data-section-key="featured-collection-list"] .heading-text {
+  text-align: left !important;
+  font-size: clamp(1.75rem, 3.2vw, 2.75rem) !important;
+  margin-bottom: clamp(20px, 2.4vw, 32px) !important;
+}
+
+/* Six across, which is what the reference runs. The theme's own
+   grid is five fixed 201px columns with a 9px gap, so the sixth
+   card wrapped to a second row on its own. */
+.js-section-wrapper[data-section-key="featured-collection-list"] .collection-list-block {
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  gap: var(--ss-grid-gap) !important;
+}
+
+@media (max-width: 1200px) {
+  .js-section-wrapper[data-section-key="featured-collection-list"] .collection-list-block {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 860px) {
+  .js-section-wrapper[data-section-key="featured-collection-list"] .collection-list-block {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 560px) {
+  .js-section-wrapper[data-section-key="featured-collection-list"] .collection-list-block {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* The sixth card is an unconfigured collection slot - card--text,
+   no image, and the placeholder string "Your collection name". It
+   rendered as an empty grey box on the end of the row. Hiding it
+   is a stopgap: delete it, or point it at a real collection, in
+   the builder. It reappears on its own once it has an image. */
+.js-section-wrapper[data-section-key="featured-collection-list"] .card-wrapper:has(.card--text) {
+  display: none !important;
+}
+
+.js-section-wrapper[data-section-key="featured-collection-list"] .card {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* 16:9, matching the shape the artwork is already cropped to. The
+   theme leaves this at aspect-ratio: auto with overflow visible,
+   so nothing was clipping the image to the rounded corners. */
+.js-section-wrapper[data-section-key="featured-collection-list"] .card__inner.ratio {
+  position: relative !important;
+  aspect-ratio: 16 / 9 !important;
+  height: auto !important;
+  border-radius: var(--ss-radius-media) !important;
+  overflow: hidden !important;
+  background: var(--ss-panel-2) !important;
+  margin: 0 !important;
+}
+
+/* The copy inside the media frame is an empty duplicate of the
+   label below, and it carries its own copy of the link. Hiding it
+   tidies the layout AND drops a second, identical link from every
+   card, which is one fewer stop for anyone tabbing through.
+   Verified after: one reachable link per card. */
+.js-section-wrapper[data-section-key="featured-collection-list"] .card__inner.ratio .card__content {
+  display: none !important;
+}
+
+.js-section-wrapper[data-section-key="featured-collection-list"] .card__media,
+.js-section-wrapper[data-section-key="featured-collection-list"] .card__inner.ratio .media {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+}
+
+.js-section-wrapper[data-section-key="featured-collection-list"] .card__inner.ratio .media img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  transition: transform 0.55s var(--ss-ease) !important;
+}
+
+.js-section-wrapper[data-section-key="featured-collection-list"] .card-wrapper:hover .card__inner.ratio .media img {
+  transform: scale(1.06);
+}
+
+/* --- the label row ---
+   Left-aligned, not centred: the reference sets the name hard
+   against the left edge of its tile, and a centred label under a
+   left-aligned grid reads as an accident. */
+.js-section-wrapper[data-section-key="featured-collection-list"] .card .card__content {
+  padding: 0 !important;
+}
+
+.js-section-wrapper[data-section-key="featured-collection-list"] .card .card__content .card__information {
+  padding: 13px 2px 0 !important;
+  text-align: left !important;
+}
+
+.js-section-wrapper[data-section-key="featured-collection-list"] .card .card__content .card__heading {
+  margin: 0 !important;
+  font-size: 1.0625rem !important;
+}
+
+/* The link becomes the row: name on the left, arrow pushed to the
+   right. The name is a bare text node and the arrow is a span, so
+   the text node becomes an anonymous flex item and
+   space-between separates the two without any extra markup.
+
+   22px down to 17px - at 22px the category name was competing
+   with the section heading above it. */
+.js-section-wrapper[data-section-key="featured-collection-list"] .card .card__content .card__heading a {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 1.0625rem !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  text-align: left !important;
+  color: var(--ss-text) !important;
+  -webkit-text-fill-color: var(--ss-text) !important;
+  transition: color 0.2s var(--ss-ease);
+}
+
+.js-section-wrapper[data-section-key="featured-collection-list"] .card-wrapper:hover .card__content .card__heading a {
+  color: var(--ss-accent-text) !important;
+  -webkit-text-fill-color: var(--ss-accent-text) !important;
+}
+
+/* The theme's own arrow, given the reference's circle. It fills
+   with the accent on hover, so the whole card has one gesture
+   rather than three competing ones. */
+.js-section-wrapper[data-section-key="featured-collection-list"] .icon-wrap {
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--ss-line-strong);
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background-color 0.18s var(--ss-ease),
+    border-color 0.18s var(--ss-ease);
+}
+
+.js-section-wrapper[data-section-key="featured-collection-list"] .icon-wrap svg {
+  display: block;
+  width: 13px !important;
+  height: auto !important;
+}
+
+.js-section-wrapper[data-section-key="featured-collection-list"] .icon-wrap svg path {
+  fill: var(--ss-text) !important;
+  transition: fill 0.18s var(--ss-ease);
+}
+
+.js-section-wrapper[data-section-key="featured-collection-list"] .card-wrapper:hover .icon-wrap {
+  background: var(--ss-accent);
+  border-color: transparent;
+}
+
+.js-section-wrapper[data-section-key="featured-collection-list"] .card-wrapper:hover .icon-wrap svg path {
+  fill: var(--ss-accent-ink) !important;
+}
+
+/* ============================================================
    8. PRODUCT PAGE
 
    The page where the money changes hands, and the least-touched
