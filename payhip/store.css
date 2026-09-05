@@ -2102,21 +2102,55 @@ button.add-to-cart-button[disabled] {
    why every overflow, clip-path and contain check on the card's
    ancestors came back clean.
 
-   22px of bottom padding keeps the whole shadow inside the section
-   that owns it. It is deliberately a little more than the 16px the
-   shadow reaches, so the hover shadow (which grows to 28px of blur)
-   is only trimmed at its very faintest edge rather than at full
-   strength.
+   44px, AND THE NUMBER COMES FROM THE HOVER STATE, NOT THE RESTING
+   ONE. The first pass used 22px, which is enough for the resting
+   shadow's 16px but NOT for the hover shadow: that one is
+   0 12px 28px, so it reaches 12 + 28 = 40px below the card. Hover a
+   category tile with 22px of room and the shadow is still sliced
+   off - which is exactly what the "still cut off" screenshot showed,
+   and why the card in it had a pink title and a filled arrow. 44px
+   clears the deepest shadow the card can draw with 4px to spare.
 
    Only sections that actually hold cards are listed. Adding it to
-   every section would push the page rhythm 22px looser everywhere for
-   no reason, since a section with no cards has no shadow to hold. */
+   every section would push the page rhythm looser everywhere for no
+   reason, since a section with no cards has no shadow to hold. */
 .content-main-wrapper .js-section-wrapper[data-section-key="featured-collection-list"],
 .content-main-wrapper .js-section-wrapper[data-section-key="featured-collection"],
 .content-main-wrapper .js-section-wrapper[data-section-key="related-products"],
 .content-main-wrapper .js-section-wrapper[data-section-key="featured-blog-post-list"],
 .content-main-wrapper .js-section-wrapper[data-section-key="collection"] {
-  padding-bottom: 22px !important;
+  padding-bottom: 44px !important;
+}
+
+/* AND THE SLAB THAT WAS DOING THE PAINTING GOES TRANSPARENT, which
+   is the root fix rather than the clearance above.
+
+   Payhip's .section-background is an absolutely-positioned child
+   filling each section, and it ships opaque - measured on the live
+   store, white in every section and rgb(215,217,225) in the banner.
+   Sections are siblings, so a later one's slab paints straight over
+   whatever the previous one hung below its own edge. That is the
+   whole mechanism behind the cut-off shadows, and it applies to any
+   card row that ever ends near a section boundary, not just the two
+   in the screenshots.
+
+   Turning the FILL off costs nothing visually because --ss-bg is
+   now the same white the slabs were painting, and the page ground is
+   painted on body and .content-main-wrapper behind everything. The
+   two sections that carry artwork are unaffected: Payhip puts that
+   artwork in a real img.section-background-image INSIDE this
+   element, not in a CSS background, so the hero and the newsletter
+   keep their images and their overlays. The banner keeps its look
+   too - its own .banner__media covers the section edge to edge
+   (measured 765x420 against a 765x420 section), so the grey slab
+   behind it was never visible anyway.
+
+   background-color specifically, not the background shorthand: the
+   shorthand would also reset background-image, and a section that is
+   given a CSS background image in the builder later should still
+   get it. */
+.content-main-wrapper .js-section-wrapper[data-section-key] .section-background {
+  background-color: transparent !important;
 }
 
 /* THE HOME PAGE'S CATALOGUE BLOCK IS HIDDEN. THE :not(:only-child)
