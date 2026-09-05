@@ -358,6 +358,105 @@ body {
 }
 
 /* ============================================================
+   1b. THE HERO
+
+   Payhip's headline section is three elements inside a 589px
+   column: an h1, one richtext paragraph, and one button. The
+   artwork is a section BACKGROUND image, not content - 2079x756,
+   object-fit: cover, centred - so the text is sitting on top of
+   it rather than beside it, and everything here is really about
+   keeping the type clear of the artwork.
+
+   Every rule below beats sections 2 and 3 on specificity rather
+   than on order, so this block can sit anywhere in the file:
+   [data-section-key="headline"] .heading-text is (0,3,0) against
+   the bare h1 (0,0,1) that section 2 sizes.
+
+   NOT YET IN THE MARKUP, and not addable from CSS - these need
+   adding as blocks in the Payhip builder before they can be
+   styled: the eyebrow line above the headline, the three-item
+   feature row under the copy, and the second button.
+   ============================================================ */
+
+/* Three lines, not two, which is what the reference does and what
+   keeps the headline out of the artwork.
+
+   THE 5.6em CAP IS LOAD-BEARING. Uncapped, "Better Content" sets
+   as one line 606px wide and runs into the doodle square, which
+   starts around 558px at a 1440px viewport. Capping the measure
+   breaks it to "Better / Content / Starts Here", whose longest
+   line is 460px - clear of the artwork with room to spare. It is
+   set in em so it tracks the clamp instead of drifting as the
+   headline resizes; anything from 4.8em down to 5.6em produces
+   the same break, because the binding constraint is the width of
+   "Starts Here" and not the cap itself. 5.6em is the loosest
+   value that still works, so it has the most headroom if the
+   copy ever changes.
+
+   0.95 leading rather than the 1.1 the rest of the site uses: a
+   three-line stack at this size wants the lines locked together
+   so they read as one object. */
+.js-section-wrapper[data-section-key="headline"] .heading-text {
+  font-size: clamp(2.75rem, 7vw, 6rem) !important;
+  line-height: 0.95 !important;
+  letter-spacing: -0.028em !important;
+  max-width: 5.6em;
+  margin: 0 0 22px !important;
+}
+
+/* Up from 17px. Against an 89px headline the body copy was
+   reading as a caption; 19px on a 30rem measure is the same
+   proportion the reference runs. The measure also holds it clear
+   of the artwork - at 34rem it reached 593px and hit the doodle
+   square. */
+.js-section-wrapper[data-section-key="headline"] .richtext p {
+  font-size: 1.1875rem !important;
+  line-height: 1.6 !important;
+  max-width: 30rem;
+  margin: 0 !important;
+}
+
+/* Flex with a gap so a second button lands BESIDE the first
+   rather than under it, the moment one is added in the builder.
+   Harmless with the single button that is there today. */
+.js-section-wrapper[data-section-key="headline"] .button-wrapper {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-top: 30px !important;
+}
+
+/* 52px to 58px, which is the reference's weight and reads as the
+   main action on the page rather than a link with a box on it. */
+.js-section-wrapper[data-section-key="headline"] .button-wrapper .btn {
+  padding: 18px 34px !important;
+}
+
+/* THE ARTWORK IS BEHIND THE TEXT, NOT BESIDE IT, AND ON A PHONE
+   THAT MADE THE HERO UNREADABLE. The background is object-fit:
+   cover, so a 375px viewport crops straight to the middle of the
+   image and the headline sat directly on the doodle square. This
+   was true before any of the rules above; a narrower headline
+   does not fix it, because there is no clear space left to move
+   into at that width.
+
+   Payhip ships a .section-background-overlay element for exactly
+   this - a solid white layer at opacity 0, between the image and
+   the contents, exposed in the builder as the overlay setting.
+   Taking it to 0.84 in the page's own ground colour leaves the
+   artwork as a faint ghost and the type fully legible. It is a
+   flat colour, not a gradient, so it does not break the rule at
+   the top of this file. Desktop is untouched - there the text
+   column and the artwork genuinely do sit side by side. */
+@media (max-width: 900px) {
+  .js-section-wrapper[data-section-key="headline"] .section-background-overlay {
+    background: var(--ss-bg) !important;
+    opacity: 0.84 !important;
+  }
+}
+
+/* ============================================================
    2. TYPE
    ============================================================ */
 
