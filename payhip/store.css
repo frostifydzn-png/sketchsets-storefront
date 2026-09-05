@@ -120,7 +120,13 @@
      want inner = outer - padding, so the artwork's corner stays
      parallel to the card's however these two are retuned. */
   --ss-radius-card: 16px;
-  --ss-card-pad: 8px;
+  --ss-card-pad: 10px;
+  /* The card outline is deliberately fainter than --ss-line. At 0.12
+     a hairline on white, repeated across a six-card row, reads as a
+     drawn box; the template's cards are held by their shadow and the
+     border is only there to stop the white dissolving into the page
+     on a bright screen. */
+  --ss-line-card: rgba(21, 21, 21, 0.07);
 
   /* ---- rhythm ----
      These replace Payhip's section padding rather than adding to it,
@@ -1239,16 +1245,22 @@ button.add-to-cart-button[disabled] {
    one strip and the eye loses where one product ends and the next
    begins. The panel is what separates them.
 
-   Kept quiet on purpose - white fill, one hairline, no shadow at
-   rest. The border deepens and a soft shadow appears on hover, so
-   the card lifts slightly rather than announcing itself. */
+   THE SHADOW DOES THE LIFTING, NOT THE BORDER. The first pass had
+   this the other way round - a 0.12 hairline and no resting shadow -
+   and the result was a row of drawn rectangles rather than cards
+   sitting on a page. Two stacked shadows now: a 1px contact shadow
+   that seats the card, and a wide soft one that floats it. The
+   border drops to 0.07 and is only there so white cards do not
+   dissolve into the page on a bright screen. */
 .product-card-wrapper .card {
   background: var(--ss-panel) !important;
-  border: 1px solid var(--ss-line) !important;
+  border: 1px solid var(--ss-line-card) !important;
   border-radius: var(--ss-radius-card) !important;
   padding: var(--ss-card-pad) !important;
   overflow: hidden !important;
-  box-shadow: none !important;
+  box-shadow:
+    0 1px 2px rgba(21, 21, 21, 0.04),
+    0 4px 12px rgba(21, 21, 21, 0.05) !important;
   position: relative !important;
   transition:
     border-color 0.18s var(--ss-ease),
@@ -1258,8 +1270,10 @@ button.add-to-cart-button[disabled] {
 /* The panel stays put; the artwork inside it is what scales. */
 .product-card-wrapper .card:hover {
   transform: none !important;
-  border-color: var(--ss-line-strong) !important;
-  box-shadow: 0 6px 18px rgba(21, 21, 21, 0.07) !important;
+  border-color: rgba(21, 21, 21, 0.1) !important;
+  box-shadow:
+    0 2px 4px rgba(21, 21, 21, 0.05),
+    0 12px 28px rgba(21, 21, 21, 0.1) !important;
 }
 
 .product-card-wrapper .card::before,
@@ -1317,10 +1331,23 @@ button.add-to-cart-button[disabled] {
 .product-card-wrapper .card .ratio .card__content {
   position: absolute !important;
   inset: 0 !important;
+  padding: 0 !important;
   pointer-events: none;
 }
 
+/* THE SALE FLAG IS PINNED, NOT FLOATED. It is a static block inside
+   this absolutely-positioned overlay, so it was landing wherever the
+   overlay's flow put it - flush into the top-left corner, half over
+   the artwork's rounded edge, and moving whenever anything else in
+   the overlay changed. Pinning it to the corner with a real inset is
+   what makes it look placed rather than dropped. */
 .product-card-wrapper .card .ratio .card__content .card-badge {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  width: auto !important;
+  margin: 0 !important;
+  z-index: 4;
   pointer-events: auto;
 }
 
@@ -1355,11 +1382,12 @@ button.add-to-cart-button[disabled] {
   padding: 0 !important;
 }
 
-/* The panel already pads the card, so the label only adds the gap
-   between the artwork and the first line of type. */
+/* On top of the panel's own 10px, so the type sits 16px in from the
+   card edge. At the first pass's 8+4 it was 12px and the price read
+   as though it were falling off the left edge. */
 .product-card-wrapper .card .card__content .card__information {
   text-align: left !important;
-  padding: 12px 4px 4px !important;
+  padding: 14px 6px 10px !important;
 }
 
 .product-card-wrapper .card__heading {
@@ -1502,19 +1530,26 @@ button.add-to-cart-button[disabled] {
   text-decoration-thickness: 1.5px;
 }
 
+/* The accent, not a separate red. A second signal colour on a page
+   that already has one is how a storefront starts looking assembled
+   from parts; the same magenta with the dark ink reads as a flag
+   from this shop. Small caps at 11.5px so it labels the artwork
+   rather than competing with it. */
 .product-card-wrapper .badge-product-on-sale,
 #page-section-product span.badge-general.badge-product-on-sale {
   display: inline-flex !important;
   align-items: center !important;
-  padding: 6px 12px !important;
-  border-radius: var(--ss-radius-pill) !important;
-  background: #ff3b30 !important;
+  padding: 5px 10px !important;
+  border-radius: 6px !important;
+  background: var(--ss-accent) !important;
   background-image: none !important;
-  color: #fff !important;
+  color: var(--ss-accent-ink) !important;
+  -webkit-text-fill-color: var(--ss-accent-ink) !important;
   font-weight: 700 !important;
-  font-size: 12.5px !important;
+  font-size: 11.5px !important;
   line-height: 1 !important;
-  letter-spacing: 0.02em !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
   box-shadow: none !important;
   filter: none !important;
   animation: none !important;
@@ -1560,6 +1595,16 @@ button.add-to-cart-button[disabled] {
    collection card renders a name and nothing else.
    ============================================================ */
 
+/* THIS ROW RUNS WIDER THAN EVERY OTHER SECTION. Six cards on the
+   site's normal 1178px column came out 177px each, which is smaller
+   than the artwork deserves. Half the usual gutter and a higher cap
+   give it 1221px at a 1280px viewport and considerably more on a
+   large screen. It is the one section allowed to break the page
+   measure, and it earns it by being a single row of tiles. */
+.content-main-wrapper .js-section-wrapper[data-section-key="featured-collection-list"] .section-contents-wrapper {
+  max-width: min(1780px, calc(100% - var(--ss-gutter))) !important;
+}
+
 .js-section-wrapper[data-section-key="featured-collection-list"] .heading-text {
   text-align: left !important;
   font-size: clamp(1.75rem, 3.2vw, 2.75rem) !important;
@@ -1604,19 +1649,23 @@ button.add-to-cart-button[disabled] {
    the store, not two. */
 .js-section-wrapper[data-section-key="featured-collection-list"] .card {
   background: var(--ss-panel) !important;
-  border: 1px solid var(--ss-line) !important;
+  border: 1px solid var(--ss-line-card) !important;
   border-radius: var(--ss-radius-card) !important;
   padding: var(--ss-card-pad) !important;
   overflow: hidden !important;
-  box-shadow: none !important;
+  box-shadow:
+    0 1px 2px rgba(21, 21, 21, 0.04),
+    0 4px 12px rgba(21, 21, 21, 0.05) !important;
   transition:
     border-color 0.18s var(--ss-ease),
     box-shadow 0.18s var(--ss-ease) !important;
 }
 
 .js-section-wrapper[data-section-key="featured-collection-list"] .card-wrapper:hover .card {
-  border-color: var(--ss-line-strong) !important;
-  box-shadow: 0 6px 18px rgba(21, 21, 21, 0.07) !important;
+  border-color: rgba(21, 21, 21, 0.1) !important;
+  box-shadow:
+    0 2px 4px rgba(21, 21, 21, 0.05),
+    0 12px 28px rgba(21, 21, 21, 0.1) !important;
 }
 
 /* 16:9, matching the shape the artwork is already cropped to. The
@@ -1672,7 +1721,7 @@ button.add-to-cart-button[disabled] {
 }
 
 .js-section-wrapper[data-section-key="featured-collection-list"] .card .card__content .card__information {
-  padding: 12px 4px 4px !important;
+  padding: 14px 6px 10px !important;
   text-align: left !important;
 }
 
@@ -1860,7 +1909,7 @@ button.add-to-cart-button[disabled] {
   flex-direction: column;
   align-items: flex-start;
   gap: 5px;
-  padding: 12px 4px 4px !important;
+  padding: 14px 6px 10px !important;
 }
 
 /* THIS RE-HIDE IS LOAD-BEARING, NOT A DUPLICATE. Section 7 hides
@@ -1975,6 +2024,91 @@ button.add-to-cart-button[disabled] {
 .content-main-wrapper .js-section-wrapper[data-section-key="newsletter"] .heading-text,
 .content-main-wrapper .js-section-wrapper[data-section-key="newsletter"] .heading-text-main {
   text-align: left !important;
+}
+
+/* ============================================================
+   7e. FULL-BLEED SECTIONS, THE HOME CATALOGUE, AND THE NEWSLETTER
+   ============================================================ */
+
+/* A SECTION WITH A BACKGROUND PAINTS OVER ITS OWN TOP PADDING, so
+   the gap that separates every other section simply vanished here.
+   The banner's artwork ran straight up against the bottom row of
+   product cards with nothing between them. Moving the gap from
+   padding to margin puts it outside the painted area, where it
+   reads as real space; the section keeps its internal centring
+   because it is a flex box with align-items: center. */
+.content-main-wrapper .js-section-wrapper[data-section-key="headline-image-double"],
+.content-main-wrapper .js-section-wrapper[data-section-key="collage"] {
+  padding-top: 0 !important;
+  margin-top: var(--ss-section-y) !important;
+}
+
+/* THE HOME PAGE'S CATALOGUE BLOCK IS HIDDEN. THE :not(:only-child)
+   IS THE ENTIRE SAFETY MECHANISM AND MUST NOT BE REMOVED.
+
+   Payhip gives the home page and every collection page the same
+   body id (page-collection), the same section id
+   (page-section-collection) and the same data-section-key. Hiding
+   on any of those alone would take out the product grid on
+   /collection/bundles, /collection/freebies and every other
+   collection page - the entire shop.
+
+   What actually differs is the company it keeps. Verified on both:
+   on a collection page this section is the ONLY child of
+   .content-main-wrapper; on the home page it is one of eight. */
+.content-main-wrapper .js-section-wrapper[data-section-key="collection"]:not(:only-child) {
+  display: none !important;
+}
+
+/* --- the newsletter --- */
+
+/* Its background is a 2076x284 strip - a 7.3:1 letterbox - and the
+   section is 380px tall, so cover crops hard through the middle of
+   the artwork and blows it up 1.3x. Dark heading type landed
+   straight on top of it and stopped being readable.
+
+   Same fix as the hero on mobile, and for the same reason: Payhip's
+   own .section-background-overlay, a solid layer shipped at opacity
+   0 between the image and the contents. At 0.85 in the page ground
+   the artwork survives as texture and the type is legible. A flat
+   colour, not a gradient. */
+.js-section-wrapper[data-section-key="newsletter"] .section-background-overlay {
+  background: var(--ss-bg) !important;
+  opacity: 0.85 !important;
+}
+
+/* The form was centred in the section while the heading above it
+   was left-aligned, which put the two on different axes. */
+.js-section-wrapper[data-section-key="newsletter"] .subscribe-form-block,
+.js-section-wrapper[data-section-key="newsletter"] .form-wrapper {
+  width: 100% !important;
+}
+
+.js-section-wrapper[data-section-key="newsletter"] form {
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: center;
+  gap: 12px;
+  width: 100% !important;
+  max-width: 520px !important;
+  margin: 0 !important;
+}
+
+.js-section-wrapper[data-section-key="newsletter"] .subscribe-form-field-wrapper {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.js-section-wrapper[data-section-key="newsletter"] .form-control {
+  width: 100% !important;
+}
+
+/* Every section in this file runs padding-bottom: 0 and takes its
+   separation from the next section's padding-top. The newsletter is
+   the last thing before the footer band, so there is no next
+   section to provide it and the form sat hard against the footer. */
+.content-main-wrapper .js-section-wrapper[data-section-key="newsletter"] {
+  padding-bottom: var(--ss-section-y) !important;
 }
 
 /* ============================================================
@@ -2810,13 +2944,23 @@ a.font-section-product-previewFileLink {
    neutralised before the grid is applied.
    ============================================================ */
 
+/* Four, matching the four items in the builder. At three the fourth
+   dropped onto a row of its own and the set stopped reading as one
+   band. */
 .js-section-wrapper[data-section-key="image-and-text-columns"] .row {
   display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: var(--ss-grid-gap) !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: clamp(14px, 1.6vw, 26px) !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
+  .js-section-wrapper[data-section-key="image-and-text-columns"] .row {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 620px) {
   .js-section-wrapper[data-section-key="image-and-text-columns"] .row {
     grid-template-columns: 1fr !important;
   }
@@ -2829,19 +2973,100 @@ a.font-section-product-previewFileLink {
   flex: none !important;
 }
 
-/* A rule down the left rather than a box around it. */
+/* AN OUTLINED ICON, NOT A PINK RULE. The template runs these four
+   as icon-left / text-right with a circular outline, and a coloured
+   bar down the left of each was doing the job of an icon without
+   saying anything.
+
+   THE CIRCLE AND THE GLYPH ARE TWO PSEUDO-ELEMENTS, AND THEY HAVE
+   TO BE. A mask applies to the whole element including its border,
+   so drawing both on ::before masked the circle away and left a
+   bare glyph. ::before is the circle (a real border, no mask) and
+   sits in the flex row; ::after is the glyph, absolutely positioned
+   over it, 20px centred inside the 44px circle.
+
+   `content` carries !important on both. The rule this replaced set
+   content: none !important at the same specificity, so a plain
+   declaration lost on priority rather than on order - which is
+   exactly how the icons silently failed to appear the first time. */
 .js-section-wrapper[data-section-key="image-and-text-columns"] .content-container {
-  position: relative;
+  position: relative !important;
+  display: flex !important;
+  align-items: flex-start;
+  gap: 14px;
   background: transparent;
-  border: 0;
-  border-left: 2px solid var(--ss-accent);
+  border: 0 !important;
   border-radius: 0;
-  padding: 4px 0 4px 22px;
+  padding: 0 !important;
   overflow: visible;
 }
 
 .js-section-wrapper[data-section-key="image-and-text-columns"] .content-container::before {
-  content: none !important;
+  content: "" !important;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--ss-line-strong);
+}
+
+.js-section-wrapper[data-section-key="image-and-text-columns"] .content-container::after {
+  content: "" !important;
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--ss-text);
+  -webkit-mask: var(--ss-icon) center / contain no-repeat;
+  mask: var(--ss-icon) center / contain no-repeat;
+}
+
+/* Payhip leaves an empty image slot above the text in every column;
+   with an icon in play it is 0px of nothing taking up a flex line. */
+.js-section-wrapper[data-section-key="image-and-text-columns"] .image-row-contents {
+  display: none !important;
+}
+
+.js-section-wrapper[data-section-key="image-and-text-columns"] .text-row-contents {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.js-section-wrapper[data-section-key="image-and-text-columns"] .heading-text {
+  font-size: 1rem !important;
+  margin: 0 0 4px !important;
+}
+
+.js-section-wrapper[data-section-key="image-and-text-columns"] .richtext p {
+  font-size: 0.9375rem !important;
+  color: var(--ss-muted) !important;
+  margin: 0 !important;
+}
+
+/* Bootstrap gives each col-md-3 15px of side padding and hangs the
+   row on negative margins. Inside a grid that is 30px of dead space
+   per column, which was enough to wrap every description onto two
+   lines. */
+.js-section-wrapper[data-section-key="image-and-text-columns"] .image-and-text-column-item {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+/* Human-Made - a hand */
+.js-section-wrapper[data-section-key="image-and-text-columns"] .image-and-text-column-item:nth-child(1) .content-container {
+  --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8.6 12.4V4.9a1.6 1.6 0 0 1 3.2 0v6.2'/%3E%3Cpath d='M11.8 10.6V3.9a1.6 1.6 0 0 1 3.2 0v7.5'/%3E%3Cpath d='M15 10.4V6.4a1.6 1.6 0 0 1 3.2 0v8.2a6.4 6.4 0 0 1-6.4 6.4h-.6a6 6 0 0 1-4.6-2.2L4 15.2a1.6 1.6 0 0 1 2.4-2.1l2.2 2.1'/%3E%3C/svg%3E");
+}
+/* Commercial Use - a briefcase */
+.js-section-wrapper[data-section-key="image-and-text-columns"] .image-and-text-column-item:nth-child(2) .content-container {
+  --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2.8' y='6.8' width='18.4' height='13.4' rx='2.2'/%3E%3Cpath d='M8.4 6.8V5.2a2 2 0 0 1 2-2h3.2a2 2 0 0 1 2 2v1.6'/%3E%3Cpath d='M12 11.4v4.4M9.8 13.6h4.4'/%3E%3C/svg%3E");
+}
+/* Instant Download - an arrow into a tray */
+.js-section-wrapper[data-section-key="image-and-text-columns"] .image-and-text-column-item:nth-child(3) .content-container {
+  --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.4v11.2'/%3E%3Cpath d='m7.6 10.4 4.4 4.4 4.4-4.4'/%3E%3Cpath d='M3.8 16.6v2a2 2 0 0 0 2 2h12.4a2 2 0 0 0 2-2v-2'/%3E%3C/svg%3E");
+}
+/* Creator Focused - two people */
+.js-section-wrapper[data-section-key="image-and-text-columns"] .image-and-text-column-item:nth-child(4) .content-container {
+  --ss-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='8.4' cy='8' r='3.2'/%3E%3Cpath d='M2.6 20.4a5.8 5.8 0 0 1 11.6 0'/%3E%3Cpath d='M16.6 5.2a3.2 3.2 0 0 1 0 5.9'/%3E%3Cpath d='M18.2 14.9a5.8 5.8 0 0 1 3.2 5.5'/%3E%3C/svg%3E");
 }
 
 .js-section-wrapper[data-section-key="image-and-text-columns"] .image-row-contents img {
