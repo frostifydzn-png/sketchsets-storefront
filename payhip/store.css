@@ -312,47 +312,6 @@ body {
   display: none !important;
 }
 
-/* --- label left, content right ---
-   Payhip's featured-collection section has exactly three children of
-   .section-contents (heading, grid, button), which is what makes this
-   possible without touching the markup. */
-@media (min-width: 900px) {
-  [data-section-key="featured-collection"] .section-contents {
-    display: grid !important;
-    grid-template-columns: 15.5rem minmax(0, 1fr);
-    grid-template-rows: auto 1fr;
-    grid-template-areas:
-      "title grid"
-      "cta   grid";
-    column-gap: 2.5rem;
-    align-items: start;
-  }
-
-  /* This is the shelf's title, not a caption, so it is set at
-     headline scale in the display face like every other heading.
-     It wraps to two lines in the 15.5rem column, which is intended. */
-  [data-section-key="featured-collection"] .heading-text {
-    grid-area: title;
-    text-align: left !important;
-    font-size: clamp(28px, 2.7vw, 44px) !important;
-    font-weight: 700 !important;
-    text-transform: none;
-    letter-spacing: -0.02em;
-    line-height: 0.94;
-    margin: 0 0 20px !important;
-  }
-
-  [data-section-key="featured-collection"] .grid-block {
-    grid-area: grid;
-  }
-
-  [data-section-key="featured-collection"] .view-all-button-wrapper {
-    grid-area: cta;
-    justify-self: start;
-    margin: 0 !important;
-  }
-}
-
 .grid-list.js-grid-list {
   gap: var(--ss-grid-gap) !important;
 }
@@ -1747,6 +1706,171 @@ button.add-to-cart-button[disabled] {
 
 .js-section-wrapper[data-section-key="featured-collection-list"] .card-wrapper:hover .icon-wrap svg path {
   fill: var(--ss-accent-ink) !important;
+}
+
+/* ============================================================
+   7c. THE FEATURED PRODUCT SHELF - "OUR MOST POPULAR PACKS"
+
+   Payhip's featured-collection section, and unlike the category
+   row above these ARE .product-card-wrapper, so everything in
+   section 7 already applies. This block is the difference between
+   the catalogue grid and a shelf.
+
+   THIS REPLACES THE OLD LABEL-LEFT LAYOUT. Section 1 used to put
+   the heading in a 15.5rem column on the left with the grid
+   beside it, which squeezed five cards into 890px. The reference
+   runs the heading across the top with the link on its right and
+   gives the cards the full width, so that is what this does. The
+   old block was deleted rather than left to fight this one.
+
+   NOT IN THE MARKUP, so it needs adding in the builder: the
+   "FEATURED PRODUCTS" eyebrow above the heading, the one-line
+   description under each product name, and the "BEST SELLER"
+   flag on the first card. Payhip's product card renders a name
+   and a price and nothing else; the .card-badge element it ships
+   for the flag is present but empty, and it is filled from the
+   product's own settings rather than from here.
+
+   No cart button on the cards, per the brief - the whole card is
+   already the link to the product.
+   ============================================================ */
+
+@media (min-width: 900px) {
+  .js-section-wrapper[data-section-key="featured-collection"] .section-contents {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "title cta"
+      "grid  grid" !important;
+    column-gap: 24px !important;
+    /* end, not center: the link sits on the heading's baseline
+       rather than floating in the middle of its cap height. */
+    align-items: end !important;
+  }
+
+  .js-section-wrapper[data-section-key="featured-collection"] .heading-text {
+    grid-area: title;
+    text-align: left !important;
+    font-size: clamp(1.75rem, 3.2vw, 2.75rem) !important;
+    line-height: 1.05 !important;
+    margin: 0 !important;
+  }
+
+  .js-section-wrapper[data-section-key="featured-collection"] .view-all-button-wrapper {
+    grid-area: cta;
+    justify-self: end !important;
+    align-self: end !important;
+    margin: 0 !important;
+  }
+
+  .js-section-wrapper[data-section-key="featured-collection"] .grid-block {
+    grid-area: grid;
+    margin-top: clamp(20px, 2.4vw, 32px);
+  }
+}
+
+/* AUTO-FIT, NOT A FIXED COLUMN COUNT, AND THE REASON IS THE
+   RAGGED EDGE. The reference shows six products; this collection
+   holds five. At repeat(6, 1fr) the five cards measured 177px
+   each and left a 200px hole on the right of the row. auto-fit
+   collapses the empty track, so the same five fill the width at
+   217px each with nothing left over - and the row still reflows
+   correctly if a sixth product is ever added. */
+.js-section-wrapper[data-section-key="featured-collection"] .grid-list {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)) !important;
+  gap: var(--ss-grid-gap) !important;
+}
+
+/* A 165px floor would put one card per row on a phone. */
+@media (max-width: 560px) {
+  .js-section-wrapper[data-section-key="featured-collection"] .grid-list {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important;
+  }
+}
+
+/* "View All" is a filled pink button by default, which put a
+   second loud control on a row that already has the heading. The
+   reference runs it as a quiet text link, so the fill comes off
+   and it underlines in the accent on hover. To read "View all
+   products" it needs renaming in the builder. */
+.js-section-wrapper[data-section-key="featured-collection"] .view-all-button-wrapper .btn {
+  background: transparent !important;
+  color: var(--ss-text) !important;
+  -webkit-text-fill-color: var(--ss-text) !important;
+  padding: 0 !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  border-radius: 0 !important;
+  border-bottom: 1px solid transparent !important;
+}
+
+.js-section-wrapper[data-section-key="featured-collection"] .view-all-button-wrapper .btn:hover {
+  filter: none !important;
+  transform: none !important;
+  color: var(--ss-accent-text) !important;
+  -webkit-text-fill-color: var(--ss-accent-text) !important;
+  border-bottom-color: var(--ss-accent-text) !important;
+}
+
+/* --- the label: price first ---
+   Payhip renders the name and then the price. The reference leads
+   with the price, so the label becomes a flex column and the
+   price block takes order: -1. Reordering with flex rather than
+   moving anything means the DOM order is untouched, so a screen
+   reader still hears the product name before its price. */
+.js-section-wrapper[data-section-key="featured-collection"] .card .card__content .card__information {
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 14px 2px 0 !important;
+}
+
+/* THIS RE-HIDE IS LOAD-BEARING, NOT A DUPLICATE. Section 7 hides
+   the overlay copy of the label with a (0,5,0) selector. The rule
+   directly above is also (0,5,0), so whichever came last in the
+   file won - and when this block sat later, the overlay copy came
+   back and printed the product name straight across the artwork.
+   At (0,7,0) this wins on specificity instead of on order, so
+   this section can be moved anywhere without the bug returning. */
+.js-section-wrapper[data-section-key="featured-collection"] .product-card-wrapper .card .ratio .card__content .card__information {
+  display: none !important;
+}
+
+.js-section-wrapper[data-section-key="featured-collection"] .card .card__content .card-information {
+  order: -1 !important;
+  margin: 0 !important;
+}
+
+/* Sentence case here, where the catalogue grid further down the
+   page stays uppercase - that is the reference's own distinction
+   between a shelf and a full grid. Say the word if you would
+   rather the two matched. */
+.js-section-wrapper[data-section-key="featured-collection"] .card .card__content .card__heading {
+  order: 0 !important;
+  margin: 0 !important;
+  font-size: 0.9375rem !important;
+  line-height: 1.3 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+.js-section-wrapper[data-section-key="featured-collection"] .card .card__content .card__heading a {
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+/* Near-black prices, not the accent. On a shelf where the price
+   leads the label it is the first thing read, and the accent at
+   17px repeated across six cards turned the row into a line of
+   pink. Section 7's price rules are (0,5,0) with !important, so
+   these carry the section attribute to clear them. */
+.js-section-wrapper[data-section-key="featured-collection"] .product-card-wrapper .price:not(.price--on-sale) .price__regular .price-item--regular,
+.js-section-wrapper[data-section-key="featured-collection"] .product-card-wrapper .price__sale .price-item--sale.price-item--last {
+  color: var(--ss-text) !important;
+  -webkit-text-fill-color: var(--ss-text) !important;
+  font-size: 1.0625rem !important;
 }
 
 /* ============================================================
