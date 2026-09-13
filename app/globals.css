@@ -213,19 +213,33 @@ h3,
  * than a plan you sign up for. Measured there at 8px, 700 weight, sentence
  * case.
  */
+/*
+ * INK, NOT PINK. A large saturated magenta button is the loudest object on a
+ * white page and it reads as a signup, not a shop counter — it was a real part
+ * of why this felt like software marketing. Ink is quieter, higher contrast
+ * and more expensive-looking, which is the whole of the minimal brief.
+ *
+ * The accent does not disappear; it moves to where it means something. Prices,
+ * badges, the archive marker and hover states all still carry it, and it now
+ * reads as "this is commerce" rather than as "this is the loudest thing we
+ * could paint".
+ *
+ * To put the pink CTA back, this is one declaration: background-color to
+ * var(--color-accent) and the hover to var(--color-accent-dim).
+ */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   border-radius: 8px;
-  background-color: var(--color-accent);
-  color: #fff;
+  background-color: var(--color-text);
+  color: var(--color-surface);
   font-weight: 700;
   transition: background-color 0.3s var(--ease-out-soft);
 }
 .btn-primary:hover {
-  background-color: var(--color-accent-dim);
+  background-color: #000000;
 }
 
 .btn-ghost {

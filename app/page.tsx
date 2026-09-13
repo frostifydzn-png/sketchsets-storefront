@@ -5,11 +5,9 @@ import { ProductCard } from "@/components/ProductCard";
 import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/Section";
 import { SoftwareRow } from "@/components/SoftwareRow";
-import { ValueProps } from "@/components/ValueProps";
 import { VaultPanel } from "@/components/VaultPanel";
 import { linkedCategories, totalAssets } from "@/lib/catalog";
 import {
-  formatPrice,
   frostifyPicks,
   getProduct,
   products,
@@ -21,21 +19,12 @@ export default function HomePage() {
   const vault = getProduct("sketchsets-vault");
 
   /*
-   * Catalogue-wide counts for the line under the hero. Kept separate from the
-   * shelves below, which claim products from each other — those lists say what
-   * is on a shelf, this says what the shop holds.
-   */
-  const freeCount = products.filter((p) => p.price === 0).length;
-  /*
    * Two tiles, not three. The third category holds one product, so it fails
    * the rule in lib/catalog.ts and never renders — which is the point of
    * deriving this rather than listing it. Three tiles where one leads
    * somewhere empty reads as a shop that is not finished.
    */
   const tiles = linkedCategories();
-  const lowest = Math.min(
-    ...products.filter((p) => p.price > 0).map((p) => p.price),
-  );
 
   /* The Vault has its own block, so it stays off every other shelf. */
   const notVault = (p: (typeof products)[number]) => p.slug !== vault?.slug;
@@ -123,25 +112,18 @@ export default function HomePage() {
 
           {/* One quiet line, not a row of badges with icons. */}
           {/*
-            Assets first, packs second. "10 packs" describes the shelf;
-            "194 assets" describes what lands in the buyer's downloads folder,
-            and both are true of the same catalogue.
-          */}
-          <p className="text-muted mt-7 text-[13.5px] leading-relaxed">
-            <span className="tabular-nums">{totalAssets()}</span> assets across{" "}
-            <span className="tabular-nums">{products.length}</span> packs
-            &middot; {freeCount} free &middot; from {formatPrice(lowest)}{" "}
-            &middot; commercial licence included
-          </p>
+            ONE SUPPORTING LINE, NOT THREE. This carried a stats row, then a
+            bordered compatibility strip with a label chip and seven names.
+            Stacked under a headline that already has an eyebrow, a lede and
+            two buttons, that is six things arguing for attention around one
+            sentence — which is the shape of a SaaS hero, and it is what made
+            the page feel like one.
 
-          {/*
-            THE COMPATIBILITY LINE BELONGS ABOVE THE FOLD. It is the first
-            question anyone asks about an asset pack and the one that stops a
-            sale dead, so it is answered before a product is even clicked.
-            Derived from the catalogue, so it cannot claim support the shop
-            does not actually have.
+            The eyebrow already gives the asset count, so repeating it here
+            was redundant as well as noisy. What survives is the fact a buyer
+            actually needs before clicking anything: what it opens in.
           */}
-          <SoftwareRow className="border-line mt-7 border-t pt-6" />
+          <SoftwareRow className="mt-8" />
         </div>
 
         <HeroStack products={fan} />
@@ -190,11 +172,7 @@ export default function HomePage() {
         </Section>
       )}
 
-      <Section
-        tight
-        title="Shop by what you make"
-        note="Two things, done properly. Everything here is for one or the other."
-      >
+      <Section tight title="Shop by what you make">
         <div className="grid gap-x-5 gap-y-9 sm:grid-cols-2">
           {tiles.map((c, i) => (
             <Reveal key={c.id} delay={i * 60}>
@@ -203,27 +181,6 @@ export default function HomePage() {
           ))}
         </div>
       </Section>
-
-      {/*
-        The compatibility band. The hero answers the question for someone who
-        reads top to bottom; this answers it again for someone who scrolled
-        straight to the shelves, which is most people. The reference
-        marketplace states its software support three times on one page for
-        exactly this reason.
-      */}
-      <section className="shelf-gap">
-        <div className="border-line bg-surface rounded-2xl border px-7 py-8 sm:px-10 sm:py-10">
-          <h2 className="display-section text-text max-w-[18ch]">
-            Opens in what you already use.
-          </h2>
-          <p className="text-dim mt-4 max-w-[54ch] text-[15.5px] leading-relaxed">
-            Layered PSDs, transparent PNGs and vectors. Nothing here needs a
-            plugin, a subscription or a specific version to be useful &mdash;
-            every product page lists exactly what it opens in.
-          </p>
-          <SoftwareRow className="border-line mt-7 border-t pt-6" />
-        </div>
-      </section>
 
       {cheap.length > 0 && (
         <Section
@@ -241,8 +198,6 @@ export default function HomePage() {
           </div>
         </Section>
       )}
-
-      <ValueProps />
 
       {/* Frostoria last, so the community never competes with the shop. */}
       <section className="section-gap">

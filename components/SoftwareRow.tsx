@@ -3,17 +3,18 @@ import { allSoftware } from "@/lib/products";
 /**
  * "Works with" — the compatibility line.
  *
- * The reference marketplace repeats its software support in three places: a
- * line under the hero, a band mid-page, and a matrix on every product page.
- * That is not redundancy, it is the objection being answered before it is
- * raised. Nobody buys a pack they are not sure opens.
+ * ONE QUIET LINE. This was a labelled strip of seven names in semibold with a
+ * rule above it — which is a logo wall, and a logo wall is the most SaaS
+ * object there is. The information is worth keeping, because "does it open in
+ * my software" is the first question anyone asks about an asset pack. The
+ * presentation was not.
  *
  * Derived from the catalogue's own compatibility fields rather than typed, so
  * it can never claim support for something nothing in the shop actually
  * targets — and so a pack that adds DaVinci support adds it here too.
  */
 export function SoftwareRow({
-  label = "Works with",
+  label = "Works in",
   className = "",
 }: {
   label?: string;
@@ -23,18 +24,8 @@ export function SoftwareRow({
   if (software.length === 0) return null;
 
   return (
-    <div className={`flex flex-wrap items-center gap-x-5 gap-y-2 ${className}`}>
-      <span className="set-no text-muted shrink-0">{label}</span>
-      <ul className="flex flex-wrap items-center gap-x-4 gap-y-2">
-        {software.map((name) => (
-          <li
-            key={name}
-            className="text-dim text-[13.5px] font-semibold whitespace-nowrap"
-          >
-            {name}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <p className={`text-muted text-[13px] leading-relaxed ${className}`}>
+      {label} {software.join(", ")}
+    </p>
   );
 }
