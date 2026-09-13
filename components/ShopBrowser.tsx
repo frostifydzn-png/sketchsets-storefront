@@ -119,7 +119,7 @@ export function ShopBrowser({ products }: { products: Product[] }) {
   );
 
   return (
-    <div className="mt-12 flex flex-col gap-10 lg:flex-row lg:gap-14">
+    <div className="mt-8 flex flex-col gap-10 lg:flex-row lg:gap-12">
       <aside className="lg:w-[220px] lg:shrink-0">
         <div className="lg:sticky lg:top-24">{sidebar}</div>
       </aside>
@@ -163,8 +163,11 @@ export function ShopBrowser({ products }: { products: Product[] }) {
           {results.length} {results.length === 1 ? "product" : "products"}
         </p>
 
+        {/* Four across on a wide screen, not three: a marketplace grid should
+            read as inventory, and at three columns a ten-product shop runs to
+            four sparse rows. */}
         {results.length > 0 ? (
-          <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-3">
+          <div className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
             {results.map((product, i) => (
               <ProductCard
                 key={product.id}
