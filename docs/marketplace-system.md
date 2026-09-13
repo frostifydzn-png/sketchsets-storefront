@@ -81,8 +81,13 @@ remember.
 - **Variants are SKUs, not products.** A variant gets no page, slug or card —
   one product page, one card, a price range.
 - **One badge maximum per card**, priority Free → New → Pick.
-- The lime accent (`--color-accent`, `#C7FF3D`) stays **commerce-only**. The
-  moment it appears on a non-commerce element it stops meaning "buy".
+- The accent (`--color-accent`) stays **commerce-only**. The moment it appears
+  on a non-commerce element it stops meaning "buy".
+
+  Note: `README.md` describes this palette as ink `#09090B` with a lime
+  `#C7FF3D` accent. `app/globals.css` actually ships a purple ground
+  (`#0a0512`) with a pink accent (`#ff3d9e`). The code is the truth; the
+  README is stale and should be corrected or the palette re-decided.
 - Cards lift on hover **only if they are links**. Non-clickable panels stay flat.
 
 ## Phase 0 — structure only, no new products

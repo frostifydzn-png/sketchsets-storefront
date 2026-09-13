@@ -5,8 +5,8 @@ import { ProductCard } from "@/components/ProductCard";
 import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/Section";
 import { VaultPanel } from "@/components/VaultPanel";
+import { linkedCategories, totalAssets } from "@/lib/catalog";
 import {
-  categories,
   formatPrice,
   frostifyPicks,
   getProduct,
@@ -24,6 +24,13 @@ export default function HomePage() {
    * is on a shelf, this says what the shop holds.
    */
   const freeCount = products.filter((p) => p.price === 0).length;
+  /*
+   * Two tiles, not three. The third category holds one product, so it fails
+   * the rule in lib/catalog.ts and never renders — which is the point of
+   * deriving this rather than listing it. Three tiles where one leads
+   * somewhere empty reads as a shop that is not finished.
+   */
+  const tiles = linkedCategories();
   const lowest = Math.min(
     ...products.filter((p) => p.price > 0).map((p) => p.price),
   );
@@ -85,19 +92,45 @@ export default function HomePage() {
           </div>
 
           {/* One quiet line, not a row of badges with icons. */}
+          {/*
+            Assets first, packs second. "10 packs" describes the shelf;
+            "194 assets" describes what lands in the buyer's downloads folder,
+            and both are true of the same catalogue.
+          */}
           <p className="text-muted mt-10 text-[13.5px] leading-relaxed">
-            {products.length} packs &middot; {freeCount} free &middot; from{" "}
-            {formatPrice(lowest)} &middot; instant download &middot; commercial
-            licence included
+            <span className="tabular-nums">{totalAssets()}</span> assets across{" "}
+            <span className="tabular-nums">{products.length}</span> packs
+            &middot; {freeCount} free &middot; from {formatPrice(lowest)}{" "}
+            &middot; commercial licence included
           </p>
         </div>
 
         <HeroStack products={fan} />
       </section>
 
+      {/*
+        THE TILES COME BEFORE THE FIRST PRODUCT SHELF, and the whole reason is
+        ordering rather than content: a visitor has to know what kind of shop
+        this is before a grid of covers means anything to them. Two tiles
+        answer that in one glance, and the shelf below is then merchandising
+        rather than a wall of unexplained artwork.
+      */}
+      <Section
+        first
+        title="Shop by what you make"
+        note="Two things, done properly. Everything here is for one or the other."
+      >
+        <div className="grid gap-x-7 gap-y-12 sm:grid-cols-2">
+          {tiles.map((c, i) => (
+            <Reveal key={c.id} delay={i * 80}>
+              <CategoryCard category={c} />
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
       {picks.length > 0 && (
         <Section
-          first
           title={`${site.parent} Picks`}
           note={`The packs ${site.parent} actually reaches for.`}
           action={{ href: "/browse", label: "See everything" }}
@@ -111,16 +144,6 @@ export default function HomePage() {
           </div>
         </Section>
       )}
-
-      <Section title="Browse by what you make">
-        <div className="grid gap-x-7 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-          {categories.map((c, i) => (
-            <Reveal key={c.id} delay={i * 80}>
-              <CategoryCard category={c} />
-            </Reveal>
-          ))}
-        </div>
-      </Section>
 
       {vault && <VaultPanel vault={vault} />}
 

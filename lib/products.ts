@@ -38,6 +38,16 @@ export interface Product {
   setNumber: string;
   /** File types in the pack, for at-a-glance scanning. */
   formats: string[];
+  /**
+   * How many individual assets are in the pack.
+   *
+   * Typed rather than parsed out of includedFiles, because those strings are
+   * prose written for people ("11 glows, 3 leaks, 6 flares") and any regex
+   * over them would be one rewording away from reporting the wrong number on
+   * every card in the shop. Omitted where the pack has no meaningful count,
+   * such as the sample packs.
+   */
+  assetCount?: number;
   /** Hand-written selling points. Rendered only when a product has them. */
   keyFeatures?: string[];
   fileSize: string;
@@ -88,6 +98,8 @@ export const products: Product[] = [
   {
     id: "vault-v1",
     slug: "sketchsets-vault",
+    /* 7 packs summed: 110 + 20 + 20 + 8 + 12 + 19 + 5 */
+    assetCount: 194,
     title: "SketchSets Vault",
     creatorSlug: "frostify",
     price: 29,
@@ -147,6 +159,7 @@ export const products: Product[] = [
   {
     id: "doodles-v1",
     slug: "hand-drawn-doodles",
+    assetCount: 110,
     title: "Hand-Drawn Doodles",
     creatorSlug: "frostify",
     price: 12.99,
@@ -183,6 +196,8 @@ export const products: Product[] = [
   {
     id: "leaks-glows-v1",
     slug: "leaks-and-glows",
+    /* 11 glows + 3 leaks + 6 flares */
+    assetCount: 20,
     title: "Leaks & Glows",
     creatorSlug: "frostify",
     price: 8.99,
@@ -229,6 +244,7 @@ export const products: Product[] = [
   {
     id: "vector-brushes-v1",
     slug: "vector-brush-assets",
+    assetCount: 20,
     title: "Vector Brush Assets",
     creatorSlug: "frostify",
     price: 8.99,
@@ -267,6 +283,7 @@ export const products: Product[] = [
   {
     id: "paper-tears-v1",
     slug: "paper-tears",
+    assetCount: 8,
     title: "Paper Tears",
     creatorSlug: "frostify",
     price: 7.99,
@@ -307,6 +324,7 @@ export const products: Product[] = [
   {
     id: "photoshop-patterns-v1",
     slug: "photoshop-patterns",
+    assetCount: 12,
     title: "Photoshop Patterns",
     creatorSlug: "frostify",
     price: 6.99,
@@ -345,6 +363,7 @@ export const products: Product[] = [
   {
     id: "speedlines-v1",
     slug: "speedlines",
+    assetCount: 5,
     title: "Speedlines",
     creatorSlug: "frostify",
     price: 0,
@@ -383,6 +402,7 @@ export const products: Product[] = [
   {
     id: "sparks-particles-v1",
     slug: "sparks-and-particles",
+    assetCount: 19,
     title: "Sparks & Particles",
     creatorSlug: "frostify",
     price: 0,

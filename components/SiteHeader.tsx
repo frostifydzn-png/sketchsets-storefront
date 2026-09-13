@@ -5,36 +5,53 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Logomark } from "@/components/Logomark";
 import { SearchDialog } from "@/components/SearchDialog";
-import { categories } from "@/lib/products";
+import { browseViews, linkedCategories, typesIn } from "@/lib/catalog";
+import { formatPrice, getProduct } from "@/lib/products";
 import { site } from "@/lib/site";
 
-/* Categories sits between Browse and Freebies, so it is rendered separately. */
-const navLeading = [{ href: "/browse", label: "Browse" }];
-
-const navLinks = [
-  { href: "/free", label: "Freebies" },
-  { href: "/products/sketchsets-vault", label: "The Vault" },
-  { href: "/new", label: "New Drops" },
-  { href: "/support", label: "Support" },
-];
-
+/**
+ * FOUR ITEMS, AND NONE OF THEM IS HAND-MAINTAINED.
+ *
+ * The menu this replaced had seven destinations across two levels — Browse,
+ * a Categories dropdown, Freebies, The Vault, New Drops, Support — for a shop
+ * holding ten products. Seven links over ten products is not a navigation, it
+ * is a filing system, and one of the categories it advertised held a single
+ * item.
+ *
+ * Shop opens everything. Vault and Free are top-level because they are the
+ * two highest-intent destinations in the shop: the flagship, and the thing
+ * someone who has never heard of SketchSets actually clicks first. Support
+ * moves to the footer, where support links belong.
+ *
+ * Every category and count below comes from lib/catalog.ts, which derives
+ * them from the product array. Nothing here lists a destination; a category
+ * appears when it earns two products and leaves when it does not.
+ */
 export function SiteHeader() {
-  const [open, setOpen] = useState(false);
-  const [cats, setCats] = useState(false);
+  const [mobile, setMobile] = useState(false);
+  const [shop, setShop] = useState(false);
   const pathname = usePathname();
+
   const close = () => {
-    setOpen(false);
-    setCats(false);
+    setMobile(false);
+    setShop(false);
   };
 
+  const cats = linkedCategories();
+  const views = browseViews();
+  const vault = getProduct("sketchsets-vault");
+
+  const inShop =
+    pathname === "/browse" ||
+    pathname === "/new" ||
+    pathname.startsWith("/products/") ||
+    cats.some((c) => pathname === `/${c.id}`);
+
   return (
-    <header className="bg-ink/80 border-line sticky top-0 z-40 border-b backdrop-blur-xl">
-      {/*
-        Three-column grid rather than flex with auto margins: the wordmark and
-        the search field are different widths, so auto margins centred the nav
-        in the leftover space rather than in the header. Equal rails put it
-        dead centre regardless.
-      */}
+    <header
+      className="bg-ink/80 border-line sticky top-0 z-40 border-b backdrop-blur-xl"
+      onMouseLeave={() => setShop(false)}
+    >
       <div className="shell grid h-[74px] grid-cols-[auto_1fr_auto] items-center gap-6">
         <Link
           href="/"
@@ -54,115 +71,79 @@ export function SiteHeader() {
 
         <nav
           aria-label="Primary"
-          className="hidden items-center justify-center gap-7 lg:flex"
+          className="hidden items-center justify-center gap-8 lg:flex"
         >
-          {navLeading.map((link) => (
+          <button
+            type="button"
+            onMouseEnter={() => setShop(true)}
+            onClick={() => setShop((v) => !v)}
+            aria-expanded={shop}
+            className={`flex items-center gap-1.5 text-[14px] font-medium transition-colors ${
+              inShop || shop ? "text-white" : "text-dim hover:text-white"
+            }`}
+          >
+            Shop
+            <svg
+              width="10"
+              height="10"
+              viewBox="0 0 10 10"
+              aria-hidden="true"
+              className={`transition-transform duration-300 ${shop ? "rotate-180" : ""}`}
+            >
+              <path
+                d="M2 4l3 3 3-3"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+
+          {vault && (
             <Link
-              key={link.href}
-              href={link.href}
+              href={`/products/${vault.slug}`}
               onClick={close}
+              onMouseEnter={() => setShop(false)}
               aria-current={
-                pathname === link.href || pathname.startsWith("/products/")
-                  ? "page"
-                  : undefined
+                pathname === `/products/${vault.slug}` ? "page" : undefined
               }
               className={`text-[14px] font-medium transition-colors ${
-                pathname === link.href || pathname.startsWith("/products/")
+                pathname === `/products/${vault.slug}`
                   ? "text-white"
                   : "text-dim hover:text-white"
               }`}
             >
-              {link.label}
+              Vault
             </Link>
-          ))}
+          )}
 
-          {/* Categories keeps a dropdown; every other destination is one click. */}
-          <div
-            className="relative"
-            onMouseEnter={() => setCats(true)}
-            onMouseLeave={() => setCats(false)}
+          <Link
+            href="/free"
+            onClick={close}
+            onMouseEnter={() => setShop(false)}
+            aria-current={pathname === "/free" ? "page" : undefined}
+            className={`text-[14px] font-medium transition-colors ${
+              pathname === "/free" ? "text-white" : "text-dim hover:text-white"
+            }`}
           >
-            <button
-              type="button"
-              onClick={() => setCats((v) => !v)}
-              aria-expanded={cats}
-              className={`flex items-center gap-1.5 text-[14px] font-medium transition-colors ${
-                categories.some((c) => pathname === `/${c.id}`)
-                  ? "text-white"
-                  : "text-dim hover:text-white"
-              }`}
-            >
-              Categories
-              <svg
-                width="10"
-                height="10"
-                viewBox="0 0 10 10"
-                aria-hidden="true"
-                className={`transition-transform duration-300 ${cats ? "rotate-180" : ""}`}
-              >
-                <path
-                  d="M2 4l3 3 3-3"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-
-            {cats && (
-              <div className="animate-menu-drop bg-surface border-line absolute top-full left-1/2 w-60 -translate-x-1/2 rounded-2xl border p-2 shadow-[0_30px_60px_-25px_rgba(0,0,0,0.95)]">
-                {categories.map((c) => (
-                  <Link
-                    key={c.id}
-                    href={`/${c.id}`}
-                    data-room={c.id}
-                    onClick={close}
-                    className="group hover:bg-elevated block rounded-xl px-3 py-2.5 transition-colors"
-                  >
-                    <span className="group-hover-room block text-[14px] font-semibold text-white transition-colors">
-                      {c.name}
-                    </span>
-                    <span className="text-muted mt-0.5 block text-[12px]">
-                      {c.blurb}
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {navLinks.map((link) => {
-            const active = pathname === link.href;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={close}
-                aria-current={active ? "page" : undefined}
-                className={`text-[14px] font-medium transition-colors ${
-                  active ? "text-white" : "text-dim hover:text-white"
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
+            Free
+          </Link>
         </nav>
 
         <div className="flex items-center justify-end gap-2">
           <SearchDialog />
           <button
             type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-expanded={open}
+            onClick={() => setMobile((v) => !v)}
+            aria-expanded={mobile}
             aria-controls="mobile-nav"
-            aria-label={open ? "Close menu" : "Open menu"}
+            aria-label={mobile ? "Close menu" : "Open menu"}
             className="text-text -mr-1 p-2 lg:hidden"
           >
             <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
-              {open ? (
+              {mobile ? (
                 <path
                   d="M6 6l10 10M16 6L6 16"
                   stroke="currentColor"
@@ -182,43 +163,148 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {open && (
+      {/*
+        The panel is a sibling of the header row rather than a child of the
+        Shop button. Anchored to the button it would need a translate and a
+        fixed width to stay on screen at every viewport; anchored to the
+        header it simply inherits the page gutter and lines up with
+        everything else on the page.
+      */}
+      {shop && (
+        <div className="animate-menu-drop border-line bg-surface hidden border-t lg:block">
+          <div className="shell grid grid-cols-[1fr_1fr_1fr_1.15fr] gap-10 py-9">
+            <div>
+              <h3 className="text-muted text-[11px] font-semibold tracking-[0.14em] uppercase">
+                Browse
+              </h3>
+              <ul className="mt-4 space-y-2.5">
+                {views.map((view) => (
+                  <li key={view.href}>
+                    <Link
+                      href={view.href}
+                      onClick={close}
+                      className="text-dim flex items-baseline gap-2 text-[14px] font-medium transition-colors hover:text-white"
+                    >
+                      {view.label}
+                      <span className="text-muted text-[12px] tabular-nums">
+                        {view.count}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {cats.map((category) => {
+              const types = typesIn(category.id);
+              return (
+                <div key={category.id} data-room={category.id}>
+                  <Link
+                    href={`/${category.id}`}
+                    onClick={close}
+                    className="room-accent text-[15px] font-bold tracking-[-0.01em] transition-opacity hover:opacity-75"
+                  >
+                    {category.name}
+                  </Link>
+                  <p className="text-muted mt-2 text-[13px] leading-relaxed">
+                    {category.blurb}
+                  </p>
+                  <ul className="mt-4 space-y-1.5">
+                    {types.map((type) => (
+                      <li
+                        key={type.name}
+                        className="text-dim flex items-baseline gap-2 text-[13.5px]"
+                      >
+                        {type.name}
+                        <span className="text-muted text-[12px] tabular-nums">
+                          {type.count}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+
+            {vault && (
+              <div>
+                <h3 className="text-muted text-[11px] font-semibold tracking-[0.14em] uppercase">
+                  The whole library
+                </h3>
+                <Link
+                  href={`/products/${vault.slug}`}
+                  onClick={close}
+                  className="border-line bg-elevated hover:border-accent/40 mt-4 block rounded-xl border p-4 transition-colors"
+                >
+                  <span className="block text-[15px] font-bold text-white">
+                    {vault.title}
+                  </span>
+                  <span className="text-muted mt-1.5 block text-[13px]">
+                    {vault.bundleOf?.length ?? 0} packs &middot;{" "}
+                    <span className="tabular-nums">{vault.assetCount}</span>{" "}
+                    assets
+                  </span>
+                  <span className="text-accent mt-3 block text-[15px] font-semibold tabular-nums">
+                    {formatPrice(vault.price)}
+                  </span>
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {mobile && (
         <nav
           id="mobile-nav"
           aria-label="Mobile"
           className="border-line bg-ink border-t lg:hidden"
         >
           <div className="shell py-4">
-            {categories.map((c) => (
+            {cats.map((c) => (
               <Link
                 key={c.id}
                 href={`/${c.id}`}
                 onClick={close}
-                className="text-dim block py-2.5 text-[17px] font-semibold hover:text-white"
+                className="flex items-baseline justify-between py-2.5 text-[17px] font-semibold text-white"
               >
                 {c.name}
+                <span className="text-muted text-[13px] tabular-nums">
+                  {typesIn(c.id).reduce((n, t) => n + t.count, 0)}
+                </span>
               </Link>
             ))}
+
             <span className="bg-line my-3 block h-px" />
-            {[...navLeading, ...navLinks].map((link) => (
+
+            {views.map((view) => (
               <Link
-                key={link.href}
-                href={link.href}
+                key={view.href}
+                href={view.href}
                 onClick={close}
-                className="block py-2.5 text-[17px] font-semibold text-white"
+                className="text-dim block py-2.5 text-[17px] font-semibold hover:text-white"
               >
-                {link.label}
+                {view.label}
               </Link>
             ))}
-            <a
-              href={site.links.frostify}
-              target="_blank"
-              rel="noopener noreferrer"
+
+            {vault && (
+              <Link
+                href={`/products/${vault.slug}`}
+                onClick={close}
+                className="text-dim block py-2.5 text-[17px] font-semibold"
+              >
+                The Vault
+              </Link>
+            )}
+
+            <Link
+              href="/support"
               onClick={close}
               className="text-dim block py-2.5 text-[17px] font-semibold"
             >
-              {site.parent} &#8599;
-            </a>
+              Support
+            </Link>
           </div>
         </nav>
       )}

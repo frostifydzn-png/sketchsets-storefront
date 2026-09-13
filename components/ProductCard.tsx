@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getCreator } from "@/lib/creators";
+import { Badge, badgeFor } from "@/components/Badge";
 import { formatPrice, type Product } from "@/lib/products";
 
 export type CardSize = "lead" | "standard";
@@ -8,10 +8,20 @@ export type CardSize = "lead" | "standard";
 /**
  * Product card.
  *
- * Artwork, then the title, creator and price underneath it. No panel around
- * the whole thing, no border, no hover glow — the cover art is the product,
- * and wrapping it in a bordered tile with a coloured bloom only put software
- * chrome between the buyer and the thing they came to look at.
+ * Artwork, then the title, what kind of thing it is, and the price. No panel
+ * around the whole thing, no border, no hover glow — the cover art is the
+ * product, and wrapping it in a bordered tile with a coloured bloom only put
+ * software chrome between the buyer and the thing they came to look at.
+ *
+ * WHAT CHANGED, AND WHY IT IS SHORTER THAN IT LOOKS. The second line used to
+ * read "Textures · Frostify". The creator name was the same on every card in
+ * the shop, so it was a column of identical text pretending to be
+ * information. It is gone, and the asset count took its place: 110 and 194
+ * are the numbers that make a $12 pack look like a library, and they were
+ * only visible on the product page.
+ *
+ * Badges are capped at one, by construction rather than by discipline — see
+ * components/Badge.tsx.
  */
 export function ProductCard({
   product,
@@ -22,9 +32,16 @@ export function ProductCard({
   priority?: boolean;
   size?: CardSize;
 }) {
-  const creator = getCreator(product.creatorSlug);
   const alt = product.previewImages[1];
   const free = product.price === 0;
+  const badge = badgeFor(product);
+
+  /*
+   * Below about eight the count argues against the product — "8 assets" reads
+   * as thin next to "110 assets", even though eight 4K paper tears is a fair
+   * pack. Above it, the number is doing the selling.
+   */
+  const showCount = (product.assetCount ?? 0) > 8;
 
   return (
     <Link
@@ -61,9 +78,9 @@ export function ProductCard({
           />
         )}
 
-        {product.isNew && (
-          <span className="bg-accent absolute top-3 left-3 rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide text-white uppercase">
-            New
+        {badge && (
+          <span className="absolute top-3 left-3">
+            <Badge kind={badge} />
           </span>
         )}
       </div>
@@ -77,18 +94,29 @@ export function ProductCard({
           >
             {product.title}
           </h3>
+          {/*
+            Tabular numerals, because prices sit in a column down a grid and
+            proportional digits leave them visibly ragged. It is a small thing
+            that reads as carelessness across twelve cards.
+          */}
           <span
-            className={`shrink-0 font-semibold ${free ? "text-accent" : "text-dim"} ${
-              size === "lead" ? "text-[1.125rem]" : "text-[15px]"
-            }`}
+            className={`shrink-0 font-semibold tabular-nums ${
+              free ? "text-accent" : "text-dim"
+            } ${size === "lead" ? "text-[1.125rem]" : "text-[15px]"}`}
           >
-            {free ? "Free" : formatPrice(product.price)}
+            {formatPrice(product.price)}
           </span>
         </div>
 
         <p className="text-muted mt-1 truncate text-[13px]">
-          {product.subcategory} &middot;{" "}
-          {creator?.name ?? product.creatorSlug}
+          {product.subcategory}
+          {showCount && (
+            <>
+              {" "}
+              &middot;{" "}
+              <span className="tabular-nums">{product.assetCount}</span> assets
+            </>
+          )}
         </p>
 
         {size === "lead" && (
