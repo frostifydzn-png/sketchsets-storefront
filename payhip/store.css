@@ -3100,11 +3100,17 @@ a.font-section-product-previewFileLink {
 
 /* Four, matching the four items in the builder. At three the fourth
    dropped onto a row of its own and the set stopped reading as one
-   band. */
+   band.
+
+   The gap is the shared --ss-grid-gap now that these are cards
+   rather than lines of text. Its 20px floor is the number that keeps
+   one tile's shadow off the next tile's white panel; the local clamp
+   this replaced bottomed out at 14px, which is inside the 16px the
+   resting shadow reaches. */
 .js-section-wrapper[data-section-key="image-and-text-columns"] .row {
   display: grid !important;
   grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: clamp(14px, 1.6vw, 26px) !important;
+  gap: var(--ss-grid-gap) !important;
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
@@ -3127,60 +3133,100 @@ a.font-section-product-previewFileLink {
   flex: none !important;
 }
 
-/* AN OUTLINED ICON, NOT A PINK RULE. The template runs these four
-   as icon-left / text-right with a circular outline, and a coloured
-   bar down the left of each was doing the job of an icon without
-   saying anything.
+/* EACH COLUMN IS A CARD, AND THE STACK IS WHAT MAKES IT ONE. Run
+   icon-left / text-right, four across, and the whole section reads
+   as a single thin line of small print - there is no room left for
+   a description beside a 44px circle, so each one wrapped and the
+   band came out looking like a footnote under the shop rather than
+   the part of the page that explains what the shop is.
+
+   Icon over title over description gives each column its full width
+   for the copy, and the panel is what separates four things from one
+   strip. It is the same white panel, hairline and resting shadow the
+   product and category cards use: one card treatment across the
+   store, not two.
+
+   NO HOVER STATE, deliberately. The product and category cards lift
+   on hover because they are links and the lift is the affordance.
+   These four are not clickable, and a card that lifts under the
+   cursor and then does nothing is a promise the section cannot keep.
+   Staying flat is also why this section is NOT in the 44px clearance
+   list further up: with no hover shadow the deepest it ever draws is
+   the resting 16px, which the transparent .section-background
+   already covers.
 
    THE CIRCLE AND THE GLYPH ARE TWO PSEUDO-ELEMENTS, AND THEY HAVE
    TO BE. A mask applies to the whole element including its border,
    so drawing both on ::before masked the circle away and left a
    bare glyph. ::before is the circle (a real border, no mask) and
-   sits in the flex row; ::after is the glyph, absolutely positioned
-   over it, 20px centred inside the 44px circle.
+   sits at the top of the stack; ::after is the glyph, absolutely
+   positioned over it.
 
    `content` carries !important on both. The rule this replaced set
    content: none !important at the same specificity, so a plain
    declaration lost on priority rather than on order - which is
    exactly how the icons silently failed to appear the first time. */
 .js-section-wrapper[data-section-key="image-and-text-columns"] .content-container {
+  /* Named once because the glyph's position is derived from both:
+     retune either and the icon stays centred in its circle. */
+  --ss-tile-pad: clamp(20px, 1.7vw, 28px);
+  --ss-tile-icon: 52px;
+
   position: relative !important;
   display: flex !important;
-  /* Centre, not flex-start. The icon has to sit against the middle of
-     the heading-plus-description block rather than against the top of
-     it, or it reads as hanging off the first line - and it drifts
-     further out of line on any column whose description wraps. */
-  align-items: center;
-  gap: 14px;
-  background: transparent;
-  border: 0 !important;
-  border-radius: 0;
-  padding: 0 !important;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  /* Fills the column so the four panels end on one baseline however
+     long the individual descriptions run. */
+  flex: 1 1 auto;
+  background: var(--ss-panel) !important;
+  border: 1px solid var(--ss-line-card) !important;
+  border-radius: var(--ss-radius-card);
+  padding: var(--ss-tile-pad) !important;
   overflow: visible;
+  box-shadow:
+    0 1px 2px rgba(21, 21, 21, 0.04),
+    0 4px 12px rgba(21, 21, 21, 0.05);
 }
 
+/* The column item has to become a flex column itself, or the
+   flex: 1 1 auto above has no main axis to grow along and the panels
+   shrink-wrap their own copy instead of matching each other. */
+.js-section-wrapper[data-section-key="image-and-text-columns"] .image-and-text-column-item {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* flex: 0 0 auto and not a basis. In a column flex, flex-basis sets
+   the MAIN axis, which is now the height - so the 0 0 44px this
+   replaced would have set the circle's height and left its width to
+   be worked out from the content, which for an empty pseudo-element
+   is zero. */
 .js-section-wrapper[data-section-key="image-and-text-columns"] .content-container::before {
   content: "" !important;
-  flex: 0 0 44px;
-  width: 44px;
-  height: 44px;
+  flex: 0 0 auto;
+  width: var(--ss-tile-icon);
+  height: var(--ss-tile-icon);
   border-radius: 50%;
   border: 1px solid var(--ss-line-strong);
 }
 
-/* The glyph has to centre the same way the circle does. A fixed
-   top offset anchored it to the container's top edge, so the moment
-   the circle moved to the middle the two came apart. Both are
-   centred against the container now, which is what keeps them
-   registered whatever height the text block ends up. */
+/* The glyph centres on the circle by deriving its position from the
+   same two tokens the circle is drawn from: the circle sits at the
+   top-left of the padding box, so its centre is one padding plus one
+   radius in from each edge. Written as a fixed offset the pair would
+   come apart the moment either token is retuned - which is exactly
+   how they came apart the last time, when the circle moved to the
+   middle and a hard-coded top offset stayed at the top. */
 .js-section-wrapper[data-section-key="image-and-text-columns"] .content-container::after {
   content: "" !important;
   position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
+  left: calc(var(--ss-tile-pad) + var(--ss-tile-icon) / 2);
+  top: calc(var(--ss-tile-pad) + var(--ss-tile-icon) / 2);
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
   background-color: var(--ss-text);
   -webkit-mask: var(--ss-icon) center / contain no-repeat;
   mask: var(--ss-icon) center / contain no-repeat;
@@ -3194,17 +3240,36 @@ a.font-section-product-previewFileLink {
 
 .js-section-wrapper[data-section-key="image-and-text-columns"] .text-row-contents {
   flex: 1 1 auto;
+  width: 100%;
   min-width: 0;
 }
 
+/* BIGGER ON BOTH, because the section is doing explanatory work now
+   rather than sitting under the fold as a trust strip. 16px over
+   15px is caption scale - it is what you set when the words are a
+   label on something else, and here the words ARE the something
+   else.
+
+   The description also comes off --ss-muted. Muted is defined as the
+   lightest tone that still passes AA at body size, which is the
+   right call for a caption and the wrong one for the only copy on
+   the home page that explains how the store works. --ss-dim is the
+   body grey, and it is what the rest of the page sets copy in.
+
+   The section heading is .heading-text-main on this section, not
+   .heading-text, so these two rules cannot reach it - which is what
+   lets the column titles be sized here without dragging the
+   section's own heading down with them. */
 .js-section-wrapper[data-section-key="image-and-text-columns"] .heading-text {
-  font-size: 1rem !important;
-  margin: 0 0 4px !important;
+  font-size: clamp(1.0625rem, 0.98rem + 0.35vw, 1.25rem) !important;
+  line-height: 1.3 !important;
+  margin: 0 0 8px !important;
 }
 
 .js-section-wrapper[data-section-key="image-and-text-columns"] .richtext p {
-  font-size: 0.9375rem !important;
-  color: var(--ss-muted) !important;
+  font-size: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem) !important;
+  line-height: 1.55 !important;
+  color: var(--ss-dim) !important;
   margin: 0 !important;
 }
 
