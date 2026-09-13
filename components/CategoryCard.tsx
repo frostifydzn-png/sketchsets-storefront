@@ -46,7 +46,7 @@ export function CategoryCard({ category }: { category: Category }) {
       </div>
 
       <div className="mt-4">
-        <h3 className="group-hover-room text-[1.25rem] font-bold tracking-[-0.02em] text-white transition-colors">
+        <h3 className="group-hover-room text-[1.25rem] font-bold tracking-[-0.02em] text-text transition-colors">
           {category.name}
         </h3>
         <p className="text-muted mt-1.5 text-[14px] leading-relaxed">

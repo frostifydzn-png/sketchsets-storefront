@@ -35,7 +35,7 @@ export function Section({
   return (
     <section className={gap}>
       <div className="flex flex-wrap items-baseline justify-between gap-x-10 gap-y-3">
-        <h2 className="text-[clamp(1.5rem,2.6vw,2rem)] leading-tight font-bold tracking-[-0.02em] text-white">
+        <h2 className="text-[clamp(1.5rem,2.6vw,2rem)] leading-tight font-bold tracking-[-0.02em] text-text">
           {title}
         </h2>
         {action && (

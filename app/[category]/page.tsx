@@ -59,7 +59,7 @@ export default async function CategoryPage({
       <header className="page-top pb-4">
         <p className="room-accent text-[13px]">Category</p>
 
-        <h1 className="mt-4 text-[clamp(2.25rem,4.6vw,3.5rem)] leading-[1.06] font-bold tracking-[-0.035em] text-white">
+        <h1 className="mt-4 text-[clamp(2.25rem,4.6vw,3.5rem)] leading-[1.06] font-bold tracking-[-0.035em] text-text">
           {found.name}
         </h1>
         <p className="text-dim mt-5 max-w-[56ch] text-[16.5px] leading-relaxed">
@@ -94,7 +94,7 @@ export default async function CategoryPage({
                   <Link
                     href={`/${c.id}`}
                     data-room={c.id}
-                    className="group hover-room text-[1.375rem] font-extrabold tracking-[-0.02em] text-white transition-colors"
+                    className="group hover-room text-[1.375rem] font-extrabold tracking-[-0.02em] text-text transition-colors"
                   >
                     {c.name}
                     <span
@@ -109,7 +109,7 @@ export default async function CategoryPage({
             <li>
               <Link
                 href="/browse"
-                className="text-muted text-[1.375rem] font-extrabold tracking-[-0.02em] transition-colors hover:text-white"
+                className="text-muted text-[1.375rem] font-extrabold tracking-[-0.02em] transition-colors hover:text-text"
               >
                 Everything
               </Link>

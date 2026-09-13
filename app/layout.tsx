@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter_Tight } from "next/font/google";
+import { Archivo, Inter_Tight } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { site } from "@/lib/site";
@@ -11,13 +11,25 @@ import { SiteFooter } from "@/components/SiteFooter";
 import "./globals.css";
 
 /*
- * One face, worked hard across its weight range.
+ * TWO FACES NOW, WHICH THE LIGHT GROUND MADE NECESSARY.
  *
- * The reference design is set entirely in a tight grotesque: 800 for headlines,
- * 700 for section titles and prices, 600 for buttons, 400 for body. Pairing it
- * with a second display face would fight the neon colour for attention, and the
- * colour is doing the identity work here.
+ * On the old near-black violet the colour was doing the identity work, so one
+ * grotesque across the whole weight range was enough. A light storefront has
+ * no neon to carry it, and the identity has to come from the type instead:
+ * a heavy, slightly narrowed display face over a neutral UI face is the pairing
+ * the reference marketplace uses, and it is what README.md has specified all
+ * along.
+ *
+ * Archivo carries a genuine width axis, so headlines can be narrowed by a
+ * variation setting rather than by swapping in a separate condensed family.
  */
+const archivo = Archivo({
+  variable: "--font-archivo",
+  subsets: ["latin"],
+  axes: ["wdth"],
+  display: "swap",
+});
+
 const interTight = Inter_Tight({
   variable: "--font-inter-tight",
   subsets: ["latin"],
@@ -63,7 +75,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${interTight.variable} h-full antialiased`}
+      className={`${archivo.variable} ${interTight.variable} h-full antialiased`}
     >
       <body className="bg-ink text-text flex min-h-full flex-col">
         <a

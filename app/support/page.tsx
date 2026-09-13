@@ -59,7 +59,7 @@ export default function SupportPage() {
           >
             <div className="grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.5fr)] lg:gap-16">
               <div className="lg:sticky lg:top-24 lg:self-start">
-                <h2 className="text-[clamp(1.375rem,2.4vw,1.75rem)] leading-tight font-bold tracking-[-0.02em] text-white">
+                <h2 className="text-[clamp(1.375rem,2.4vw,1.75rem)] leading-tight font-bold tracking-[-0.02em] text-text">
                   {section.title}
                 </h2>
                 <p className="text-dim mt-3 text-[15px] leading-relaxed">
@@ -96,7 +96,7 @@ export default function SupportPage() {
         {/* Contact */}
         <section className="section-gap">
           <div className="border-line border-t pt-14 sm:pt-16">
-            <h2 className="text-[clamp(1.75rem,3.2vw,2.25rem)] leading-[1.1] font-bold tracking-[-0.03em] text-white">
+            <h2 className="text-[clamp(1.75rem,3.2vw,2.25rem)] leading-[1.1] font-bold tracking-[-0.03em] text-text">
               Still stuck?
             </h2>
             <p className="text-dim mt-4 max-w-md text-[16px] leading-relaxed">

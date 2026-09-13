@@ -47,7 +47,20 @@ export function HeroStack({ products }: { products: Product[] }) {
             key={product.id}
             href={`/products/${product.slug}`}
             title={product.title}
-            className={`group border-line-bright bg-elevated absolute overflow-hidden rounded-2xl border shadow-[0_28px_60px_-24px_rgba(0,0,0,0.9)] transition-transform duration-[700ms] ease-[var(--ease-glide)] hover:z-40 hover:-translate-y-2 ${pos.z}`}
+            /*
+              THE SHADOW IS WHAT HOLDS THESE, not the border, and on a light
+              ground that matters more than it did on a dark one. Several pack
+              covers are cream artwork — the doodles and the paper tears — so
+              centre-cropped into a portrait card on a near-white page they
+              have no edge of their own and read as blank rectangles. A white
+              panel under a real shadow gives them one.
+
+              The shadow this replaced was 0 28px 60px rgba(0,0,0,0.9): built
+              to separate a card from near-black violet, and on #f7f7f7 it is
+              a grey smear. Two stacked shadows instead, same system as the
+              product cards.
+            */
+            className={`group border-line-bright bg-surface absolute overflow-hidden rounded-2xl border shadow-[0_2px_4px_rgba(21,21,21,0.05),0_18px_40px_-12px_rgba(21,21,21,0.2)] transition-transform duration-[700ms] ease-[var(--ease-glide)] hover:z-40 hover:-translate-y-2 ${pos.z}`}
             style={{
               left: `${pos.left}%`,
               top: `${pos.top}%`,

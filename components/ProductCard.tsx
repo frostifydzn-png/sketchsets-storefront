@@ -48,11 +48,28 @@ export function ProductCard({
       href={`/products/${product.slug}`}
       className="group block focus-visible:outline-none"
     >
-      <div
-        className={`bg-elevated relative overflow-hidden rounded-xl ${
-          size === "lead" ? "aspect-[16/10]" : "aspect-[16/11]"
-        }`}
-      >
+      {/*
+        THE PANEL CAME BACK WITH THE LIGHT GROUND, and it is not a
+        reversal of the old note above so much as a consequence of it.
+        Bare artwork worked on near-black: every cover, however pale, had
+        a hard edge against the page. On #f7f7f7 the pale covers — the
+        doodles, the patterns, the paper tears — have no edge at all and
+        dissolve into the page.
+
+        So products sit on a white card held by a shadow, which is the
+        same treatment payhip/store.css already gives them on the Payhip
+        store. One card system across both properties.
+
+        The inner radius is derived rather than typed: concentric corners
+        want inner = outer - padding, so the artwork's corner stays
+        parallel to the card's however the two are retuned.
+      */}
+      <div className="card-panel p-2.5">
+        <div
+          className={`bg-elevated relative overflow-hidden rounded-[calc(1rem-0.625rem)] ${
+            size === "lead" ? "aspect-[16/10]" : "aspect-[16/11]"
+          }`}
+        >
         <Image
           src={product.thumbnail}
           alt={`${product.title} preview`}
@@ -85,10 +102,10 @@ export function ProductCard({
         )}
       </div>
 
-      <div className="mt-4">
+        <div className="px-1.5 pt-3.5 pb-1">
         <div className="flex items-baseline justify-between gap-4">
           <h3
-            className={`group-hover:text-accent truncate font-semibold text-white transition-colors ${
+            className={`group-hover:text-accent truncate font-semibold text-text transition-colors ${
               size === "lead" ? "text-[1.25rem]" : "text-[15.5px]"
             }`}
           >
@@ -124,6 +141,7 @@ export function ProductCard({
             {product.valueProp}
           </p>
         )}
+        </div>
       </div>
     </Link>
   );

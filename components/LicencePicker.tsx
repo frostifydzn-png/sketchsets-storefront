@@ -96,7 +96,7 @@ export function LicencePicker({ product }: { product: Product }) {
 
       <div className="border-line mt-6 flex items-baseline justify-between gap-4 border-t pt-6">
         <span className="text-muted text-[13px]">Total</span>
-        <span className="text-[2.25rem] leading-none font-bold tracking-[-0.02em] text-white">
+        <span className="text-[2.25rem] leading-none font-bold tracking-[-0.02em] text-text">
           {formatPrice(total)}
         </span>
       </div>

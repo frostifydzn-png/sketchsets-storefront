@@ -229,7 +229,7 @@ export function ProductBrowser({
         >
           Filters
           {active.length > 0 && (
-            <span className="bg-accent text-white flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold">
+            <span className="bg-accent text-text flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold">
               {active.length}
             </span>
           )}

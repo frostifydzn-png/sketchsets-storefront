@@ -3,73 +3,86 @@
 /*
  * SketchSets design system.
  *
- * Built to a supplied mockup: a neon storefront on near-black violet, where
- * every section is its own rounded, bordered panel stacked down the page. The
- * three rules that hold it together:
+ * A LIGHT STOREFRONT BETWEEN TWO DARK BANDS, which is the shape the reference
+ * marketplace uses and the same system already running on the Payhip store in
+ * payhip/store.css. The two properties are the same brand and should not look
+ * like different companies.
  *
- *   1. The page is a stack of panels, not a flow of sections. Each block sits
- *      in a bordered container with generous internal padding and a consistent
- *      gap between it and the next. That stacking IS the layout signature.
- *   2. One brand gradient — pink into violet into blue — used for the headline
- *      accent, primary buttons and glows. Flat pink is the workhorse; the
- *      gradient is the moment.
- *   3. Left label column, right content. Most panels put a short title and
- *      description in a narrow left rail and let products run horizontally
- *      beside it. It reads as shelves rather than a grid.
+ * Three rules hold it together:
+ *
+ *   1. The page is a flow of sections on a soft grey ground, and products sit
+ *      on white cards. Space separates blocks; borders and panels do not.
+ *      A shop reads as inventory, so shelves are dense and cards are close.
+ *   2. The artwork supplies the colour. The chrome stays quiet — one accent,
+ *      spent on commerce, and neutral greys everywhere else.
+ *   3. Header and footer are dark and do not follow the page. They frame the
+ *      shop rather than belonging to it.
+ *
+ * The greys are the reference site's own, measured off it rather than picked:
+ * a #f7f7f7 ground, #151515 for anything that has to land, #303133 for body
+ * copy. The accent is NOT theirs — structure is worth borrowing, a brand
+ * colour is not.
  */
 @theme {
-  /* Surfaces. Every one carries a violet cast; nothing is neutral grey. */
-  --color-ink: #0a0512;
-  --color-surface: #120a1e;
-  --color-elevated: #1a1029;
-  --color-raised: #221636;
-  --color-line: #2a1a3f;
-  --color-line-bright: #3f2960;
+  /* Surfaces. Neutral, with the faintest warm bias so white cards read as
+     lifted off the ground rather than cut out of it. */
+  --color-ink: #f7f7f7;
+  --color-surface: #ffffff;
+  --color-elevated: #ededf0;
+  --color-raised: #e4e4e8;
+  --color-line: #e4e4e7;
+  --color-line-bright: #d3d3d8;
 
-  /* Text */
-  --color-text: #ffffff;
-  --color-dim: #b6a6c9;
-  --color-muted: #877796;
+  /* Text. Muted is the lightest tone that still clears AA at body size;
+     anything paler than it is decoration, not text. */
+  --color-text: #151515;
+  --color-dim: #303133;
+  --color-muted: #6b6b6d;
+
+  /* The two dark bands. These carry their own ink because they do not follow
+     the page, so every colour used on them is named here rather than being a
+     white alpha that disappears the moment it lands on the light ground. */
+  --color-dark: #141618;
+  --color-dark-2: #1e2124;
+  --color-on-dark: #ffffff;
+  --color-on-dark-dim: #b4b5b7;
+  --color-on-dark-muted: #85868a;
+  --color-line-dark: #2a2d31;
 
   /*
-   * Signature accent. Hot pink leads, violet and blue complete the gradient.
-   * Pink on the violet ink clears 5.6:1, and every pink button takes white
-   * text rather than dark, which is how the mockup reads.
+   * ONE ACCENT, AND IT HAD TO MOVE FOR THE LIGHT GROUND. #ff3d9e cleared
+   * 5.6:1 on the old violet ink; on white it is 3.26:1, which fails AA for
+   * text and leaves white-on-pink buttons at 2.4:1 — unreadable. This pink
+   * clears 5.1:1 both as text on white and as a button carrying white text.
+   * The bright original survives for the dark bands, where it still pops.
    */
-  --color-accent: #ff3d9e;
-  --color-accent-dim: #e02a86;
-  --color-violet: #a855f7;
-  --color-blue: #5b7cfa;
+  --color-accent: #d11a6f;
+  --color-accent-dim: #ad125b;
+  --color-accent-bright: #ff3d9e;
 
-  /* Category identity, kept inside the pink/violet/blue family. */
-  --color-cat-editing: #a855f7;
-  --color-cat-thumbnails: #ff3d9e;
-  --color-cat-tools: #5b7cfa;
+  /* Category identity, darkened to the same standard as the accent. One
+     hairline each and nothing more. */
+  --color-cat-editing: #7c3aed;
+  --color-cat-thumbnails: #d11a6f;
+  --color-cat-tools: #1d6fd8;
 
   --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-archivo), var(--font-inter-tight), sans-serif;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-glide: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /*
- * Fine grain over the whole page. Invisible as texture, but it stops the large
- * dark violet fields banding, which is most of what separates a flat dark site
- * from an expensive-looking one.
+ * The film-grain overlay is gone with the dark ground. It existed to stop
+ * large near-black violet fields banding; on a #f7f7f7 page there is no
+ * banding to hide, and a fixed full-screen layer at z-index 200 over a light
+ * shop is pure cost.
  */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  pointer-events: none;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
-}
 
 html {
   background-color: var(--color-ink);
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
@@ -77,6 +90,21 @@ body {
   color: var(--color-text);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * HEADINGS TAKE THE DISPLAY FACE, set once here rather than as a utility
+ * repeated across thirty components. Archivo carries a real width axis, and
+ * narrowing it slightly is what gives headlines the compact, heavy set the
+ * reference marketplace uses without reaching for a condensed face.
+ */
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 90;
+  letter-spacing: -0.025em;
 }
 
 /* Single source of truth for page gutters and max width. */
@@ -129,19 +157,23 @@ body {
 /* ---------- controls ---------- */
 
 /*
- * Primary call to action. Flat pink, no gradient and no bloom underneath:
- * a glowing gradient pill is the single most recognisable piece of software
- * marketing furniture, and this is a shop counter.
+ * Primary call to action.
+ *
+ * ROUNDED RECTANGLE, NOT A PILL. A full pill is the single most recognisable
+ * piece of software-marketing furniture; 8px is what the reference
+ * marketplace uses on every button, and it reads as a product you buy rather
+ * than a plan you sign up for. Measured there at 8px, 700 weight, sentence
+ * case.
  */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: 999px;
+  border-radius: 8px;
   background-color: var(--color-accent);
   color: #fff;
-  font-weight: 600;
+  font-weight: 700;
   transition: background-color 0.3s var(--ease-out-soft);
 }
 .btn-primary:hover {
@@ -153,18 +185,44 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: 999px;
+  border-radius: 8px;
   border: 1px solid var(--color-line-bright);
-  background-color: transparent;
+  background-color: var(--color-surface);
   color: var(--color-text);
-  font-weight: 600;
+  font-weight: 700;
   transition:
     background-color 0.3s var(--ease-out-soft),
     border-color 0.3s var(--ease-out-soft);
 }
 .btn-ghost:hover {
   background-color: var(--color-elevated);
-  border-color: var(--color-accent);
+  border-color: var(--color-text);
+}
+
+/*
+ * THE CARD PANEL. Products and categories sit on white, held by a shadow
+ * rather than by a border: at a visible hairline a row of six reads as drawn
+ * rectangles, and the border is only here so white cards do not dissolve into
+ * the ground on a bright screen. Two stacked shadows — a 1px contact shadow
+ * that seats the card, and a wide soft one that floats it.
+ */
+.card-panel {
+  background-color: var(--color-surface);
+  border: 1px solid rgba(21, 21, 21, 0.07);
+  border-radius: 16px;
+  box-shadow:
+    0 1px 2px rgba(21, 21, 21, 0.04),
+    0 4px 12px rgba(21, 21, 21, 0.05);
+  transition:
+    border-color 0.18s var(--ease-out-soft),
+    box-shadow 0.18s var(--ease-out-soft);
+}
+a:hover > .card-panel,
+.group:hover .card-panel {
+  border-color: rgba(21, 21, 21, 0.1);
+  box-shadow:
+    0 2px 4px rgba(21, 21, 21, 0.05),
+    0 12px 28px rgba(21, 21, 21, 0.1);
 }
 
 /* A quiet text link with a rule under it, for secondary actions. */
@@ -221,17 +279,24 @@ body {
  * z-index — that older approach needed `isolation: isolate`, which trapped
  * the search dropdown inside the hero's stacking context.
  */
+/*
+ * Both glows are now near-invisible washes rather than blooms. A radial
+ * bloom is a dark-UI device: it works by adding light to a dark field, and on
+ * a #f7f7f7 ground the same gradient reads as a dirty smudge behind the
+ * artwork. Kept rather than deleted so the elements carrying them do not need
+ * touching, and so the hero keeps a faint tint under the pack covers.
+ */
 .glow-pink {
   background: radial-gradient(
     50% 50% at 50% 50%,
-    rgba(255, 61, 158, 0.13),
+    rgba(209, 26, 111, 0.05),
     transparent 70%
   );
 }
 .glow-violet {
   background: radial-gradient(
     50% 50% at 50% 50%,
-    rgba(168, 85, 247, 0.11),
+    rgba(124, 58, 237, 0.04),
     transparent 70%
   );
 }

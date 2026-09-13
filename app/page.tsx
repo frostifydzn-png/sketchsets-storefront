@@ -76,7 +76,7 @@ export default function HomePage() {
         <div>
           <p className="text-muted text-[13px]">Curated by {site.parent}</p>
 
-          <h1 className="mt-4 text-[clamp(2.25rem,4.4vw,3.25rem)] leading-[1.05] font-bold tracking-[-0.035em] text-white">
+          <h1 className="mt-4 text-[clamp(2.25rem,4.4vw,3.25rem)] leading-[1.05] font-bold tracking-[-0.035em] text-text">
             Resources for people who make{" "}
             <span className="text-accent">the internet.</span>
           </h1>
@@ -195,7 +195,7 @@ export default function HomePage() {
         <div className="border-line flex flex-col gap-6 border-t pt-14 sm:flex-row sm:items-end sm:justify-between sm:pt-16">
           <div className="max-w-lg">
             <p className="text-muted text-[13px]">The other side of it</p>
-            <h2 className="mt-3 text-[clamp(1.5rem,2.8vw,2.125rem)] leading-[1.12] font-bold tracking-[-0.02em] text-white">
+            <h2 className="mt-3 text-[clamp(1.5rem,2.8vw,2.125rem)] leading-[1.12] font-bold tracking-[-0.02em] text-text">
               Make stuff with people who care.
             </h2>
             <p className="text-dim mt-4 text-[16px] leading-relaxed">

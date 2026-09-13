@@ -40,7 +40,7 @@ export function VaultPanel({ vault }: { vault: Product }) {
               The whole catalogue
             </p>
 
-            <h2 className="mt-3 text-[clamp(2rem,4vw,3rem)] leading-[1.05] font-bold tracking-[-0.03em] text-white">
+            <h2 className="mt-3 text-[clamp(2rem,4vw,3rem)] leading-[1.05] font-bold tracking-[-0.03em] text-text">
               The Vault
             </h2>
 
@@ -49,7 +49,7 @@ export function VaultPanel({ vault }: { vault: Product }) {
               the ones already on your list, and everything stays yours to keep.
             </p>
 
-            <p className="mt-8 text-[17px] text-white">
+            <p className="mt-8 text-[17px] text-text">
               <span className="text-[2rem] font-bold tracking-[-0.02em]">
                 {formatPrice(vault.price)}
               </span>{" "}

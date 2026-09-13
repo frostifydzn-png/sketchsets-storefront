@@ -49,7 +49,7 @@ export function SiteHeader() {
 
   return (
     <header
-      className="bg-ink/80 border-line sticky top-0 z-40 border-b backdrop-blur-xl"
+      className="bg-dark/95 border-line-dark sticky top-0 z-40 border-b backdrop-blur-xl"
       onMouseLeave={() => setShop(false)}
     >
       <div className="shell grid h-[74px] grid-cols-[auto_1fr_auto] items-center gap-6">
@@ -58,13 +58,13 @@ export function SiteHeader() {
           onClick={close}
           className="group flex shrink-0 items-center gap-2.5"
         >
-          <Logomark className="text-accent h-7 w-7 shrink-0 transition-transform duration-500 ease-[var(--ease-glide)] group-hover:-rotate-6" />
+          <Logomark className="text-accent-bright h-7 w-7 shrink-0 transition-transform duration-500 ease-[var(--ease-glide)] group-hover:-rotate-6" />
           <span className="leading-none">
             <span className="block text-[20px] font-extrabold tracking-[-0.02em] text-white">
               SketchSets
             </span>
-            <span className="text-muted mt-0.5 block text-[11px]">
-              by <span className="text-accent font-semibold">{site.parent}</span>
+            <span className="text-on-dark-muted mt-0.5 block text-[11px]">
+              by <span className="text-accent-bright font-semibold">{site.parent}</span>
             </span>
           </span>
         </Link>
@@ -79,7 +79,7 @@ export function SiteHeader() {
             onClick={() => setShop((v) => !v)}
             aria-expanded={shop}
             className={`flex items-center gap-1.5 text-[14px] font-medium transition-colors ${
-              inShop || shop ? "text-white" : "text-dim hover:text-white"
+              inShop || shop ? "text-white" : "text-on-dark-dim hover:text-white"
             }`}
           >
             Shop
@@ -112,7 +112,7 @@ export function SiteHeader() {
               className={`text-[14px] font-medium transition-colors ${
                 pathname === `/products/${vault.slug}`
                   ? "text-white"
-                  : "text-dim hover:text-white"
+                  : "text-on-dark-dim hover:text-white"
               }`}
             >
               Vault
@@ -125,7 +125,7 @@ export function SiteHeader() {
             onMouseEnter={() => setShop(false)}
             aria-current={pathname === "/free" ? "page" : undefined}
             className={`text-[14px] font-medium transition-colors ${
-              pathname === "/free" ? "text-white" : "text-dim hover:text-white"
+              pathname === "/free" ? "text-white" : "text-on-dark-dim hover:text-white"
             }`}
           >
             Free
@@ -140,7 +140,7 @@ export function SiteHeader() {
             aria-expanded={mobile}
             aria-controls="mobile-nav"
             aria-label={mobile ? "Close menu" : "Open menu"}
-            className="text-text -mr-1 p-2 lg:hidden"
+            className="text-on-dark -mr-1 p-2 lg:hidden"
           >
             <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
               {mobile ? (
@@ -171,10 +171,10 @@ export function SiteHeader() {
         everything else on the page.
       */}
       {shop && (
-        <div className="animate-menu-sheet border-line bg-surface absolute inset-x-0 top-full hidden border-t border-b shadow-[0_30px_60px_-25px_rgba(0,0,0,0.95)] lg:block">
+        <div className="animate-menu-sheet border-line-dark bg-dark-2 absolute inset-x-0 top-full hidden border-t border-b shadow-[0_30px_60px_-25px_rgba(0,0,0,0.95)] lg:block">
           <div className="shell grid grid-cols-[1fr_1fr_1fr_1.15fr] gap-10 py-9">
             <div>
-              <h3 className="text-muted text-[11px] font-semibold tracking-[0.14em] uppercase">
+              <h3 className="text-on-dark-muted text-[11px] font-semibold tracking-[0.14em] uppercase">
                 Browse
               </h3>
               <ul className="mt-4 space-y-2.5">
@@ -183,10 +183,10 @@ export function SiteHeader() {
                     <Link
                       href={view.href}
                       onClick={close}
-                      className="text-dim flex items-baseline gap-2 text-[14px] font-medium transition-colors hover:text-white"
+                      className="text-on-dark-dim flex items-baseline gap-2 text-[14px] font-medium transition-colors hover:text-white"
                     >
                       {view.label}
-                      <span className="text-muted text-[12px] tabular-nums">
+                      <span className="text-on-dark-muted text-[12px] tabular-nums">
                         {view.count}
                       </span>
                     </Link>
@@ -206,17 +206,17 @@ export function SiteHeader() {
                   >
                     {category.name}
                   </Link>
-                  <p className="text-muted mt-2 text-[13px] leading-relaxed">
+                  <p className="text-on-dark-muted mt-2 text-[13px] leading-relaxed">
                     {category.blurb}
                   </p>
                   <ul className="mt-4 space-y-1.5">
                     {types.map((type) => (
                       <li
                         key={type.name}
-                        className="text-dim flex items-baseline gap-2 text-[13.5px]"
+                        className="text-on-dark-dim flex items-baseline gap-2 text-[13.5px]"
                       >
                         {type.name}
-                        <span className="text-muted text-[12px] tabular-nums">
+                        <span className="text-on-dark-muted text-[12px] tabular-nums">
                           {type.count}
                         </span>
                       </li>
@@ -228,23 +228,23 @@ export function SiteHeader() {
 
             {vault && (
               <div>
-                <h3 className="text-muted text-[11px] font-semibold tracking-[0.14em] uppercase">
+                <h3 className="text-on-dark-muted text-[11px] font-semibold tracking-[0.14em] uppercase">
                   The whole library
                 </h3>
                 <Link
                   href={`/products/${vault.slug}`}
                   onClick={close}
-                  className="border-line bg-elevated hover:border-accent/40 mt-4 block rounded-xl border p-4 transition-colors"
+                  className="border-line-dark bg-dark hover:border-accent-bright/50 mt-4 block rounded-xl border p-4 transition-colors"
                 >
                   <span className="block text-[15px] font-bold text-white">
                     {vault.title}
                   </span>
-                  <span className="text-muted mt-1.5 block text-[13px]">
+                  <span className="text-on-dark-muted mt-1.5 block text-[13px]">
                     {vault.bundleOf?.length ?? 0} packs &middot;{" "}
                     <span className="tabular-nums">{vault.assetCount}</span>{" "}
                     assets
                   </span>
-                  <span className="text-accent mt-3 block text-[15px] font-semibold tabular-nums">
+                  <span className="text-accent-bright mt-3 block text-[15px] font-semibold tabular-nums">
                     {formatPrice(vault.price)}
                   </span>
                 </Link>
@@ -258,7 +258,7 @@ export function SiteHeader() {
         <nav
           id="mobile-nav"
           aria-label="Mobile"
-          className="border-line bg-ink border-t lg:hidden"
+          className="border-line-dark bg-dark border-t lg:hidden"
         >
           <div className="shell py-4">
             {cats.map((c) => (
@@ -269,7 +269,7 @@ export function SiteHeader() {
                 className="flex items-baseline justify-between py-2.5 text-[17px] font-semibold text-white"
               >
                 {c.name}
-                <span className="text-muted text-[13px] tabular-nums">
+                <span className="text-on-dark-muted text-[13px] tabular-nums">
                   {typesIn(c.id).reduce((n, t) => n + t.count, 0)}
                 </span>
               </Link>
@@ -282,7 +282,7 @@ export function SiteHeader() {
                 key={view.href}
                 href={view.href}
                 onClick={close}
-                className="text-dim block py-2.5 text-[17px] font-semibold hover:text-white"
+                className="text-on-dark-dim block py-2.5 text-[17px] font-semibold hover:text-white"
               >
                 {view.label}
               </Link>
@@ -292,7 +292,7 @@ export function SiteHeader() {
               <Link
                 href={`/products/${vault.slug}`}
                 onClick={close}
-                className="text-dim block py-2.5 text-[17px] font-semibold"
+                className="text-on-dark-dim block py-2.5 text-[17px] font-semibold"
               >
                 The Vault
               </Link>
@@ -301,7 +301,7 @@ export function SiteHeader() {
             <Link
               href="/support"
               onClick={close}
-              className="text-dim block py-2.5 text-[17px] font-semibold"
+              className="text-on-dark-dim block py-2.5 text-[17px] font-semibold"
             >
               Support
             </Link>

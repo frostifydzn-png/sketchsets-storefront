@@ -22,7 +22,7 @@ export function PageHeader({
     <header className="page-top pb-4">
       <p className="text-muted text-[13px]">{marker}</p>
 
-      <h1 className="mt-4 max-w-[20ch] text-[clamp(2.25rem,4.6vw,3.5rem)] leading-[1.06] font-bold tracking-[-0.035em] text-white">
+      <h1 className="mt-4 max-w-[20ch] text-[clamp(2.25rem,4.6vw,3.5rem)] leading-[1.06] font-bold tracking-[-0.035em] text-text">
         {title}
       </h1>
 
