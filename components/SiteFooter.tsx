@@ -37,25 +37,25 @@ const creatorLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="bg-dark text-on-dark border-line-dark border-t">
+    <footer className="bg-elevated text-text border-line border-t">
       <div className="shell py-12 lg:py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.1fr)_repeat(4,minmax(0,0.62fr))_minmax(0,1.05fr)]">
           <div>
             <div className="flex items-center gap-2.5">
-              <Logomark className="text-accent-bright h-7 w-7 shrink-0" />
+              <Logomark className="text-accent h-7 w-7 shrink-0" />
               <span className="leading-none">
                 <span className="block text-[19px] font-extrabold tracking-[-0.02em] text-white">
                   SketchSets
                 </span>
-                <span className="text-on-dark-muted mt-0.5 block text-[11px]">
+                <span className="text-muted mt-0.5 block text-[11px]">
                   by{" "}
-                  <span className="text-accent-bright font-semibold">
+                  <span className="text-accent font-semibold">
                     {site.parent}
                   </span>
                 </span>
               </span>
             </div>
-            <p className="text-on-dark-dim mt-4 max-w-[30ch] text-[13.5px] leading-relaxed">
+            <p className="text-dim mt-4 max-w-[30ch] text-[13.5px] leading-relaxed">
               Curated resources for people who make the internet.
             </p>
             <div className="mt-5 flex gap-3">
@@ -119,7 +119,7 @@ export function SiteFooter() {
             <h2 className="text-[12px] font-extrabold tracking-[0.09em] text-white uppercase">
               Get SketchSets drops
             </h2>
-            <p className="text-on-dark-muted mt-2.5 text-[13px] leading-relaxed">
+            <p className="text-muted mt-2.5 text-[13px] leading-relaxed">
               Occasional emails. Good resources. No garbage.
             </p>
             <div className="mt-4">
@@ -128,7 +128,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="border-line-dark text-on-dark-muted mt-11 flex flex-col gap-2 border-t pt-6 text-[12.5px] sm:flex-row sm:items-center sm:justify-between">
+        <div className="border-line text-muted mt-11 flex flex-col gap-2 border-t pt-6 text-[12.5px] sm:flex-row sm:items-center sm:justify-between">
           <p>
             &copy; {new Date().getFullYear()} SketchSets by {site.parent}. All
             rights reserved.
@@ -141,7 +141,7 @@ export function SiteFooter() {
 }
 
 const footerLink =
-  "text-on-dark-dim hover:text-accent-bright block py-1.5 text-[13.5px] transition-colors";
+  "text-dim hover:text-accent block py-1.5 text-[13.5px] transition-colors";
 
 function FooterColumn({
   title,
@@ -175,7 +175,7 @@ function Social({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="bg-dark-2 border-line-dark text-on-dark-dim hover:border-accent-bright hover:text-accent-bright flex h-9 w-9 items-center justify-center rounded-full border transition-colors"
+      className="bg-elevated border-line text-dim hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-full border transition-colors"
     >
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         {children}

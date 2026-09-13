@@ -2,31 +2,79 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  IconArrow,
+  IconGrid,
+  IconLayers,
+  IconSpark,
+  IconTag,
+  iconForType,
+} from "@/components/Icons";
 import { Logomark } from "@/components/Logomark";
 import { SearchDialog } from "@/components/SearchDialog";
-import { browseViews, linkedCategories, typesIn } from "@/lib/catalog";
-import { formatPrice, getProduct } from "@/lib/products";
+import { linkedCategories, typesIn } from "@/lib/catalog";
+import { formatPrice, getProduct, products } from "@/lib/products";
 import { site } from "@/lib/site";
 
 /**
- * FOUR ITEMS, AND NONE OF THEM IS HAND-MAINTAINED.
+ * Site header.
  *
- * The menu this replaced had seven destinations across two levels — Browse,
- * a Categories dropdown, Freebies, The Vault, New Drops, Support — for a shop
- * holding ten products. Seven links over ten products is not a navigation, it
- * is a filing system, and one of the categories it advertised held a single
- * item.
+ * WHITE, AND THE MENU IS A SHEET RATHER THAN A DROPDOWN. The dark band this
+ * replaced framed the shop but also fought it: a near-black slab above a white
+ * page is the heaviest thing on screen, and on a storefront the heaviest thing
+ * on screen should be a product.
  *
- * Shop opens everything. Vault and Free are top-level because they are the
- * two highest-intent destinations in the shop: the flagship, and the thing
- * someone who has never heard of SketchSets actually clicks first. Support
- * moves to the footer, where support links belong.
- *
- * Every category and count below comes from lib/catalog.ts, which derives
- * them from the product array. Nothing here lists a destination; a category
- * appears when it earns two products and leaves when it does not.
+ * Four destinations. Shop opens everything; Vault and Free are the two highest
+ * intent entry points and keep their own slot. Every category, type and count
+ * below is derived from lib/products.ts through lib/catalog.ts — this file
+ * lists no destinations of its own, so the menu cannot drift out of step with
+ * the catalogue, and a category holding fewer than two products is
+ * structurally unable to appear in it.
  */
+
+/**
+ * One row of the sheet: icon chip, label, count.
+ *
+ * No descriptions. A mega menu is scanned rather than read, and a sentence
+ * under every row doubles its height while adding nothing a buyer did not
+ * already get from the label — which is the difference between a menu that
+ * looks thorough and one that is quick.
+ */
+function MenuRow({
+  href,
+  label,
+  count,
+  icon: Icon,
+  onNavigate,
+}: {
+  href: string;
+  label: string;
+  count?: number;
+  icon: (p: { className?: string }) => React.ReactElement;
+  onNavigate: () => void;
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onNavigate}
+      className="group/row hover:bg-elevated -mx-2.5 flex items-center gap-3 rounded-lg px-2.5 py-2 transition-colors"
+    >
+      <span className="border-line bg-surface text-dim group-hover/row:border-accent/35 group-hover/row:text-accent flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border transition-colors">
+        <Icon className="h-[18px] w-[18px]" />
+      </span>
+      <span className="text-text min-w-0 flex-1 truncate text-[13.5px] font-semibold">
+        {label}
+      </span>
+      {count !== undefined && (
+        <span className="text-muted shrink-0 text-[12px] tabular-nums">
+          {count}
+        </span>
+      )}
+    </Link>
+  );
+}
+
 export function SiteHeader() {
   const [mobile, setMobile] = useState(false);
   const [shop, setShop] = useState(false);
@@ -37,34 +85,67 @@ export function SiteHeader() {
     setShop(false);
   };
 
+  /* Escape closes the sheet. A menu that opens from the keyboard and only
+     closes with the mouse is a trap. */
+  useEffect(() => {
+    if (!shop && !mobile) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setShop(false);
+        setMobile(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [shop, mobile]);
+
   const cats = linkedCategories();
-  const views = browseViews();
   const vault = getProduct("sketchsets-vault");
 
-  const inShop =
-    pathname === "/browse" ||
-    pathname === "/new" ||
-    pathname.startsWith("/products/") ||
-    cats.some((c) => pathname === `/${c.id}`);
+  const views = [
+    {
+      href: "/browse",
+      label: "All products",
+      count: products.length,
+      icon: IconGrid,
+    },
+    {
+      href: "/new",
+      label: "New releases",
+      count: products.filter((p) => p.isNew).length,
+      icon: IconSpark,
+    },
+    {
+      href: "/free",
+      label: "Free downloads",
+      count: products.filter((p) => p.price === 0).length,
+      icon: IconTag,
+    },
+  ].filter((v) => v.count > 0);
+
+  const navLink = (active: boolean) =>
+    `text-[14px] font-semibold transition-colors ${
+      active ? "text-text" : "text-dim hover:text-text"
+    }`;
 
   return (
     <header
-      className="bg-dark/95 border-line-dark sticky top-0 z-40 border-b backdrop-blur-xl"
+      className="bg-surface/85 border-line sticky top-0 z-40 border-b backdrop-blur-xl"
       onMouseLeave={() => setShop(false)}
     >
-      <div className="shell grid h-[74px] grid-cols-[auto_1fr_auto] items-center gap-6">
+      <div className="shell grid h-[72px] grid-cols-[auto_1fr_auto] items-center gap-6">
         <Link
           href="/"
           onClick={close}
           className="group flex shrink-0 items-center gap-2.5"
         >
-          <Logomark className="text-accent-bright h-7 w-7 shrink-0 transition-transform duration-500 ease-[var(--ease-glide)] group-hover:-rotate-6" />
+          <Logomark className="text-accent h-7 w-7 shrink-0 transition-transform duration-500 ease-[var(--ease-glide)] group-hover:-rotate-6" />
           <span className="leading-none">
-            <span className="block text-[20px] font-extrabold tracking-[-0.02em] text-white">
+            <span className="text-text block text-[19px] font-extrabold tracking-[-0.025em]">
               SketchSets
             </span>
-            <span className="text-on-dark-muted mt-0.5 block text-[11px]">
-              by <span className="text-accent-bright font-semibold">{site.parent}</span>
+            <span className="text-muted mt-0.5 block text-[10.5px] font-medium">
+              by <span className="text-accent font-semibold">{site.parent}</span>
             </span>
           </span>
         </Link>
@@ -78,9 +159,7 @@ export function SiteHeader() {
             onMouseEnter={() => setShop(true)}
             onClick={() => setShop((v) => !v)}
             aria-expanded={shop}
-            className={`flex items-center gap-1.5 text-[14px] font-medium transition-colors ${
-              inShop || shop ? "text-white" : "text-on-dark-dim hover:text-white"
-            }`}
+            className={`flex items-center gap-1.5 ${navLink(shop)}`}
           >
             Shop
             <svg
@@ -94,7 +173,7 @@ export function SiteHeader() {
                 d="M2 4l3 3 3-3"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="1.6"
+                strokeWidth="1.7"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
@@ -106,14 +185,7 @@ export function SiteHeader() {
               href={`/products/${vault.slug}`}
               onClick={close}
               onMouseEnter={() => setShop(false)}
-              aria-current={
-                pathname === `/products/${vault.slug}` ? "page" : undefined
-              }
-              className={`text-[14px] font-medium transition-colors ${
-                pathname === `/products/${vault.slug}`
-                  ? "text-white"
-                  : "text-on-dark-dim hover:text-white"
-              }`}
+              className={navLink(pathname === `/products/${vault.slug}`)}
             >
               Vault
             </Link>
@@ -123,10 +195,7 @@ export function SiteHeader() {
             href="/free"
             onClick={close}
             onMouseEnter={() => setShop(false)}
-            aria-current={pathname === "/free" ? "page" : undefined}
-            className={`text-[14px] font-medium transition-colors ${
-              pathname === "/free" ? "text-white" : "text-on-dark-dim hover:text-white"
-            }`}
+            className={navLink(pathname === "/free")}
           >
             Free
           </Link>
@@ -140,7 +209,7 @@ export function SiteHeader() {
             aria-expanded={mobile}
             aria-controls="mobile-nav"
             aria-label={mobile ? "Close menu" : "Open menu"}
-            className="text-on-dark -mr-1 p-2 lg:hidden"
+            className="text-text -mr-1 p-2 lg:hidden"
           >
             <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
               {mobile ? (
@@ -164,88 +233,65 @@ export function SiteHeader() {
       </div>
 
       {/*
-        The panel is a sibling of the header row rather than a child of the
-        Shop button. Anchored to the button it would need a translate and a
-        fixed width to stay on screen at every viewport; anchored to the
-        header it simply inherits the page gutter and lines up with
-        everything else on the page.
+        The sheet spans the header rather than hanging off the Shop button, so
+        it must NOT take .animate-menu-drop — those keyframes end at
+        translate(-50%, 0) for a panel that also sets left: 50%, and applied to
+        a full-width sheet they push it half its own width off the screen,
+        which is exactly what they did once. Its own keyframes only fade and
+        drop.
       */}
       {shop && (
-        <div className="animate-menu-sheet border-line-dark bg-dark-2 absolute inset-x-0 top-full hidden border-t border-b shadow-[0_30px_60px_-25px_rgba(0,0,0,0.95)] lg:block">
-          <div className="shell grid grid-cols-[1fr_1fr_1fr_1.15fr] gap-10 py-9">
+        <div className="animate-menu-sheet bg-surface border-line absolute inset-x-0 top-full hidden border-b shadow-[0_24px_50px_-28px_rgba(21,21,21,0.35)] lg:block">
+          <div className="shell grid grid-cols-[1fr_1fr_1fr_1.1fr] gap-9 py-9">
             <div>
-              <h3 className="text-on-dark-muted text-[11px] font-semibold tracking-[0.14em] uppercase">
-                Browse
-              </h3>
-              <ul className="mt-4 space-y-2.5">
-                {views.map((view) => (
-                  <li key={view.href}>
-                    <Link
-                      href={view.href}
-                      onClick={close}
-                      className="text-on-dark-dim flex items-baseline gap-2 text-[14px] font-medium transition-colors hover:text-white"
-                    >
-                      {view.label}
-                      <span className="text-on-dark-muted text-[12px] tabular-nums">
-                        {view.count}
-                      </span>
-                    </Link>
-                  </li>
+              <h3 className="set-no text-muted mb-4">Browse</h3>
+              <div className="flex flex-col gap-0.5">
+                {views.map((v) => (
+                  <MenuRow key={v.href} {...v} onNavigate={close} />
                 ))}
-              </ul>
+              </div>
             </div>
 
-            {cats.map((category) => {
-              const types = typesIn(category.id);
-              return (
-                <div key={category.id} data-room={category.id}>
-                  <Link
-                    href={`/${category.id}`}
-                    onClick={close}
-                    className="room-accent text-[15px] font-bold tracking-[-0.01em] transition-opacity hover:opacity-75"
-                  >
-                    {category.name}
-                  </Link>
-                  <p className="text-on-dark-muted mt-2 text-[13px] leading-relaxed">
-                    {category.blurb}
-                  </p>
-                  <ul className="mt-4 space-y-1.5">
-                    {types.map((type) => (
-                      <li
-                        key={type.name}
-                        className="text-on-dark-dim flex items-baseline gap-2 text-[13.5px]"
-                      >
-                        {type.name}
-                        <span className="text-on-dark-muted text-[12px] tabular-nums">
-                          {type.count}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+            {cats.map((category) => (
+              <div key={category.id}>
+                <h3 className="set-no text-muted mb-4">{category.name}</h3>
+                <div className="flex flex-col gap-0.5">
+                  {typesIn(category.id).map((type) => (
+                    <MenuRow
+                      key={type.name}
+                      href={`/${category.id}`}
+                      label={type.name}
+                      count={type.count}
+                      icon={iconForType(type.name)}
+                      onNavigate={close}
+                    />
+                  ))}
                 </div>
-              );
-            })}
+              </div>
+            ))}
 
             {vault && (
               <div>
-                <h3 className="text-on-dark-muted text-[11px] font-semibold tracking-[0.14em] uppercase">
-                  The whole library
-                </h3>
+                <h3 className="set-no text-muted mb-4">The whole library</h3>
                 <Link
                   href={`/products/${vault.slug}`}
                   onClick={close}
-                  className="border-line-dark bg-dark hover:border-accent-bright/50 mt-4 block rounded-xl border p-4 transition-colors"
+                  className="group/v border-line bg-elevated hover:border-accent/40 block rounded-xl border p-4 transition-colors"
                 >
-                  <span className="block text-[15px] font-bold text-white">
+                  <span className="border-line bg-surface text-accent mb-3 flex h-9 w-9 items-center justify-center rounded-[10px] border">
+                    <IconLayers className="h-[18px] w-[18px]" />
+                  </span>
+                  <span className="text-text block text-[14.5px] font-bold">
                     {vault.title}
                   </span>
-                  <span className="text-on-dark-muted mt-1.5 block text-[13px]">
+                  <span className="text-muted mt-1 block text-[12.5px]">
                     {vault.bundleOf?.length ?? 0} packs &middot;{" "}
                     <span className="tabular-nums">{vault.assetCount}</span>{" "}
                     assets
                   </span>
-                  <span className="text-accent-bright mt-3 block text-[15px] font-semibold tabular-nums">
+                  <span className="text-accent mt-3 flex items-center gap-1.5 text-[14px] font-bold tabular-nums">
                     {formatPrice(vault.price)}
+                    <IconArrow className="h-4 w-4 transition-transform group-hover/v:translate-x-1" />
                   </span>
                 </Link>
               </div>
@@ -258,53 +304,41 @@ export function SiteHeader() {
         <nav
           id="mobile-nav"
           aria-label="Mobile"
-          className="border-line-dark bg-dark border-t lg:hidden"
+          className="border-line bg-surface border-t lg:hidden"
         >
-          <div className="shell py-4">
+          <div className="shell flex flex-col gap-0.5 py-4">
             {cats.map((c) => (
-              <Link
+              <MenuRow
                 key={c.id}
                 href={`/${c.id}`}
-                onClick={close}
-                className="flex items-baseline justify-between py-2.5 text-[17px] font-semibold text-white"
-              >
-                {c.name}
-                <span className="text-on-dark-muted text-[13px] tabular-nums">
-                  {typesIn(c.id).reduce((n, t) => n + t.count, 0)}
-                </span>
-              </Link>
+                label={c.name}
+                count={typesIn(c.id).reduce((n, t) => n + t.count, 0)}
+                icon={iconForType(c.name)}
+                onNavigate={close}
+              />
             ))}
 
             <span className="bg-line my-3 block h-px" />
 
-            {views.map((view) => (
-              <Link
-                key={view.href}
-                href={view.href}
-                onClick={close}
-                className="text-on-dark-dim block py-2.5 text-[17px] font-semibold hover:text-white"
-              >
-                {view.label}
-              </Link>
+            {views.map((v) => (
+              <MenuRow key={v.href} {...v} onNavigate={close} />
             ))}
 
             {vault && (
-              <Link
+              <MenuRow
                 href={`/products/${vault.slug}`}
-                onClick={close}
-                className="text-on-dark-dim block py-2.5 text-[17px] font-semibold"
-              >
-                The Vault
-              </Link>
+                label="The Vault"
+                icon={IconLayers}
+                onNavigate={close}
+              />
             )}
 
-            <Link
+            <MenuRow
               href="/support"
-              onClick={close}
-              className="text-on-dark-dim block py-2.5 text-[17px] font-semibold"
-            >
-              Support
-            </Link>
+              label="Support"
+              icon={IconGrid}
+              onNavigate={close}
+            />
           </div>
         </nav>
       )}

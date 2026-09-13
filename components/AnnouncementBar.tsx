@@ -13,17 +13,17 @@ export function AnnouncementBar() {
 
   return (
     /* Quiet strip. A solid accent bar shouted louder than the offer deserved. */
-    <div className="border-line-dark bg-dark-2 border-b">
+    <div className="border-line bg-elevated/70 border-b">
       <Link
         href={`/products/${vault.slug}`}
-        className="shell text-on-dark-dim hover:text-on-dark group flex h-11 items-center justify-center gap-2.5 text-center text-[12px] transition-colors"
+        className="shell text-dim hover:text-text group flex h-11 items-center justify-center gap-2.5 text-center text-[12px] transition-colors"
       >
         <span
-          className="bg-accent-bright h-1.5 w-1.5 rounded-full"
+          className="bg-accent h-1.5 w-1.5 rounded-full"
           aria-hidden="true"
         />
         <span>
-          <span className="text-on-dark">The Vault</span>
+          <span className="text-text">The Vault</span>
           <span className="mx-1.5">·</span>
           {vault.includedFiles.length} packs for {formatPrice(vault.price)},
           save ${saving}

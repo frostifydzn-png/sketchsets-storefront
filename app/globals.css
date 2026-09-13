@@ -26,12 +26,12 @@
 @theme {
   /* Surfaces. Neutral, with the faintest warm bias so white cards read as
      lifted off the ground rather than cut out of it. */
-  --color-ink: #f7f7f7;
+  --color-ink: #ffffff;
   --color-surface: #ffffff;
-  --color-elevated: #ededf0;
-  --color-raised: #e4e4e8;
-  --color-line: #e4e4e7;
-  --color-line-bright: #d3d3d8;
+  --color-elevated: #f4f5f6;
+  --color-raised: #ebedef;
+  --color-line: #e6e8ea;
+  --color-line-bright: #d2d6da;
 
   /* Text. Muted is the lightest tone that still clears AA at body size;
      anything paler than it is decoration, not text. */
@@ -39,9 +39,13 @@
   --color-dim: #303133;
   --color-muted: #6b6b6d;
 
-  /* The two dark bands. These carry their own ink because they do not follow
-     the page, so every colour used on them is named here rather than being a
-     white alpha that disappears the moment it lands on the light ground. */
+  /* KEPT, BUT NOTHING USES THESE RIGHT NOW. The header and footer were dark
+     bands framing a light page; they are white and light-grey now, because a
+     near-black slab above a white shop is the heaviest thing on screen and on
+     a storefront that should be a product. The tokens survive because a dark
+     band is a reasonable thing to want back for a footer or a campaign page,
+     and re-deriving an on-dark set from scratch is how the white alphas that
+     vanished on the light ground got written the first time. */
   --color-dark: #141618;
   --color-dark-2: #1e2124;
   --color-on-dark: #ffffff;
@@ -250,9 +254,16 @@ h3,
  * the ground on a bright screen. Two stacked shadows — a 1px contact shadow
  * that seats the card, and a wide soft one that floats it.
  */
+/*
+ * ON A WHITE PAGE THE BORDER HAS TO DO THE WORK THE SHADOW WAS DOING.
+ * Against #f7f7f7 a card could be held by its shadow alone and a 0.07
+ * hairline was enough to stop it dissolving. Card and page are now the same
+ * white, so there is no tonal difference left for a shadow to exaggerate —
+ * the edge is the only thing separating them, and it has to be visible.
+ */
 .card-panel {
   background-color: var(--color-surface);
-  border: 1px solid rgba(21, 21, 21, 0.07);
+  border: 1px solid var(--color-line);
   border-radius: 16px;
   box-shadow:
     0 1px 2px rgba(21, 21, 21, 0.04),
@@ -263,7 +274,7 @@ h3,
 }
 a:hover > .card-panel,
 .group:hover .card-panel {
-  border-color: rgba(21, 21, 21, 0.1);
+  border-color: var(--color-line-bright);
   box-shadow:
     0 2px 4px rgba(21, 21, 21, 0.05),
     0 12px 28px rgba(21, 21, 21, 0.1);
