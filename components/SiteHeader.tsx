@@ -152,7 +152,7 @@ export function SiteHeader() {
 
         <nav
           aria-label="Primary"
-          className="hidden items-center justify-center gap-8 lg:flex"
+          className="hidden items-center justify-center gap-6 lg:flex xl:gap-7"
         >
           <button
             type="button"
@@ -161,7 +161,7 @@ export function SiteHeader() {
             aria-expanded={shop}
             className={`flex items-center gap-1.5 ${navLink(shop)}`}
           >
-            Shop
+            Browse
             <svg
               width="10"
               height="10"
@@ -180,16 +180,24 @@ export function SiteHeader() {
             </svg>
           </button>
 
-          {vault && (
+          {/*
+            THE DEPARTMENTS ARE NAMED IN THE BAR. Hiding every category one
+            level down under a single "Browse" is a boutique move — it works
+            when there are two rooms and reads as evasive when there are
+            several. A marketplace says what it stocks on the front door, and
+            these come from lib/products.ts so the bar restocks itself.
+          */}
+          {cats.map((category) => (
             <Link
-              href={`/products/${vault.slug}`}
+              key={category.id}
+              href={`/${category.id}`}
               onClick={close}
               onMouseEnter={() => setShop(false)}
-              className={navLink(pathname === `/products/${vault.slug}`)}
+              className={navLink(pathname === `/${category.id}`)}
             >
-              Vault
+              {category.name}
             </Link>
-          )}
+          ))}
 
           <Link
             href="/free"

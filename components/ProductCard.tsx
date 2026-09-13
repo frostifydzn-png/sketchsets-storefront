@@ -1,33 +1,32 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Badge, badgeFor } from "@/components/Badge";
+import { IconArrow } from "@/components/Icons";
+import { getCreator } from "@/lib/creators";
 import { formatPrice, type Product } from "@/lib/products";
 
 export type CardSize = "lead" | "standard";
 
 /**
- * Product card.
+ * Product card. One component, used everywhere.
  *
- * A white panel holding the artwork, a catalogue number, the title, what kind
- * of thing it is and the price. Four lines of information, and each one had
- * to argue for its place.
+ * THE ARTWORK IS THE CARD. There is no panel around the whole thing — the
+ * surface fill and the hairline live on the media alone, and the caption sits
+ * directly on the page beneath it. On a near-black ground the covers have a
+ * hard edge of their own and need nothing to hold them, so wrapping each one
+ * in a bordered tile would only put a box between the buyer and the thing
+ * they came to look at. A grid of these reads as a contact sheet.
  *
- * The panel is here because the ground is light — see the note on it below.
- * An earlier version of this comment argued the opposite, and was right at
- * the time: on near-black, bare artwork with no border was correct.
+ * Five pieces of information, in the order a buyer uses them: the plate
+ * number stamped on the art, the name, who made it, what kind of thing it is
+ * and how many assets are in it, and the price. Nothing else earned a place.
  *
- * WHAT IS DELIBERATELY ABSENT. The creator name, which read "Frostify" on
- * every card in the shop and was a column of identical text pretending to be
- * information. Rating stars, because there are no reviews. Strikethrough
- * prices, because nothing is on sale. File size and format list, which are
- * product-page facts.
+ * DELIBERATELY ABSENT: rating stars, because four products carry a rating and
+ * six do not, and a grid where most cards have a hole under the title looks
+ * broken rather than honest. Strikethrough prices, because nothing is on
+ * sale. File sizes and format lists, which are product-page facts.
  *
- * WHAT EARNED ITS PLACE. The asset count — 110 and 194 are the numbers that
- * make a $12 pack look like a library, and they were buried on the product
- * page. And the set number, which lib/products.ts has carried from the start
- * while nothing rendered it.
- *
- * Badges are capped at one, by construction rather than by discipline — see
+ * Badges are capped at one by construction rather than by discipline — see
  * components/Badge.tsx.
  */
 export function ProductCard({
@@ -42,6 +41,7 @@ export function ProductCard({
   const alt = product.previewImages[1];
   const free = product.price === 0;
   const badge = badgeFor(product);
+  const creator = getCreator(product.creatorSlug);
 
   /*
    * Below about eight the count argues against the product — "8 assets" reads
@@ -55,28 +55,9 @@ export function ProductCard({
       href={`/products/${product.slug}`}
       className="group block focus-visible:outline-none"
     >
-      {/*
-        THE PANEL CAME BACK WITH THE LIGHT GROUND, and it is not a
-        reversal of the old note above so much as a consequence of it.
-        Bare artwork worked on near-black: every cover, however pale, had
-        a hard edge against the page. On #f7f7f7 the pale covers — the
-        doodles, the patterns, the paper tears — have no edge at all and
-        dissolve into the page.
-
-        So products sit on a white card held by a shadow, which is the
-        same treatment payhip/store.css already gives them on the Payhip
-        store. One card system across both properties.
-
-        The inner radius is derived rather than typed: concentric corners
-        want inner = outer - padding, so the artwork's corner stays
-        parallel to the card's however the two are retuned.
-      */}
-      <div className="card-panel p-1.5">
-        <div
-          className={`bg-elevated relative overflow-hidden rounded-[4px] ${
-            size === "lead" ? "aspect-[16/10]" : "aspect-[16/11]"
-          }`}
-        >
+      <div
+        className={`card-media ${size === "lead" ? "aspect-[16/10]" : "aspect-[16/11]"}`}
+      >
         <Image
           src={product.thumbnail}
           alt={`${product.title} preview`}
@@ -84,10 +65,10 @@ export function ProductCard({
           sizes={
             size === "lead"
               ? "(max-width: 1024px) 100vw, 55vw"
-              : "(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
+              : "(max-width: 640px) 50vw, (max-width: 1280px) 33vw, 25vw"
           }
           priority={priority}
-          className={`object-cover transition-all duration-[900ms] ease-[var(--ease-glide)] group-hover:scale-[1.04] ${
+          className={`object-cover transition-transform duration-[650ms] ease-[var(--ease-glide)] group-hover:scale-[1.05] ${
             alt ? "group-hover:opacity-0" : ""
           }`}
         />
@@ -97,44 +78,56 @@ export function ProductCard({
             alt=""
             aria-hidden="true"
             fill
-            sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
-            className="scale-[1.04] object-cover opacity-0 transition-opacity duration-[900ms] ease-[var(--ease-glide)] group-hover:opacity-100"
+            sizes="(max-width: 640px) 50vw, (max-width: 1280px) 33vw, 25vw"
+            className="scale-[1.05] object-cover opacity-0 transition-opacity duration-[650ms] ease-[var(--ease-glide)] group-hover:opacity-100"
           />
         )}
 
         {/*
-          THE NUMBER GOES ON THE ARTWORK, the way a plate number sits on a
-          print rather than in the caption underneath it. Under the title it
-          was a line of small grey text competing with the type label; on the
-          media it is the first thing read on every tile, and a grid of
-          stamped, numbered plates reads as a collection where a grid of
-          titles reads as a list of files.
+          The plate number sits on the artwork the way it sits on a print,
+          rather than in the caption underneath. lib/products.ts has described
+          this shop as a numbered archive from the first commit; this is where
+          that shows.
         */}
-        <span className="plate absolute top-2.5 left-2.5">
+        <span className="plate absolute top-2.5 left-2.5 z-10">
           {product.setNumber}
         </span>
 
         {badge && (
-          <span className="absolute top-2.5 right-2.5">
+          <span className="absolute top-2.5 right-2.5 z-10">
             <Badge kind={badge} />
           </span>
         )}
+
+        {/*
+          The hover affordance. A scrim rather than a floating button: a
+          button implies a second destination, and there is only one — the
+          whole card is the link. It stays out of the way until the cursor
+          arrives, and it is hidden from assistive tech because the link
+          already says where it goes.
+        */}
+        <span
+          aria-hidden="true"
+          className="from-ink/85 pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-gradient-to-t to-transparent px-3 pt-10 pb-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        >
+          <span className="set-no text-text">View pack</span>
+          <IconArrow className="text-text h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+        </span>
       </div>
 
-        <div className="px-1.5 pt-3 pb-1">
-        <div className="flex items-baseline justify-between gap-4">
+      <div className="mt-3">
+        <div className="flex items-baseline justify-between gap-3">
           <h3
-            className={`group-hover:text-accent font-display truncate font-bold text-text transition-colors ${
-              size === "lead" ? "text-[1.375rem]" : "text-[16.5px]"
+            className={`group-hover:text-accent font-display truncate font-bold transition-colors ${
+              size === "lead" ? "text-[1.375rem]" : "text-[16px]"
             }`}
           >
             {product.title}
           </h3>
           {/*
             Mono, because a price only means anything next to another price.
-            Down a four-column grid proportional digits never line up, and
-            two figures you cannot scan against each other are two figures
-            the buyer has to read twice.
+            Down a four-column grid proportional digits never line up, and two
+            figures you cannot scan against each other get read twice.
           */}
           <span
             className={`meta shrink-0 font-semibold ${
@@ -145,12 +138,13 @@ export function ProductCard({
           </span>
         </div>
 
-        <p className="text-muted mt-1.5 truncate text-[12.5px]">
+        <p className="text-muted mt-1 truncate text-[12.5px]">
+          {creator && <span>by {creator.name}</span>}
+          {creator && " · "}
           {product.subcategory}
           {showCount && (
             <>
-              {" "}
-              &middot;{" "}
+              {" · "}
               <span className="meta">{product.assetCount}</span> assets
             </>
           )}
@@ -161,7 +155,6 @@ export function ProductCard({
             {product.valueProp}
           </p>
         )}
-        </div>
       </div>
     </Link>
   );

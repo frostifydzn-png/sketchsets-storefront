@@ -15,16 +15,20 @@ import {
  *
  * So navigation is DERIVED from the catalogue and never hand-maintained, and
  * a category has to hold at least this many published products before it is
- * linked anywhere. Empty departments become structurally impossible rather
- * than something anyone has to police.
+ * linked anywhere. EMPTY departments stay structurally impossible rather than
+ * being something anyone has to police.
  *
- * This is also how "Creator Tools" leaves the navigation without a migration:
- * it holds one product, the Vault, which is a bundle rather than a tool. The
- * rule removes it. The category id survives in lib/products.ts so its route
- * and every existing link keep resolving; it simply stops being advertised.
- * It comes back the moment it earns two real products.
+ * THE THRESHOLD MOVED FROM 2 TO 1, deliberately. At 2 this hid Creator Tools,
+ * which holds only the Vault — defensible when the nav was four items and the
+ * Vault had its own slot, but the storefront now surfaces the real category
+ * set as a marketplace directory, and a department with one good product in
+ * it is a thin department rather than a lie. Counts are shown everywhere the
+ * categories are listed, so nobody is promised more than is there.
+ *
+ * Raise it back to 2 if a category ever needs hiding again; that is the only
+ * lever, and no list of links needs touching either way.
  */
-export const MIN_TO_LINK = 2;
+export const MIN_TO_LINK = 1;
 
 export const inCategory = (id: CategoryId) =>
   products.filter((p) => p.category === id);

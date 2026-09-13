@@ -24,51 +24,52 @@
  * colour is not.
  */
 @theme {
-  /* Surfaces. Neutral, with the faintest warm bias so white cards read as
-     lifted off the ground rather than cut out of it. */
-  --color-ink: #ffffff;
-  --color-surface: #ffffff;
-  --color-elevated: #f4f5f6;
-  --color-raised: #ebedef;
-  --color-line: #e6e8ea;
-  --color-line-bright: #d2d6da;
+  /*
+   * SURFACES: FOUR STEPS, AND NONE OF THEM IS GREY ENOUGH TO NOTICE.
+   *
+   * The brief's warning about "everything obviously grey" is the real trap of
+   * a dark marketplace: every container gets its own lighter fill, and the
+   * page turns into a stack of visible boxes with the products trapped inside
+   * them. So the steps between these are deliberately small — 2 to 4 points
+   * of lightness — and the separation work is done by hairlines, spacing and
+   * the artwork itself.
+   *
+   * Neutrals carry the faintest cool cast rather than being pure grey, which
+   * is what stops a near-black page reading as switched-off rather than as
+   * chosen.
+   */
+  --color-ink: #0b0b0e;
+  --color-surface: #121216;
+  --color-elevated: #17171c;
+  --color-raised: #1e1e24;
+  --color-line: #262630;
+  --color-line-bright: #35353f;
 
-  /* Text. Muted is the lightest tone that still clears AA at body size;
-     anything paler than it is decoration, not text. */
-  --color-text: #151515;
-  --color-dim: #303133;
-  --color-muted: #6b6b6d;
-
-  /* KEPT, BUT NOTHING USES THESE RIGHT NOW. The header and footer were dark
-     bands framing a light page; they are white and light-grey now, because a
-     near-black slab above a white shop is the heaviest thing on screen and on
-     a storefront that should be a product. The tokens survive because a dark
-     band is a reasonable thing to want back for a footer or a campaign page,
-     and re-deriving an on-dark set from scratch is how the white alphas that
-     vanished on the light ground got written the first time. */
-  --color-dark: #141618;
-  --color-dark-2: #1e2124;
-  --color-on-dark: #ffffff;
-  --color-on-dark-dim: #b4b5b7;
-  --color-on-dark-muted: #85868a;
-  --color-line-dark: #2a2d31;
+  /* Off-white rather than white: pure #fff on near-black buzzes at body size.
+     Muted is the darkest tone that still clears AA on the ink ground. */
+  --color-text: #f4f4f6;
+  --color-dim: #a6a6b0;
+  --color-muted: #74747f;
 
   /*
-   * ONE ACCENT, AND IT HAD TO MOVE FOR THE LIGHT GROUND. #ff3d9e cleared
-   * 5.6:1 on the old violet ink; on white it is 3.26:1, which fails AA for
-   * text and leaves white-on-pink buttons at 2.4:1 — unreadable. This pink
-   * clears 5.1:1 both as text on white and as a button carrying white text.
-   * The bright original survives for the dark bands, where it still pops.
+   * THE BRAND PINK COMES BACK AT FULL STRENGTH. It was darkened to #d11a6f to
+   * survive a white page, where the bright original measured 3.26:1 and could
+   * not be used for text at all. On #0b0b0e it clears 5.6:1, so the accent
+   * the project started with is usable again everywhere — which is the whole
+   * argument for a dark ground on a store whose brand colour is a hot pink.
+   *
+   * It carries dark text, not white: pink on white is 3.26:1 and fails,
+   * pink on ink is 5.6:1 and passes comfortably.
    */
-  --color-accent: #d11a6f;
-  --color-accent-dim: #ad125b;
-  --color-accent-bright: #ff3d9e;
+  --color-accent: #ff3d9e;
+  --color-accent-dim: #e02a86;
+  --color-accent-ink: #0b0b0e;
 
-  /* Category identity, darkened to the same standard as the accent. One
-     hairline each and nothing more. */
-  --color-cat-editing: #7c3aed;
-  --color-cat-thumbnails: #d11a6f;
-  --color-cat-tools: #1d6fd8;
+  /* Category identity. One hairline and one hover each, nothing more — the
+     artwork supplies the colour, the chrome stays quiet. */
+  --color-cat-editing: #a855f7;
+  --color-cat-thumbnails: #ff3d9e;
+  --color-cat-tools: #38bdf8;
 
   --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-bricolage), var(--font-instrument), sans-serif;
@@ -87,7 +88,7 @@
 
 html {
   background-color: var(--color-ink);
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 body {
@@ -184,9 +185,11 @@ h3,
   font-weight: 600;
   letter-spacing: 0.1em;
   font-variant-numeric: tabular-nums;
-  background-color: rgba(255, 255, 255, 0.92);
+  /* Dark and translucent, so it reads on pale artwork and dark artwork
+     alike — the covers run from cream paper textures to near-black glows. */
+  background-color: rgba(11, 11, 14, 0.72);
   color: var(--color-text);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
   border-radius: 4px;
   padding: 0.25rem 0.4rem;
   line-height: 1;
@@ -264,19 +267,25 @@ h3,
  * To put the pink CTA back, this is one declaration: background-color to
  * var(--color-accent) and the hover to var(--color-accent-dim).
  */
+/*
+ * The accent is the primary action again. On white it had to be either a
+ * darkened pink or plain ink, because bright pink under white text measured
+ * 2.4:1. On the ink ground it carries DARK text at 5.6:1, which is both
+ * accessible and considerably louder than the white page ever allowed.
+ */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: 6px;
-  background-color: var(--color-text);
-  color: var(--color-surface);
+  border-radius: 8px;
+  background-color: var(--color-accent);
+  color: var(--color-accent-ink);
   font-weight: 700;
-  transition: background-color 0.3s var(--ease-out-soft);
+  transition: background-color 0.18s var(--ease-out-soft);
 }
 .btn-primary:hover {
-  background-color: #000000;
+  background-color: var(--color-accent-dim);
 }
 
 .btn-ghost {
@@ -284,14 +293,14 @@ h3,
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid var(--color-line-bright);
-  background-color: var(--color-surface);
+  background-color: transparent;
   color: var(--color-text);
   font-weight: 700;
   transition:
-    background-color 0.3s var(--ease-out-soft),
-    border-color 0.3s var(--ease-out-soft);
+    background-color 0.18s var(--ease-out-soft),
+    border-color 0.18s var(--ease-out-soft);
 }
 .btn-ghost:hover {
   background-color: var(--color-elevated);
@@ -320,6 +329,30 @@ h3,
  * the shadow goes entirely — the hairline does the separating, and hover
  * darkens it rather than lifting the tile off the page.
  */
+/*
+ * NO CONTAINER AROUND THE PRODUCT. The brief is explicit that cards should not
+ * sit inside unnecessary extra boxes, and on a dark ground that is easier to
+ * honour than it was on white: artwork has a hard edge against near-black
+ * without needing a panel to hold it.
+ *
+ * So the card is the artwork plus its caption. The surface fill and the
+ * hairline live on the MEDIA only, the caption sits directly on the page, and
+ * hover brightens the frame rather than lifting a tile.
+ */
+.card-media {
+  background-color: var(--color-elevated);
+  border: 1px solid var(--color-line);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  transition: border-color 0.2s var(--ease-out-soft);
+}
+.group:hover .card-media {
+  border-color: var(--color-line-bright);
+}
+
+/* Retained: the Vault panel and a few editorial blocks still want a real
+   container, and they are containers rather than products. */
 .card-panel {
   background-color: var(--color-surface);
   border: 1px solid var(--color-line);
@@ -328,7 +361,7 @@ h3,
 }
 a:hover > .card-panel,
 .group:hover .card-panel {
-  border-color: var(--color-text);
+  border-color: var(--color-line-bright);
 }
 
 /*
@@ -345,19 +378,22 @@ a:hover > .card-panel,
  * than as a component in a design system demo.
  */
 .field {
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid var(--color-line);
   background-color: var(--color-surface);
   color: var(--color-text);
   outline: none;
-  transition: border-color 0.18s var(--ease-out-soft);
+  transition:
+    border-color 0.18s var(--ease-out-soft),
+    background-color 0.18s var(--ease-out-soft);
 }
 .field:hover {
   border-color: var(--color-line-bright);
 }
 .field:focus,
 .field:focus-within {
-  border-color: var(--color-text);
+  border-color: var(--color-accent);
+  background-color: var(--color-elevated);
 }
 
 /* A quiet text link with a rule under it, for secondary actions. */
