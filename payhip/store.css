@@ -3133,16 +3133,24 @@ a.font-section-product-previewFileLink {
   flex: none !important;
 }
 
-/* EACH COLUMN IS A CARD, AND THE STACK IS WHAT MAKES IT ONE. Run
-   icon-left / text-right, four across, and the whole section reads
-   as a single thin line of small print - there is no room left for
-   a description beside a 44px circle, so each one wrapped and the
-   band came out looking like a footnote under the shop rather than
-   the part of the page that explains what the shop is.
+/* THE PANEL IS WHAT MAKES IT FOUR THINGS, NOT THE STACK. That is
+   the thing the first pass got wrong: it read the cramped band as a
+   layout problem and stacked the icon over the words to fix it, when
+   what was actually missing was the card. Bare on the page, four
+   icon-left rows with no panel between them run together into one
+   line of small print. Give each one a panel and the row reads as
+   four cards whichever way the icon sits.
 
-   Icon over title over description gives each column its full width
-   for the copy, and the panel is what separates four things from one
-   strip. It is the same white panel, hairline and resting shadow the
+   So the icon goes back beside the words, and the card keeps the
+   section from collapsing into a strip. The copy here is a single
+   short line per column, which is what makes the row work: there is
+   room for it beside a 52px circle inside the card's own padding,
+   and the card is shorter and denser for it. If a description ever
+   grows past about two lines at this width, stack it again -
+   flex-direction: column, align-items: flex-start, and the ::after
+   top goes back to deriving from --ss-tile-pad.
+
+   It is the same white panel, hairline and resting shadow the
    product and category cards use: one card treatment across the
    store, not two.
 
@@ -3159,8 +3167,8 @@ a.font-section-product-previewFileLink {
    TO BE. A mask applies to the whole element including its border,
    so drawing both on ::before masked the circle away and left a
    bare glyph. ::before is the circle (a real border, no mask) and
-   sits at the top of the stack; ::after is the glyph, absolutely
-   positioned over it.
+   sits in the flex row; ::after is the glyph, absolutely positioned
+   over it.
 
    `content` carries !important on both. The rule this replaced set
    content: none !important at the same specificity, so a plain
@@ -3174,9 +3182,14 @@ a.font-section-product-previewFileLink {
 
   position: relative !important;
   display: flex !important;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 18px;
+  flex-direction: row;
+  /* Centre, not flex-start. The icon has to sit against the middle
+     of the heading-plus-description block rather than against the
+     top of it, or it reads as hanging off the first line - and it
+     drifts further out of line on any column whose description
+     wraps. */
+  align-items: center;
+  gap: 16px;
   /* Fills the column so the four panels end on one baseline however
      long the individual descriptions run. */
   flex: 1 1 auto;
@@ -3198,11 +3211,13 @@ a.font-section-product-previewFileLink {
   flex-direction: column !important;
 }
 
-/* flex: 0 0 auto and not a basis. In a column flex, flex-basis sets
-   the MAIN axis, which is now the height - so the 0 0 44px this
-   replaced would have set the circle's height and left its width to
-   be worked out from the content, which for an empty pseudo-element
-   is zero. */
+/* flex: 0 0 auto with explicit width and height, never a basis.
+   flex-basis sets whichever axis is currently the main one, so a
+   0 0 52px here would silently mean the width in a row and the
+   height in a column - and in the column direction it left the width
+   to be worked out from the content, which for an empty
+   pseudo-element is zero. Written this way the circle is 52px square
+   whichever direction this row is ever flipped to. */
 .js-section-wrapper[data-section-key="image-and-text-columns"] .content-container::before {
   content: "" !important;
   flex: 0 0 auto;
@@ -3212,18 +3227,23 @@ a.font-section-product-previewFileLink {
   border: 1px solid var(--ss-line-strong);
 }
 
-/* The glyph centres on the circle by deriving its position from the
-   same two tokens the circle is drawn from: the circle sits at the
-   top-left of the padding box, so its centre is one padding plus one
-   radius in from each edge. Written as a fixed offset the pair would
-   come apart the moment either token is retuned - which is exactly
-   how they came apart the last time, when the circle moved to the
-   middle and a hard-coded top offset stayed at the top. */
+/* THE GLYPH IS POSITIONED THE SAME WAY THE CIRCLE IS, ON BOTH AXES,
+   which is the only thing that keeps the two registered. Across the
+   edge, the circle is one padding plus one radius in, so the glyph
+   derives from the same two tokens rather than a typed offset. Down
+   the page, align-items: center puts the circle in the middle of the
+   content box, and symmetric padding makes that the middle of the
+   padding box too - which is what top: 50% resolves against.
+
+   Both halves have already failed once each: a hard-coded top left
+   the glyph at the container top the moment the circle centred, and
+   a top derived from --ss-tile-pad would now leave it stranded near
+   the top edge on any card taller than one line of copy. */
 .js-section-wrapper[data-section-key="image-and-text-columns"] .content-container::after {
   content: "" !important;
   position: absolute;
   left: calc(var(--ss-tile-pad) + var(--ss-tile-icon) / 2);
-  top: calc(var(--ss-tile-pad) + var(--ss-tile-icon) / 2);
+  top: 50%;
   transform: translate(-50%, -50%);
   width: 24px;
   height: 24px;
@@ -3238,9 +3258,13 @@ a.font-section-product-previewFileLink {
   display: none !important;
 }
 
+/* No width: 100% here. In the column direction that was harmless -
+   it just filled the card. Back in a row it would be the full card
+   width measured beside a 52px circle, which pushes the copy out
+   past the padding. The flex grow does the same job in both
+   directions without naming a number. */
 .js-section-wrapper[data-section-key="image-and-text-columns"] .text-row-contents {
   flex: 1 1 auto;
-  width: 100%;
   min-width: 0;
 }
 
