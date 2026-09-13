@@ -17,9 +17,10 @@ export type CardSize = "lead" | "standard";
  * in a bordered tile would only put a box between the buyer and the thing
  * they came to look at. A grid of these reads as a contact sheet.
  *
- * Five pieces of information, in the order a buyer uses them: the plate
- * number stamped on the art, the name, who made it, what kind of thing it is
- * and how many assets are in it, and the price. Nothing else earned a place.
+ * Four pieces of information, in the order a buyer uses them: the name, who
+ * made it, what kind of thing it is and how many assets are in it, and the
+ * price. Nothing is printed over the cover — the artwork is the pitch, and
+ * labelling it competes with it.
  *
  * DELIBERATELY ABSENT: rating stars, because four products carry a rating and
  * six do not, and a grid where most cards have a hole under the title looks
@@ -84,17 +85,14 @@ export function ProductCard({
         )}
 
         {/*
-          The plate number sits on the artwork the way it sits on a print,
-          rather than in the caption underneath. lib/products.ts has described
-          this shop as a numbered archive from the first commit; this is where
-          that shows.
+          NOTHING IS STAMPED ON THE COVER ANY MORE. A mono chip in the corner
+          of every card was the most technical object on the page, and it sat
+          on the one thing that actually sells the product. The set number
+          moved to the caption, where it is a detail for whoever wants it
+          rather than a label on the picture.
         */}
-        <span className="plate absolute top-2.5 left-2.5 z-10">
-          {product.setNumber}
-        </span>
-
         {badge && (
-          <span className="absolute top-2.5 right-2.5 z-10">
+          <span className="absolute top-3 right-3 z-10">
             <Badge kind={badge} />
           </span>
         )}
@@ -125,9 +123,12 @@ export function ProductCard({
             {product.title}
           </h3>
           {/*
-            Mono, because a price only means anything next to another price.
-            Down a four-column grid proportional digits never line up, and two
-            figures you cannot scan against each other get read twice.
+            Tabular figures, because a price only means anything next to
+            another price: down a four-column grid proportional digits never
+            line up, and two figures you cannot scan against each other get
+            read twice. That is what .meta does now — it used to reach for a
+            whole monospace family to get the same alignment, which brought
+            the terminal voice along for no extra benefit.
           */}
           <span
             className={`meta shrink-0 font-semibold ${

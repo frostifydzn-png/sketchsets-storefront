@@ -34,22 +34,32 @@
    * of lightness — and the separation work is done by hairlines, spacing and
    * the artwork itself.
    *
-   * Neutrals carry the faintest cool cast rather than being pure grey, which
-   * is what stops a near-black page reading as switched-off rather than as
-   * chosen.
+   * AND THEY CARRY A VIOLET CAST RATHER THAN BEING NEUTRAL. A pure grey
+   * near-black is the colour of a code editor, and combined with hairlines it
+   * reads as a developer tool no matter what is sitting on it. Warming the
+   * whole ramp toward violet costs nothing, reads as a considered dark rather
+   * than an absent one, and sits under a hot pink far better than grey does.
+   *
+   * This is a cousin of the violet the project originally shipped, not a
+   * return to it: that one was #0a0512 under neon gradients and glows. This
+   * is a tint you would struggle to name, doing its work underneath the
+   * artwork.
    */
-  --color-ink: #0b0b0e;
-  --color-surface: #121216;
-  --color-elevated: #17171c;
-  --color-raised: #1e1e24;
-  --color-line: #262630;
-  --color-line-bright: #35353f;
+  --color-ink: #0d0b12;
+  --color-surface: #16131e;
+  --color-elevated: #1c1826;
+  --color-raised: #241f30;
+  --color-line: #2c2639;
+  --color-line-bright: #3d3550;
 
   /* Off-white rather than white: pure #fff on near-black buzzes at body size.
      Muted is the darkest tone that still clears AA on the ink ground. */
-  --color-text: #f4f4f6;
-  --color-dim: #a6a6b0;
-  --color-muted: #74747f;
+  --color-text: #f6f4fa;
+  --color-dim: #aaa4b8;
+  /* Measured, not guessed: at #7b748c this was 4.40:1 on the ink ground,
+     just under the 4.5:1 floor — and it carries the card captions at
+     12.5px, which is exactly the size that cannot afford to be under it. */
+  --color-muted: #8a8299;
 
   /*
    * THE BRAND PINK COMES BACK AT FULL STRENGTH. It was darkened to #d11a6f to
@@ -73,7 +83,6 @@
 
   --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-bricolage), var(--font-instrument), sans-serif;
-  --font-mono: var(--font-mono-face), ui-monospace, "SFMono-Regular", monospace;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-glide: cubic-bezier(0.16, 1, 0.3, 1);
@@ -148,50 +157,62 @@ h3,
  * it. Tabular, tracked out, and quiet: it is a catalogue number, not a badge.
  */
 /*
- * The archive marker, and the label voice for the whole site.
+ * THE LABEL VOICE, AND IT IS NO LONGER MONOSPACE.
  *
- * Mono, tracked out, uppercase. Every section eyebrow, filter heading and
- * catalogue number uses it, which is what ties the shop together as one
- * indexed thing rather than a set of pages that happen to share a palette.
+ * Mono was the single biggest reason this read as technical. Set in it were
+ * every eyebrow, every filter heading, every count and every catalogue
+ * number — and monospace does not say "archive" to most people, it says
+ * terminal. Tracked out and uppercased on top of that, the whole shop spoke
+ * in the voice of a developer tool while selling brushes and glows to people
+ * who make YouTube videos.
+ *
+ * The display face at label size does the same structural job with none of
+ * that. Enough tracking to read as a label, not enough to read as a spec
+ * sheet, and no uppercase — capitals at 10px are a technical convention and
+ * they are harder to read besides.
  */
 .set-no {
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
   font-variant-numeric: tabular-nums;
-  text-transform: uppercase;
 }
 
 /*
- * Data. Prices, counts, sizes, anything a buyer compares between two cards.
- * Mono because comparison is the job: proportional digits make two prices in
- * adjacent cards impossible to scan against each other.
+ * Data. Prices, counts, sizes — anything a buyer compares between two cards.
+ *
+ * TABULAR FIGURES WERE THE POINT, NOT THE MONOSPACE. Prices down a grid have
+ * to line up, and that is what font-variant-numeric does; reaching for a
+ * whole monospace family to get it dragged the terminal voice along with it
+ * for no extra benefit. The UI face has tabular figures of its own.
  */
 .meta {
-  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.005em;
 }
 
 /*
- * The number stamped on the artwork. Sits on the media rather than under it,
- * the way a plate number sits on a print — which is the difference between a
- * shop that numbers its products and one that looks like it numbers them.
+ * The set number, and IT COMES OFF THE ARTWORK.
+ *
+ * A mono chip stamped in the corner of every cover was the most technical
+ * object on the page and it sat on the one thing that is supposed to sell the
+ * product. The covers are the best work here; the right move is to let them
+ * be seen rather than to label them.
+ *
+ * The number survives in the caption, where it is a quiet detail for anyone
+ * who wants it rather than a stamp on the picture.
  */
 .plate {
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
-  /* Dark and translucent, so it reads on pale artwork and dark artwork
-     alike — the covers run from cream paper textures to near-black glows. */
-  background-color: rgba(11, 11, 14, 0.72);
+  background-color: rgba(13, 11, 18, 0.7);
   color: var(--color-text);
   backdrop-filter: blur(8px);
-  border-radius: 4px;
-  padding: 0.25rem 0.4rem;
+  border-radius: 6px;
+  padding: 0.25rem 0.45rem;
   line-height: 1;
 }
 
@@ -342,13 +363,16 @@ h3,
 .card-media {
   background-color: var(--color-elevated);
   border: 1px solid var(--color-line);
-  border-radius: 10px;
+  border-radius: 14px;
   overflow: hidden;
   position: relative;
   transition: border-color 0.2s var(--ease-out-soft);
 }
+/* Hover takes the accent rather than a brighter grey. A pink edge on a
+   violet-dark ground is a moment of colour where there was a shade of grey,
+   and it costs nothing. */
 .group:hover .card-media {
-  border-color: var(--color-line-bright);
+  border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
 }
 
 /* Retained: the Vault panel and a few editorial blocks still want a real
@@ -356,7 +380,7 @@ h3,
 .card-panel {
   background-color: var(--color-surface);
   border: 1px solid var(--color-line);
-  border-radius: 10px;
+  border-radius: 14px;
   transition: border-color 0.18s var(--ease-out-soft);
 }
 a:hover > .card-panel,

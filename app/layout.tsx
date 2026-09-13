@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
-import {
-  Bricolage_Grotesque,
-  Instrument_Sans,
-  JetBrains_Mono,
-} from "next/font/google";
+import { Bricolage_Grotesque, Instrument_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { site } from "@/lib/site";
@@ -40,24 +36,12 @@ const instrument = Instrument_Sans({
 });
 
 /*
- * THE THIRD FACE IS THE WHOLE IDEA.
- *
- * lib/products.ts has always described this shop as a numbered archive — 000
- * is the complete library, 001 through 007 are the sets, samples take an S
- * prefix — and until now that was a string rendered in the same sans as
- * everything else. A catalogue number set in body copy is just a number.
- *
- * Mono is what makes it read as a catalogue: figures that line up in a column
- * down a grid, and a voice that says "this was indexed" rather than "this was
- * marketed". It carries every piece of data on the site — set numbers,
- * prices, counts, file sizes, filters — and nothing else. Sans for language,
- * mono for facts, display for names.
+ * TWO FACES, NOT THREE. A monospace carried every number here for exactly one
+ * commit. It was the wrong call: mono does not read as "catalogue" to most
+ * people, it reads as terminal, and it was the main reason a shop selling
+ * brushes and glows to YouTubers felt like a developer tool. Tabular figures
+ * were the only real benefit and Instrument Sans has those of its own.
  */
-const mono = JetBrains_Mono({
-  variable: "--font-mono-face",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -98,7 +82,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${bricolage.variable} ${instrument.variable} ${mono.variable} h-full antialiased`}
+      className={`${bricolage.variable} ${instrument.variable} h-full antialiased`}
     >
       <body className="bg-ink text-text flex min-h-full flex-col">
         <a
