@@ -8,17 +8,24 @@ export type CardSize = "lead" | "standard";
 /**
  * Product card.
  *
- * Artwork, then the title, what kind of thing it is, and the price. No panel
- * around the whole thing, no border, no hover glow — the cover art is the
- * product, and wrapping it in a bordered tile with a coloured bloom only put
- * software chrome between the buyer and the thing they came to look at.
+ * A white panel holding the artwork, a catalogue number, the title, what kind
+ * of thing it is and the price. Four lines of information, and each one had
+ * to argue for its place.
  *
- * WHAT CHANGED, AND WHY IT IS SHORTER THAN IT LOOKS. The second line used to
- * read "Textures · Frostify". The creator name was the same on every card in
- * the shop, so it was a column of identical text pretending to be
- * information. It is gone, and the asset count took its place: 110 and 194
- * are the numbers that make a $12 pack look like a library, and they were
- * only visible on the product page.
+ * The panel is here because the ground is light — see the note on it below.
+ * An earlier version of this comment argued the opposite, and was right at
+ * the time: on near-black, bare artwork with no border was correct.
+ *
+ * WHAT IS DELIBERATELY ABSENT. The creator name, which read "Frostify" on
+ * every card in the shop and was a column of identical text pretending to be
+ * information. Rating stars, because there are no reviews. Strikethrough
+ * prices, because nothing is on sale. File size and format list, which are
+ * product-page facts.
+ *
+ * WHAT EARNED ITS PLACE. The asset count — 110 and 194 are the numbers that
+ * make a $12 pack look like a library, and they were buried on the product
+ * page. And the set number, which lib/products.ts has carried from the start
+ * while nothing rendered it.
  *
  * Badges are capped at one, by construction rather than by discipline — see
  * components/Badge.tsx.
@@ -103,10 +110,21 @@ export function ProductCard({
       </div>
 
         <div className="px-1.5 pt-3.5 pb-1">
+        {/*
+          The catalogue number, which was in the data all along. Every product
+          carries a setNumber and lib/products.ts describes the shop as a
+          numbered archive, but nothing ever rendered it. It is the one piece
+          of structure here that is genuinely SketchSets rather than generic
+          storefront furniture, and a grid of numbered sets reads as a
+          collection where a grid of titles reads as a list of files.
+        */}
+        <span className="set-no text-muted mb-1.5 block">
+          Set {product.setNumber}
+        </span>
         <div className="flex items-baseline justify-between gap-4">
           <h3
-            className={`group-hover:text-accent truncate font-semibold text-text transition-colors ${
-              size === "lead" ? "text-[1.25rem]" : "text-[15.5px]"
+            className={`group-hover:text-accent font-display truncate font-bold text-text transition-colors ${
+              size === "lead" ? "text-[1.375rem]" : "text-[16.5px]"
             }`}
           >
             {product.title}

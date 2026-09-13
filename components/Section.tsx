@@ -34,14 +34,30 @@ export function Section({
 
   return (
     <section className={gap}>
-      <div className="flex flex-wrap items-baseline justify-between gap-x-10 gap-y-3">
-        <h2 className="text-[clamp(1.5rem,2.6vw,2rem)] leading-tight font-bold tracking-[-0.02em] text-text">
-          {title}
-        </h2>
+      {/*
+        A HEADING, A RULE RUNNING OUT, AND THE ACTION AT THE FAR END.
+        The version this replaced was a title on the left and a link on the
+        right with nothing between them, which is the default arrangement of
+        every templated section on the internet and reads as one. The rule
+        does two things a gap cannot: it ties the two ends into a single
+        object, and it gives the eye a line to travel along, so the shelf
+        below reads as belonging to the heading rather than merely following
+        it.
+
+        items-end, and the rule takes a bottom margin rather than sitting on
+        the baseline — a hairline aligned to a 2.875rem cap height sits
+        visibly high against the descenders.
+      */}
+      <div className="flex items-end gap-5 sm:gap-7">
+        <h2 className="display-section text-text shrink-0">{title}</h2>
+        <span
+          aria-hidden="true"
+          className="bg-line mb-2.5 h-px flex-1 sm:mb-3.5"
+        />
         {action && (
           <Link
             href={action.href}
-            className="text-dim link-rule text-[14px] font-medium"
+            className="text-dim hover:text-accent label shrink-0 pb-1 transition-colors"
           >
             {action.label}
           </Link>

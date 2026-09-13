@@ -103,8 +103,52 @@ h2,
 h3,
 .font-display {
   font-family: var(--font-display);
-  font-variation-settings: "wdth" 90;
+  font-variation-settings: "wdth" 86;
   letter-spacing: -0.025em;
+}
+
+/*
+ * A REAL TYPE SCALE, because the page did not have one.
+ *
+ * Every heading sat between 1.5rem and 2rem at weight 700, which is the
+ * flattest possible setting: nothing led, nothing followed, and the reader
+ * got no help deciding what mattered. Two ranks now, and the gap between them
+ * is the point — the hero is roughly twice the section headings, and the
+ * section headings are roughly twice the card titles.
+ *
+ * Archivo is narrowed as it gets larger. A display face set wide at 5rem
+ * eats the measure and goes soft; pulling the width axis in as the size goes
+ * up is what keeps big type looking cut rather than inflated.
+ */
+.display-hero {
+  font-size: clamp(2.75rem, 6.4vw, 5.25rem);
+  font-variation-settings: "wdth" 76;
+  font-weight: 800;
+  line-height: 0.94;
+  letter-spacing: -0.042em;
+  text-wrap: balance;
+}
+
+.display-section {
+  font-size: clamp(1.75rem, 3.6vw, 2.875rem);
+  font-variation-settings: "wdth" 80;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.032em;
+}
+
+/*
+ * The archive marker. Products carry a setNumber in lib/products.ts and the
+ * shop has always been described in that file as a numbered archive — 000 is
+ * the complete library, samples take an S prefix — but nothing ever showed
+ * it. Tabular, tracked out, and quiet: it is a catalogue number, not a badge.
+ */
+.set-no {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
 }
 
 /* Single source of truth for page gutters and max width. */

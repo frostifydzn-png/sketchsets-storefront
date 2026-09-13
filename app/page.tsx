@@ -72,18 +72,39 @@ export default function HomePage() {
         that is the whole argument lost: a landing page explains, a shop shows
         you what it sells.
       */}
-      <section className="grid items-center gap-10 pt-8 pb-2 sm:pt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14">
+      <section className="grid items-center gap-10 pt-8 pb-2 sm:pt-10 lg:grid-cols-[1.14fr_0.86fr] lg:gap-12">
         <div>
-          <p className="text-muted text-[13px]">Curated by {site.parent}</p>
+          {/*
+            THE EYEBROW IS THE CATALOGUE, NOT A COMPLIMENT. "Curated by
+            Frostify" asserted taste; the set range and the asset count
+            demonstrate it, and they come from the data rather than from
+            copywriting.
+          */}
+          <p className="set-no text-muted">
+            Sets 000&ndash;007 &middot;{" "}
+            <span className="tabular-nums">{totalAssets()}</span> assets
+          </p>
 
-          <h1 className="mt-4 text-[clamp(2.25rem,4.4vw,3.25rem)] leading-[1.05] font-bold tracking-[-0.035em] text-text">
-            Resources for people who make{" "}
-            <span className="text-accent">the internet.</span>
+          {/*
+            NO COLOURED WORD IN THE HEADLINE. A sentence in ink with its last
+            phrase flipped to the brand accent is the single most recognisable
+            piece of generated-landing-page furniture there is, and it was the
+            first thing the eye hit on this page. The headline carries itself
+            on size and weight now; the pink is spent on the one thing it
+            should mark, which is the button that takes money.
+
+            The line also changed to say something only this shop can say.
+            "Resources for people who make the internet" could sit on any
+            asset store on earth. The provenance is the entire differentiator
+            against a Gumroad folder, so it leads.
+          */}
+          <h1 className="display-hero text-text mt-6 max-w-[15ch]">
+            Every pack shipped on a real video first.
           </h1>
 
-          <p className="text-dim mt-5 max-w-[46ch] text-[16.5px] leading-relaxed">
-            Textures, overlays and brushes for thumbnail designers and editors.
-            Every pack here came out of real client work.
+          <p className="text-dim mt-6 max-w-[46ch] text-[16.5px] leading-relaxed">
+            Textures, overlays and brushes for thumbnail designers and editors
+            &mdash; built for client work, then packaged properly.
           </p>
 
           <div className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-4">
