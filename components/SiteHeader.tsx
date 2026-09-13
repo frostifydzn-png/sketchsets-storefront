@@ -276,7 +276,7 @@ export function SiteHeader() {
                 <Link
                   href={`/products/${vault.slug}`}
                   onClick={close}
-                  className="group/v border-line bg-elevated hover:border-accent/40 block rounded-xl border p-4 transition-colors"
+                  className="group/v border-line bg-elevated hover:border-accent/40 block rounded-lg border p-4 transition-colors"
                 >
                   <span className="border-line bg-surface text-accent mb-3 flex h-9 w-9 items-center justify-center rounded-[10px] border">
                     <IconLayers className="h-[18px] w-[18px]" />

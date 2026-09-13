@@ -43,7 +43,7 @@ export function Badge({ kind }: { kind: BadgeKind }) {
 
   return (
     <span
-      className={`rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide uppercase ${tone}`}
+      className={`rounded px-2 py-1 text-[10px] font-bold tracking-wide uppercase ${tone}`}
     >
       {LABEL[kind]}
     </span>

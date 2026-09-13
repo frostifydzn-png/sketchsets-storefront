@@ -19,7 +19,7 @@ export function ProductGallery({
 
   return (
     <div>
-      <div className="bg-surface border-line relative aspect-[4/3] overflow-hidden rounded-2xl border">
+      <div className="bg-surface border-line relative aspect-[4/3] overflow-hidden rounded-lg border">
         {current === "__video__" && video ? (
           <video
             src={video}

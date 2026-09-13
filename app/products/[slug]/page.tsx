@@ -287,7 +287,7 @@ export default async function ProductPage({
                 {product.tags.map((tag) => (
                   <li
                     key={tag}
-                    className="border-line bg-elevated text-muted hover:border-accent hover:text-accent rounded-full border px-3 py-1.5 text-[12px] transition-colors"
+                    className="border-line text-muted hover:border-text hover:text-text rounded-md border px-3 py-1.5 text-[12px] transition-colors"
                   >
                     {tag}
                   </li>
@@ -423,7 +423,7 @@ function PairsWith({ slug }: { slug: string }) {
     <section className="section-gap">
       <Link
         href={`/products/${bundle.slug}`}
-        className="bg-surface border-line hover:border-accent/60 flex flex-col gap-4 rounded-2xl border p-6 transition-colors sm:flex-row sm:items-center sm:justify-between sm:p-8"
+        className="bg-surface border-line hover:border-accent/60 flex flex-col gap-4 rounded-lg border p-6 transition-colors sm:flex-row sm:items-center sm:justify-between sm:p-8"
       >
         <div>
           <p className="text-muted text-[14px]">Pairs well with</p>

@@ -30,7 +30,7 @@ export function LicencePicker({ product }: { product: Product }) {
   const tiersWired = tiers.every((t) => t.payhipId);
 
   return (
-    <div className="border-line rounded-2xl border p-6 sm:p-7">
+    <div className="border-line rounded-lg border p-6 sm:p-7">
       {tiers.length > 0 && (
         <>
           <div className="rule-out text-muted">

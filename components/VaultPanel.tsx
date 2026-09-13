@@ -25,7 +25,7 @@ export function VaultPanel({ vault }: { vault: Product }) {
     <section className="section-gap">
       <div className="border-line border-t pt-14 sm:pt-16">
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          <div className="bg-elevated relative aspect-[4/3] overflow-hidden rounded-xl">
+          <div className="bg-elevated relative aspect-[4/3] overflow-hidden rounded-lg">
             <Image
               src={vault.thumbnail}
               alt={`${vault.title} cover`}

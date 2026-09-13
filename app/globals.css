@@ -70,8 +70,9 @@
   --color-cat-thumbnails: #d11a6f;
   --color-cat-tools: #1d6fd8;
 
-  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-archivo), var(--font-inter-tight), sans-serif;
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-instrument), sans-serif;
+  --font-mono: var(--font-mono-face), ui-monospace, "SFMono-Regular", monospace;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-glide: cubic-bezier(0.16, 1, 0.3, 1);
@@ -107,8 +108,8 @@ h2,
 h3,
 .font-display {
   font-family: var(--font-display);
-  font-variation-settings: "wdth" 86;
-  letter-spacing: -0.025em;
+  font-weight: 700;
+  letter-spacing: -0.022em;
 }
 
 /*
@@ -125,20 +126,18 @@ h3,
  * up is what keeps big type looking cut rather than inflated.
  */
 .display-hero {
-  font-size: clamp(2.75rem, 6.4vw, 5.25rem);
-  font-variation-settings: "wdth" 76;
+  font-size: clamp(2.5rem, 5.6vw, 4.5rem);
   font-weight: 800;
-  line-height: 0.94;
-  letter-spacing: -0.042em;
+  line-height: 0.98;
+  letter-spacing: -0.036em;
   text-wrap: balance;
 }
 
 .display-section {
-  font-size: clamp(1.75rem, 3.6vw, 2.875rem);
-  font-variation-settings: "wdth" 80;
+  font-size: clamp(1.625rem, 3.2vw, 2.5rem);
   font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.032em;
+  line-height: 1.04;
+  letter-spacing: -0.028em;
 }
 
 /*
@@ -147,18 +146,56 @@ h3,
  * the complete library, samples take an S prefix — but nothing ever showed
  * it. Tabular, tracked out, and quiet: it is a catalogue number, not a badge.
  */
+/*
+ * The archive marker, and the label voice for the whole site.
+ *
+ * Mono, tracked out, uppercase. Every section eyebrow, filter heading and
+ * catalogue number uses it, which is what ties the shop together as one
+ * indexed thing rather than a set of pages that happen to share a palette.
+ */
 .set-no {
+  font-family: var(--font-mono);
   font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   font-variant-numeric: tabular-nums;
   text-transform: uppercase;
+}
+
+/*
+ * Data. Prices, counts, sizes, anything a buyer compares between two cards.
+ * Mono because comparison is the job: proportional digits make two prices in
+ * adjacent cards impossible to scan against each other.
+ */
+.meta {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/*
+ * The number stamped on the artwork. Sits on the media rather than under it,
+ * the way a plate number sits on a print — which is the difference between a
+ * shop that numbers its products and one that looks like it numbers them.
+ */
+.plate {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+  background-color: rgba(255, 255, 255, 0.92);
+  color: var(--color-text);
+  backdrop-filter: blur(6px);
+  border-radius: 4px;
+  padding: 0.25rem 0.4rem;
+  line-height: 1;
 }
 
 /* Single source of truth for page gutters and max width. */
 .shell {
   margin-inline: auto;
-  max-width: 1400px;
+  max-width: 1560px;
   padding-inline: 1rem;
 }
 @media (min-width: 640px) {
@@ -232,7 +269,7 @@ h3,
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: 8px;
+  border-radius: 6px;
   background-color: var(--color-text);
   color: var(--color-surface);
   font-weight: 700;
@@ -247,7 +284,7 @@ h3,
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid var(--color-line-bright);
   background-color: var(--color-surface);
   color: var(--color-text);
@@ -275,23 +312,52 @@ h3,
  * white, so there is no tonal difference left for a shadow to exaggerate —
  * the edge is the only thing separating them, and it has to be visible.
  */
+/*
+ * FLAT, AND THAT IS THE POINT. Two stacked shadows under a 16px radius is a
+ * floating card, and a page of floating cards is a dashboard. A marketplace
+ * grid wants to read as a contact sheet: tiles that sit on the page, held by
+ * an edge, close enough together to scan. The radius comes down to 10px and
+ * the shadow goes entirely — the hairline does the separating, and hover
+ * darkens it rather than lifting the tile off the page.
+ */
 .card-panel {
   background-color: var(--color-surface);
   border: 1px solid var(--color-line);
-  border-radius: 16px;
-  box-shadow:
-    0 1px 2px rgba(21, 21, 21, 0.04),
-    0 4px 12px rgba(21, 21, 21, 0.05);
-  transition:
-    border-color 0.18s var(--ease-out-soft),
-    box-shadow 0.18s var(--ease-out-soft);
+  border-radius: 10px;
+  transition: border-color 0.18s var(--ease-out-soft);
 }
 a:hover > .card-panel,
 .group:hover .card-panel {
+  border-color: var(--color-text);
+}
+
+/*
+ * THE PILL IS THE SAAS TELL, more than any colour or typeface was.
+ *
+ * The search input, the sort control, the header's search trigger, the filter
+ * chips, the badges and the social buttons were all rounded-full on a soft
+ * grey fill. A row of grey capsules on white is the house style of every
+ * product-marketing site of the last decade, and no amount of restyling the
+ * type was going to get past it.
+ *
+ * One field style now, squared to 6px, on the page's own white rather than a
+ * grey fill, held by a hairline. It reads as a form control on a shop rather
+ * than as a component in a design system demo.
+ */
+.field {
+  border-radius: 6px;
+  border: 1px solid var(--color-line);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  outline: none;
+  transition: border-color 0.18s var(--ease-out-soft);
+}
+.field:hover {
   border-color: var(--color-line-bright);
-  box-shadow:
-    0 2px 4px rgba(21, 21, 21, 0.05),
-    0 12px 28px rgba(21, 21, 21, 0.1);
+}
+.field:focus,
+.field:focus-within {
+  border-color: var(--color-text);
 }
 
 /* A quiet text link with a rule under it, for secondary actions. */

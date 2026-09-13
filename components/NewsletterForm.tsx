@@ -27,7 +27,7 @@ export function NewsletterForm() {
     <form
       action={NEWSLETTER_ENDPOINT}
       method="post"
-      className="bg-elevated border-line focus-within:border-accent flex items-center gap-2 rounded-full border p-1.5 pl-4 transition-colors"
+      className="field flex items-center gap-2 p-1.5 pl-4"
     >
       <label htmlFor="newsletter-email" className="sr-only">
         Email address

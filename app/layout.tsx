@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
-import { Archivo, Inter_Tight } from "next/font/google";
+import {
+  Bricolage_Grotesque,
+  Instrument_Sans,
+  JetBrains_Mono,
+} from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { site } from "@/lib/site";
@@ -23,15 +27,34 @@ import "./globals.css";
  * Archivo carries a genuine width axis, so headlines can be narrowed by a
  * variation setting rather than by swapping in a separate condensed family.
  */
-const archivo = Archivo({
-  variable: "--font-archivo",
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
   subsets: ["latin"],
-  axes: ["wdth"],
   display: "swap",
 });
 
-const interTight = Inter_Tight({
-  variable: "--font-inter-tight",
+const instrument = Instrument_Sans({
+  variable: "--font-instrument",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+/*
+ * THE THIRD FACE IS THE WHOLE IDEA.
+ *
+ * lib/products.ts has always described this shop as a numbered archive — 000
+ * is the complete library, 001 through 007 are the sets, samples take an S
+ * prefix — and until now that was a string rendered in the same sans as
+ * everything else. A catalogue number set in body copy is just a number.
+ *
+ * Mono is what makes it read as a catalogue: figures that line up in a column
+ * down a grid, and a voice that says "this was indexed" rather than "this was
+ * marketed". It carries every piece of data on the site — set numbers,
+ * prices, counts, file sizes, filters — and nothing else. Sans for language,
+ * mono for facts, display for names.
+ */
+const mono = JetBrains_Mono({
+  variable: "--font-mono-face",
   subsets: ["latin"],
   display: "swap",
 });
@@ -75,7 +98,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${interTight.variable} h-full antialiased`}
+      className={`${bricolage.variable} ${instrument.variable} ${mono.variable} h-full antialiased`}
     >
       <body className="bg-ink text-text flex min-h-full flex-col">
         <a

@@ -43,7 +43,7 @@ export default async function CreatorPage({
   return (
     <div className="shell page-bottom">
       <header className="max-w-2xl pt-10 pb-10 sm:pt-14 sm:pb-12">
-        <span className="bg-elevated border-line flex h-16 w-16 items-center justify-center rounded-2xl border text-[20px] font-extrabold">
+        <span className="bg-elevated border-line flex h-16 w-16 items-center justify-center rounded-lg border text-[20px] font-extrabold">
           {monogram(creator.name)}
         </span>
         <h1 className="mt-6 text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.04] font-extrabold tracking-[-0.03em]">

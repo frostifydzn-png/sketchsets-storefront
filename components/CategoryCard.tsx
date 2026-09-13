@@ -34,7 +34,7 @@ export function CategoryCard({ category }: { category: Category }) {
       data-room={category.id}
       className="group block focus-visible:outline-none"
     >
-      <div className="bg-elevated relative aspect-[5/3] overflow-hidden rounded-xl">
+      <div className="bg-elevated relative aspect-[5/3] overflow-hidden rounded-lg">
         <Image
           src={preview}
           alt=""

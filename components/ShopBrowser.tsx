@@ -133,7 +133,7 @@ export function ShopBrowser({ products }: { products: Product[] }) {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search products…"
-              className="bg-elevated border-line focus:border-accent text-text placeholder:text-muted w-full rounded-full border px-5 py-3 text-[15px] outline-none"
+              className="field placeholder:text-muted w-full px-4 py-3 text-[15px]"
             />
           </label>
 
@@ -142,7 +142,7 @@ export function ShopBrowser({ products }: { products: Product[] }) {
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortKey)}
-              className="border-line hover:border-line-bright bg-elevated text-text cursor-pointer appearance-none rounded-full border py-3 pr-10 pl-5 text-[14px] font-medium outline-none"
+              className="field cursor-pointer appearance-none py-3 pr-10 pl-4 text-[14px] font-medium"
             >
               {sorts.map((s) => (
                 <option key={s.id} value={s.id} className="bg-surface">

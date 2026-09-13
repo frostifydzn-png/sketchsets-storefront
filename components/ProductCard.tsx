@@ -71,9 +71,9 @@ export function ProductCard({
         want inner = outer - padding, so the artwork's corner stays
         parallel to the card's however the two are retuned.
       */}
-      <div className="card-panel p-2.5">
+      <div className="card-panel p-1.5">
         <div
-          className={`bg-elevated relative overflow-hidden rounded-[calc(1rem-0.625rem)] ${
+          className={`bg-elevated relative overflow-hidden rounded-[4px] ${
             size === "lead" ? "aspect-[16/10]" : "aspect-[16/11]"
           }`}
         >
@@ -102,25 +102,26 @@ export function ProductCard({
           />
         )}
 
+        {/*
+          THE NUMBER GOES ON THE ARTWORK, the way a plate number sits on a
+          print rather than in the caption underneath it. Under the title it
+          was a line of small grey text competing with the type label; on the
+          media it is the first thing read on every tile, and a grid of
+          stamped, numbered plates reads as a collection where a grid of
+          titles reads as a list of files.
+        */}
+        <span className="plate absolute top-2.5 left-2.5">
+          {product.setNumber}
+        </span>
+
         {badge && (
-          <span className="absolute top-3 left-3">
+          <span className="absolute top-2.5 right-2.5">
             <Badge kind={badge} />
           </span>
         )}
       </div>
 
-        <div className="px-1.5 pt-3.5 pb-1">
-        {/*
-          The catalogue number, which was in the data all along. Every product
-          carries a setNumber and lib/products.ts describes the shop as a
-          numbered archive, but nothing ever rendered it. It is the one piece
-          of structure here that is genuinely SketchSets rather than generic
-          storefront furniture, and a grid of numbered sets reads as a
-          collection where a grid of titles reads as a list of files.
-        */}
-        <span className="set-no text-muted mb-1.5 block">
-          Set {product.setNumber}
-        </span>
+        <div className="px-1.5 pt-3 pb-1">
         <div className="flex items-baseline justify-between gap-4">
           <h3
             className={`group-hover:text-accent font-display truncate font-bold text-text transition-colors ${
@@ -130,26 +131,27 @@ export function ProductCard({
             {product.title}
           </h3>
           {/*
-            Tabular numerals, because prices sit in a column down a grid and
-            proportional digits leave them visibly ragged. It is a small thing
-            that reads as carelessness across twelve cards.
+            Mono, because a price only means anything next to another price.
+            Down a four-column grid proportional digits never line up, and
+            two figures you cannot scan against each other are two figures
+            the buyer has to read twice.
           */}
           <span
-            className={`shrink-0 font-semibold tabular-nums ${
-              free ? "text-accent" : "text-dim"
-            } ${size === "lead" ? "text-[1.125rem]" : "text-[15px]"}`}
+            className={`meta shrink-0 font-semibold ${
+              free ? "text-accent" : "text-text"
+            } ${size === "lead" ? "text-[1.0625rem]" : "text-[14.5px]"}`}
           >
             {formatPrice(product.price)}
           </span>
         </div>
 
-        <p className="text-muted mt-1 truncate text-[13px]">
+        <p className="text-muted mt-1.5 truncate text-[12.5px]">
           {product.subcategory}
           {showCount && (
             <>
               {" "}
               &middot;{" "}
-              <span className="tabular-nums">{product.assetCount}</span> assets
+              <span className="meta">{product.assetCount}</span> assets
             </>
           )}
         </p>

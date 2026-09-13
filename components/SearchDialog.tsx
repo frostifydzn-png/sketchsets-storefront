@@ -75,7 +75,7 @@ export function SearchDialog() {
         type="button"
         onClick={() => setOpen(true)}
         aria-label="Search products"
-        className="bg-elevated border-line hover:border-line-bright text-muted flex items-center gap-2.5 rounded-full border px-4 py-2.5 text-[13.5px] transition-colors lg:w-[19rem]"
+        className="field text-muted flex items-center gap-2.5 px-3.5 py-2.5 text-[13.5px] lg:w-[19rem]"
       >
         <SearchIcon />
         <span className="hidden flex-1 text-left lg:inline">
@@ -100,7 +100,7 @@ export function SearchDialog() {
             className="bg-ink/80 absolute inset-0 backdrop-blur-sm"
           />
 
-          <div className="bg-surface border-line animate-fade-up relative w-full max-w-xl overflow-hidden rounded-2xl border shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)]">
+          <div className="bg-surface border-line animate-fade-up relative w-full max-w-xl overflow-hidden rounded-lg border shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)]">
             <div className="border-line flex items-center gap-3 border-b px-4">
               <SearchIcon />
               <input

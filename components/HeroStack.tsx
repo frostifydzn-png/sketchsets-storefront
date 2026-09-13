@@ -60,7 +60,7 @@ export function HeroStack({ products }: { products: Product[] }) {
               a grey smear. Two stacked shadows instead, same system as the
               product cards.
             */
-            className={`group border-line-bright bg-surface absolute overflow-hidden rounded-2xl border shadow-[0_2px_4px_rgba(21,21,21,0.05),0_18px_40px_-12px_rgba(21,21,21,0.2)] transition-transform duration-[700ms] ease-[var(--ease-glide)] hover:z-40 hover:-translate-y-2 ${pos.z}`}
+            className={`group border-line-bright bg-surface absolute overflow-hidden rounded-lg border shadow-[0_2px_4px_rgba(21,21,21,0.05),0_18px_40px_-12px_rgba(21,21,21,0.2)] transition-transform duration-[700ms] ease-[var(--ease-glide)] hover:z-40 hover:-translate-y-2 ${pos.z}`}
             style={{
               left: `${pos.left}%`,
               top: `${pos.top}%`,

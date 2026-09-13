@@ -175,7 +175,7 @@ function Social({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="bg-elevated border-line text-dim hover:border-accent hover:text-accent flex h-9 w-9 items-center justify-center rounded-full border transition-colors"
+      className="border-line text-dim hover:border-text hover:text-text flex h-9 w-9 items-center justify-center rounded-md border transition-colors"
     >
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         {children}
