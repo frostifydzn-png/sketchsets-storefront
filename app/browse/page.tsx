@@ -29,7 +29,10 @@ export default function BrowsePage() {
         ]}
       />
 
-      <div className="section-gap-sm">
+      {/* mt-8, not section-gap-sm. The header now ends in a rule, which is
+          already a separation; 80px on top of it was the rest of the reason
+          the grid started a screen down. */}
+      <div className="mt-8">
         <ShopBrowser products={products} />
       </div>
     </div>

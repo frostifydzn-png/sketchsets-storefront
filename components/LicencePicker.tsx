@@ -95,7 +95,11 @@ export function LicencePicker({ product }: { product: Product }) {
       )}
 
       <div className="border-line mt-6 flex items-baseline justify-between gap-4 border-t pt-6">
-        <span className="text-muted text-[13px]">Total</span>
+        {/* "Total" implies a sum of choices. With the tiers gated off there
+            is nothing to total, so it is a price. */}
+        <span className="text-muted text-[13px]">
+          {tiers.length > 0 ? "Total" : "Price"}
+        </span>
         <span className="text-[2.25rem] leading-none font-bold tracking-[-0.02em] text-text">
           {formatPrice(total)}
         </span>

@@ -114,24 +114,18 @@ export default async function ProductPage({
         <span className="text-dim">{product.title}</span>
       </nav>
 
-      {/* Catalogue number sits with the name, the way an archive labels a piece. */}
-      <header className="pt-10 pb-10 sm:pt-12 sm:pb-14">
-        <p className="text-muted text-[13px]">Set {product.setNumber}</p>
-        <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
-          <div>
-            <h1 className="max-w-[16ch] text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.02] font-extrabold tracking-[-0.03em]">
-              {product.title}
-            </h1>
-          </div>
-          {product.rating && (
-            <p className="text-muted text-[13px]">
-              <span className="text-accent">★</span>{" "}
-              {product.rating.average.toFixed(1)} from {product.rating.count}{" "}
-              {product.rating.count === 1 ? "review" : "reviews"}
-            </p>
-          )}
-        </div>
-      </header>
+      {/*
+        THE NAME MOVED INTO THE BUY COLUMN, and that is the whole change here.
+
+        It used to be a full-width banner headline up to 3.75rem tall with its
+        own 100px of padding, which is how a case study opens. On a shop the
+        first screen has one job: show the thing and show the price. That
+        header pushed the artwork down and the price off the fold entirely, so
+        a visitor's first screen was a large piece of type and some whitespace.
+
+        Set number, name, what it does and the price now read as one block
+        beside the gallery, which is the order a buyer actually wants them in.
+      */}
 
       {/*
         Explicit grid placement so the source order stays gallery, purchase
@@ -139,7 +133,7 @@ export default async function ProductPage({
         under the artwork; on desktop the panel spans both rows and stays
         stuck beside the whole read.
       */}
-      <div className="grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:gap-14">
+      <div className="grid gap-10 pt-6 lg:grid-cols-[1.6fr_1fr] lg:gap-14">
         <div className="min-w-0 lg:col-start-1 lg:row-start-1">
           <ProductGallery
             images={product.previewImages}
@@ -150,20 +144,62 @@ export default async function ProductPage({
 
         <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
           <div className="lg:sticky lg:top-24">
-            <LicencePicker product={product} />
+            <p className="set-no text-muted">Set {product.setNumber}</p>
+
+            <h1 className="display-section text-text mt-2.5">
+              {product.title}
+            </h1>
+
+            <p className="text-dim mt-3.5 text-[15.5px] leading-relaxed">
+              {product.valueProp}
+            </p>
+
+            <div className="text-muted mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[13px]">
+              {product.assetCount && (
+                <span>
+                  <span className="tabular-nums">{product.assetCount}</span>{" "}
+                  assets
+                </span>
+              )}
+              <span>{product.formats.join(" · ")}</span>
+              <span>{product.fileSize}</span>
+              {product.rating && (
+                <span>
+                  <span className="text-accent">★</span>{" "}
+                  {product.rating.average.toFixed(1)} ({product.rating.count})
+                </span>
+              )}
+            </div>
+
+            <div className="mt-6">
+              <LicencePicker product={product} />
+            </div>
+
+            {/*
+              Compatibility sits inside the buy column rather than below the
+              fold. It is the last thing anyone checks before paying, and
+              making them scroll past the button to find it is how a sale gets
+              postponed into a tab that never gets reopened.
+            */}
+            <div className="border-line mt-6 border-t pt-5">
+              <p className="set-no text-muted">Works in</p>
+              <p className="text-dim mt-2 text-[14px] leading-relaxed">
+                {product.compatibility.join(", ")}
+              </p>
+            </div>
           </div>
         </div>
 
         <div className="min-w-0 lg:col-start-1 lg:row-start-2">
+          {/*
+            The value proposition is not repeated here. It now leads the buy
+            column, and the same sentence twice on one screen reads as padding.
+          */}
           <div className="section-gap-sm max-w-[68ch]">
-            {/* Lead runs bold and large; the rest is body copy. */}
-            <p className="text-text text-[19px] leading-snug font-semibold sm:text-[21px]">
-              {product.valueProp}
-            </p>
             {product.description.map((p) => (
               <p
                 key={p.slice(0, 40)}
-                className="text-dim mt-5 text-[16px] leading-relaxed"
+                className="text-dim text-[16px] leading-relaxed not-first:mt-5"
               >
                 {p}
               </p>

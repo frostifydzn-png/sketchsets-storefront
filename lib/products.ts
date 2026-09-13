@@ -528,7 +528,7 @@ const round99 = (n: number) => Math.max(1, Math.round(n) - 0.01);
 export const licenceTiers = (product: Product): LicenceTier[] => {
   if (product.price === 0) return [];
 
-  return [
+  const tiers: LicenceTier[] = [
     {
       id: "personal",
       label: "Personal",
@@ -551,6 +551,24 @@ export const licenceTiers = (product: Product): LicenceTier[] => {
       price: round99(product.price * EXTENDED_MULTIPLIER),
     },
   ];
+
+  /*
+   * NOTHING SHIPS UNTIL EVERY TIER HAS A REAL LISTING.
+   *
+   * The comment above this function has always said the Personal and Extended
+   * prices are derived from a multiplier and are not prices anyone agreed. It
+   * asked for them to be replaced before they went near a customer, and then
+   * they went in front of customers anyway, because a comment cannot stop
+   * anything — the panel disclosed the fallback honestly and the total charged
+   * was always the real price, but the page still showed two invented numbers
+   * in the shape of a plan comparison.
+   *
+   * Now the code enforces what the comment asked for. No payhipId on a tier
+   * means the tier does not exist, the buy panel collapses to one price and
+   * one button, and tiered pricing switches itself back on the moment each
+   * tier is given its own Payhip listing.
+   */
+  return tiers.every((t) => t.payhipId) ? tiers : [];
 };
 
 /* ---------- lookups ---------- */
