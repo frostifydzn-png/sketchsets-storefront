@@ -4,6 +4,8 @@ import { HeroStack } from "@/components/HeroStack";
 import { ProductCard } from "@/components/ProductCard";
 import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/Section";
+import { SoftwareRow } from "@/components/SoftwareRow";
+import { ValueProps } from "@/components/ValueProps";
 import { VaultPanel } from "@/components/VaultPanel";
 import { linkedCategories, totalAssets } from "@/lib/catalog";
 import {
@@ -131,10 +133,21 @@ export default function HomePage() {
             &middot; {freeCount} free &middot; from {formatPrice(lowest)}{" "}
             &middot; commercial licence included
           </p>
+
+          {/*
+            THE COMPATIBILITY LINE BELONGS ABOVE THE FOLD. It is the first
+            question anyone asks about an asset pack and the one that stops a
+            sale dead, so it is answered before a product is even clicked.
+            Derived from the catalogue, so it cannot claim support the shop
+            does not actually have.
+          */}
+          <SoftwareRow className="border-line mt-7 border-t pt-6" />
         </div>
 
         <HeroStack products={fan} />
       </section>
+
+      {vault && <VaultPanel vault={vault} />}
 
       {/*
         PRODUCTS FIRST. Nerd or Die puts two full shelves in front of you
@@ -145,7 +158,6 @@ export default function HomePage() {
       */}
       {picks.length > 0 && (
         <Section
-          first
           tight
           title={`${site.parent} Picks`}
           note={`The packs ${site.parent} actually reaches for.`}
@@ -155,6 +167,23 @@ export default function HomePage() {
             {picks.map((product, i) => (
               <Reveal key={product.id} delay={i * 60}>
                 <ProductCard product={product} priority={i < 4} />
+              </Reveal>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {free.length > 0 && (
+        <Section
+          tight
+          title="Free downloads"
+          note="Real packs, not trials. Take them and see whether the quality holds up."
+          action={{ href: "/free", label: "All free packs" }}
+        >
+          <div className="grid gap-x-5 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
+            {free.map((product, i) => (
+              <Reveal key={product.id} delay={Math.min(i, 3) * 80}>
+                <ProductCard product={product} />
               </Reveal>
             ))}
           </div>
@@ -175,24 +204,26 @@ export default function HomePage() {
         </div>
       </Section>
 
-      {vault && <VaultPanel vault={vault} />}
-
-      {free.length > 0 && (
-        <Section
-          tight
-          title="Free downloads"
-          note="Real packs, not trials. Take them and see whether the quality holds up."
-          action={{ href: "/free", label: "All free packs" }}
-        >
-          <div className="grid gap-x-5 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
-            {free.map((product, i) => (
-              <Reveal key={product.id} delay={Math.min(i, 3) * 80}>
-                <ProductCard product={product} />
-              </Reveal>
-            ))}
-          </div>
-        </Section>
-      )}
+      {/*
+        The compatibility band. The hero answers the question for someone who
+        reads top to bottom; this answers it again for someone who scrolled
+        straight to the shelves, which is most people. The reference
+        marketplace states its software support three times on one page for
+        exactly this reason.
+      */}
+      <section className="shelf-gap">
+        <div className="border-line bg-surface rounded-2xl border px-7 py-8 sm:px-10 sm:py-10">
+          <h2 className="display-section text-text max-w-[18ch]">
+            Opens in what you already use.
+          </h2>
+          <p className="text-dim mt-4 max-w-[54ch] text-[15.5px] leading-relaxed">
+            Layered PSDs, transparent PNGs and vectors. Nothing here needs a
+            plugin, a subscription or a specific version to be useful &mdash;
+            every product page lists exactly what it opens in.
+          </p>
+          <SoftwareRow className="border-line mt-7 border-t pt-6" />
+        </div>
+      </section>
 
       {cheap.length > 0 && (
         <Section
@@ -210,6 +241,8 @@ export default function HomePage() {
           </div>
         </Section>
       )}
+
+      <ValueProps />
 
       {/* Frostoria last, so the community never competes with the shop. */}
       <section className="section-gap">
