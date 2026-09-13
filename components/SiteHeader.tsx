@@ -171,7 +171,7 @@ export function SiteHeader() {
         everything else on the page.
       */}
       {shop && (
-        <div className="animate-menu-drop border-line bg-surface hidden border-t lg:block">
+        <div className="animate-menu-sheet border-line bg-surface absolute inset-x-0 top-full hidden border-t border-b shadow-[0_30px_60px_-25px_rgba(0,0,0,0.95)] lg:block">
           <div className="shell grid grid-cols-[1fr_1fr_1fr_1.15fr] gap-10 py-9">
             <div>
               <h3 className="text-muted text-[11px] font-semibold tracking-[0.14em] uppercase">

@@ -15,6 +15,7 @@ export function Section({
   action,
   children,
   first = false,
+  tight = false,
 }: {
   title: string;
   note?: string;
@@ -22,9 +23,17 @@ export function Section({
   children: React.ReactNode;
   /** First section after the hero, which already has space above it. */
   first?: boolean;
+  /**
+   * A shelf of products rather than a block of argument. Takes the tighter
+   * .shelf-gap, because cards spaced like landing-page sections read as an
+   * empty shop rather than a considered one.
+   */
+  tight?: boolean;
 }) {
+  const gap = first ? "section-gap-sm" : tight ? "shelf-gap" : "section-gap";
+
   return (
-    <section className={first ? "section-gap-sm" : "section-gap"}>
+    <section className={gap}>
       <div className="flex flex-wrap items-baseline justify-between gap-x-10 gap-y-3">
         <h2 className="text-[clamp(1.5rem,2.6vw,2rem)] leading-tight font-bold tracking-[-0.02em] text-white">
           {title}
@@ -45,7 +54,9 @@ export function Section({
         </p>
       )}
 
-      <div className="mt-9 sm:mt-11">{children}</div>
+      <div className={tight ? "mt-6 sm:mt-7" : "mt-9 sm:mt-11"}>
+        {children}
+      </div>
     </section>
   );
 }

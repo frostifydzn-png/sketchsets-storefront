@@ -64,22 +64,29 @@ export default function HomePage() {
 
   return (
     <div className="shell page-bottom">
-      {/* Hero. Copy on the left, real pack covers on the right. */}
-      <section className="page-top grid items-center gap-12 pb-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
+      {/*
+        HERO, SIZED SO THE SHOP STARTS ABOVE THE FOLD. The version this
+        replaced ran a 4rem headline over ~180px of stacked vertical steps and
+        then handed the next 176px to .section-gap, which put the first
+        purchasable thing roughly a screen and a half down. On a storefront
+        that is the whole argument lost: a landing page explains, a shop shows
+        you what it sells.
+      */}
+      <section className="grid items-center gap-10 pt-8 pb-2 sm:pt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14">
         <div>
           <p className="text-muted text-[13px]">Curated by {site.parent}</p>
 
-          <h1 className="mt-5 text-[clamp(2.5rem,5.4vw,4rem)] leading-[1.06] font-bold tracking-[-0.035em] text-white">
+          <h1 className="mt-4 text-[clamp(2.25rem,4.4vw,3.25rem)] leading-[1.05] font-bold tracking-[-0.035em] text-white">
             Resources for people who make{" "}
             <span className="text-accent">the internet.</span>
           </h1>
 
-          <p className="text-dim mt-6 max-w-[44ch] text-[17px] leading-relaxed">
-            A small, hand-picked shop of presets, textures and creator tools.
-            Everything here is something we actually reach for.
+          <p className="text-dim mt-5 max-w-[46ch] text-[16.5px] leading-relaxed">
+            Textures, overlays and brushes for thumbnail designers and editors.
+            Every pack here came out of real client work.
           </p>
 
-          <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
+          <div className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-4">
             <Link href="/browse" className="btn-primary px-7 py-3.5 text-[15px]">
               Browse the shop
             </Link>
@@ -97,7 +104,7 @@ export default function HomePage() {
             "194 assets" describes what lands in the buyer's downloads folder,
             and both are true of the same catalogue.
           */}
-          <p className="text-muted mt-10 text-[13.5px] leading-relaxed">
+          <p className="text-muted mt-7 text-[13.5px] leading-relaxed">
             <span className="tabular-nums">{totalAssets()}</span> assets across{" "}
             <span className="tabular-nums">{products.length}</span> packs
             &middot; {freeCount} free &middot; from {formatPrice(lowest)}{" "}
@@ -109,51 +116,54 @@ export default function HomePage() {
       </section>
 
       {/*
-        THE TILES COME BEFORE THE FIRST PRODUCT SHELF, and the whole reason is
-        ordering rather than content: a visitor has to know what kind of shop
-        this is before a grid of covers means anything to them. Two tiles
-        answer that in one glance, and the shelf below is then merchandising
-        rather than a wall of unexplained artwork.
+        PRODUCTS FIRST. Nerd or Die puts two full shelves in front of you
+        before a single paragraph of marketing, and that ordering is most of
+        why it reads as a shop rather than a landing page with products bolted
+        underneath. The tiles are navigation and navigation can wait until
+        someone has seen what is on sale.
       */}
-      <Section
-        first
-        title="Shop by what you make"
-        note="Two things, done properly. Everything here is for one or the other."
-      >
-        <div className="grid gap-x-7 gap-y-12 sm:grid-cols-2">
-          {tiles.map((c, i) => (
-            <Reveal key={c.id} delay={i * 80}>
-              <CategoryCard category={c} />
-            </Reveal>
-          ))}
-        </div>
-      </Section>
-
       {picks.length > 0 && (
         <Section
+          first
+          tight
           title={`${site.parent} Picks`}
           note={`The packs ${site.parent} actually reaches for.`}
           action={{ href: "/browse", label: "See everything" }}
         >
-          <div className="grid gap-x-7 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-x-5 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
             {picks.map((product, i) => (
-              <Reveal key={product.id} delay={i * 80}>
-                <ProductCard product={product} priority={i < 3} />
+              <Reveal key={product.id} delay={i * 60}>
+                <ProductCard product={product} priority={i < 4} />
               </Reveal>
             ))}
           </div>
         </Section>
       )}
 
+      <Section
+        tight
+        title="Shop by what you make"
+        note="Two things, done properly. Everything here is for one or the other."
+      >
+        <div className="grid gap-x-5 gap-y-9 sm:grid-cols-2">
+          {tiles.map((c, i) => (
+            <Reveal key={c.id} delay={i * 60}>
+              <CategoryCard category={c} />
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
       {vault && <VaultPanel vault={vault} />}
 
       {free.length > 0 && (
         <Section
+          tight
           title="Free downloads"
           note="Real packs, not trials. Take them and see whether the quality holds up."
           action={{ href: "/free", label: "All free packs" }}
         >
-          <div className="grid gap-x-7 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-x-5 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
             {free.map((product, i) => (
               <Reveal key={product.id} delay={Math.min(i, 3) * 80}>
                 <ProductCard product={product} />
@@ -165,11 +175,12 @@ export default function HomePage() {
 
       {cheap.length > 0 && (
         <Section
+          tight
           title="Under $10"
           note="Good work that costs less than lunch."
           action={{ href: "/browse", label: "See everything" }}
         >
-          <div className="grid gap-x-7 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-x-5 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
             {cheap.map((product, i) => (
               <Reveal key={product.id} delay={Math.min(i, 3) * 80}>
                 <ProductCard product={product} />

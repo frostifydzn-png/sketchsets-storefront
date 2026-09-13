@@ -108,6 +108,16 @@ body {
 .section-gap-sm {
   padding-top: clamp(3rem, 6vw, 5rem);
 }
+/* SHOP DENSITY, WHICH IS A DIFFERENT PROBLEM FROM PAGE RHYTHM.
+   .section-gap opens up to 176px between blocks. That is right for a landing
+   page, where each section is an argument and the space is what separates one
+   argument from the next. It is wrong for a shelf of products: at that gap a
+   ten-product shop reads as four lonely rows scattered down a very long page,
+   and the thing that makes a marketplace feel stocked is cards close enough
+   together to scan as inventory. Shelves take this instead. */
+.shelf-gap {
+  padding-top: clamp(2.75rem, 4.5vw, 4.5rem);
+}
 
 .page-top {
   padding-top: clamp(2.5rem, 5vw, 4.5rem);
@@ -347,7 +357,28 @@ textarea:focus-visible {
   animation-delay: 0.18s;
 }
 
-/* Categories dropdown in the header. */
+/* THE MEGA MENU SHEET, WHICH IS NOT THE DROPDOWN BELOW.
+   It spans the header rather than hanging under one button, so it must not
+   inherit the centring transform: menu-drop ends at translate(-50%, 0),
+   written for a panel that was also positioned left: 50%. Applied to a
+   full-width sheet that shifts it half its own width off the left of the
+   screen, which is exactly what it did. */
+@keyframes menu-sheet {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-menu-sheet {
+  animation: menu-sheet 0.18s var(--ease-out-soft) both;
+}
+
+/* Categories dropdown in the header. Still used by narrower popovers, which
+   DO hang off a centred anchor and need the -50%. */
 @keyframes menu-drop {
   from {
     opacity: 0;
